@@ -68,8 +68,13 @@ public class ItemInventory : MonoBehaviour {
         Assert.IsTrue(quantity >= 0, "ItemInventory: Cannot remove item. Must remove quantity >= 0");
 
         int current_count = countItem(itemID);
+        Assert.IsTrue(current_count > 0, "ItemInventory: Cannot remove item. Does not exist in inventory.");
         if (quantity > current_count) {
             return false;
+        }
+        else if (quantity == current_count) {
+            _items.Remove(itemID);
+            return true;
         }
         else {
             _items[itemID] -= quantity;
@@ -95,9 +100,22 @@ public class ItemInventory : MonoBehaviour {
 
     }
 
-    void Start () {
+    /**
+    * @override
+    * String representation of the inventory
+    */
+    override public string ToString() {
+        string s = "";
+        foreach (var itemID in _items.Keys) {
+            var line = string.Format("{0, -10}: {1, -3}\n", ItemDatabase.getName(itemID), _items[itemID]);
+            s += line;
+        }
+        return s;
+    }
+
+    void Start() {
         _items = new Dictionary<int, int>();
-	}
+    }
 
     private Dictionary<int, int> _items;
 }
