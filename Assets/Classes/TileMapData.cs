@@ -36,6 +36,16 @@ public class TileMapData {
         _tiles[x_pos, y_pos] = tile;
     }
 
+    /** 
+    * Get a tile in the map
+    * @param x_pos x position of the tile to get
+    * @param y_pos y position of the tile to get
+    * @return Tile a copy of the desired tile
+    */
+    public Tile getTile(int x_pos, int y_pos) {
+        return _tiles[x_pos, y_pos].clone();
+    }
+
     /**
     * Tile class
     * data structure that contains information every tile stores. For now, just store if the tile is walkable.
@@ -43,6 +53,12 @@ public class TileMapData {
     [Serializable]
     public class Tile {
         public bool is_walkable;
+
+        public Tile clone() {
+            Tile copy = new Tile();
+            copy.is_walkable = is_walkable;
+            return copy;
+        }
     }
 
     /**
