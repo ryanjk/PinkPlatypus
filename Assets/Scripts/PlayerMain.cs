@@ -10,9 +10,17 @@ using System.Collections;
  */
 
 public class PlayerMain : MonoBehaviour {
+    
+    void Awake() {
+        DontDestroyOnLoad(gameObject);
+    }
+
     // Use this for initialization
 	void Start () {
-		_inventory = new ItemInventory ();
+
+        //TODO: fix this, can't create a script with new. should be AddComponent.
+		//_inventory = new ItemInventory ();
+        _sceneLoadData = new SceneLoadData();
 
 	}
 	
@@ -58,8 +66,10 @@ public class PlayerMain : MonoBehaviour {
 		return _inventory.removeItem(pItemID, pQuantity);
 	}
 
-
 	private ItemInventory _inventory;
+
+    //TODO: change to private, add access methods
+    public SceneLoadData _sceneLoadData;
 
 }
 	
