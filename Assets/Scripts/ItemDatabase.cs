@@ -57,7 +57,7 @@ public class ItemDatabase : MonoBehaviour {
         return Convert.ToBoolean(_data[getPropertyIndex("isKey"), item_index]);
     }
 
-    void Start() {
+    void Awake() {
         TextAsset item_database_csv = (TextAsset)Resources.Load("item_database");
         _data = CSVReader.SplitCsvGrid(item_database_csv.text);
 

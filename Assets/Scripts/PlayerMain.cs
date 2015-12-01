@@ -11,8 +11,8 @@ using System.Collections;
 
 public class PlayerMain : MonoBehaviour {
     // Use this for initialization
-	void Start () {
-		_inventory = new ItemInventory ();
+	void Awake () {
+		_inventory = gameObject.GetComponent<ItemInventory>();
 
 	}
 	
@@ -28,6 +28,15 @@ public class PlayerMain : MonoBehaviour {
     */
 	public void addItem(int pId){
 		_inventory.addItem (pId);
+	}
+
+	/**
+	* Get the quantity of a certain item from inventory
+	* @param pId: ID of item to check
+	* @return the count of the item
+	*/ 
+	public int countItem(int pId){
+		return _inventory.countItem(pId);
 	}
 
 	/**

@@ -99,6 +99,14 @@ public class ItemInventory : MonoBehaviour {
         }
 
     }
+	/**
+	* Returns a copy of the _items Dictionary
+	* @return Dictionary<int,int> A deep copy of the _items Dictionary
+	*/
+	public Dictionary<int,int> getItemList(){
+		return new Dictionary<int, int>(_items);
+	}
+
 
     /**
     * @override
@@ -113,7 +121,7 @@ public class ItemInventory : MonoBehaviour {
         return s;
     }
 
-    void Start() {
+    void Awake() {
         _items = new Dictionary<int, int>();
     }
 
