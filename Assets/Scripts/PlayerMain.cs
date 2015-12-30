@@ -10,10 +10,10 @@ using System.Collections;
  */
 
 public class PlayerMain : MonoBehaviour {
-    // Use this for initialization
+    
 	void Awake () {
+		DontDestroyOnLoad(gameObject);
 		_inventory = gameObject.GetComponent<ItemInventory>();
-
 	}
 	
 	// Update is called once per frame
@@ -67,8 +67,10 @@ public class PlayerMain : MonoBehaviour {
 		return _inventory.removeItem(pItemID, pQuantity);
 	}
 
-
 	private ItemInventory _inventory;
+
+    //TODO: change to private, add access methods
+    public SceneLoadData _sceneLoadData;
 
 }
 	
