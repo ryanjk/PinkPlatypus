@@ -12,6 +12,6 @@ public class TEMPCurrencyUpdater : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		currency.text = "$ " + player.countItem(0);
+		/*currency.text = "$ " + player.countItem(0);*/
 	}
 }

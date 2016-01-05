@@ -19,7 +19,7 @@ public class Talk : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if(other.tag=="Player"||other.tag=="FPPlayer")
-        text.text = "You need the key to open the door.";
+        text.text = "You need the key.";
     }
     void OnTriggerExit(Collider other)
     {

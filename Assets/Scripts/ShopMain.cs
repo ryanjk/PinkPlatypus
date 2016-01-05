@@ -119,7 +119,7 @@ public class ShopMain : MonoBehaviour {
 	 */
 	public void buy(){
 		if(this._dropdown.value > 0){
-			if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
+			/*if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
 				_player.removeItem(0,((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]]));
 				_player.addItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
 				_inventory.removeItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
@@ -128,9 +128,9 @@ public class ShopMain : MonoBehaviour {
 				refreshShopWindow();
 				updateQuantities();
 			}
-			else{
+			else{*/
 				Debug.Log("Not enough money to buy this!");
-			}
+			//}
 		}
 	}
 	
