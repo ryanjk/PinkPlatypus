@@ -1,63 +1,16 @@
 fileFormatVersion: 2
-guid: 1592a13da5fd98b48a66fec580ea8278
-timeCreated: 1446926074
+guid: 09f4a2f74db40dd4d87398d9a311c9a4
+timeCreated: 1449065576
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: Plane
-    100002: Plane_001
-    100004: Plane_002
-    100006: Plane_003
-    100008: Plane_004
-    100010: Plane_005
-    100012: Plane_006
-    100014: Plane_007
-    100016: //RootNode
-    100018: Plane_000
-    400000: Plane
-    400002: Plane_001
-    400004: Plane_002
-    400006: Plane_003
-    400008: Plane_004
-    400010: Plane_005
-    400012: Plane_006
-    400014: Plane_007
-    400016: //RootNode
-    400018: Plane_000
-    2300000: Plane
-    2300002: Plane_001
-    2300004: Plane_002
-    2300006: Plane_003
-    2300008: Plane_004
-    2300010: Plane_005
-    2300012: Plane_006
-    2300014: Plane_007
-    2300016: Plane_000
-    2300018: //RootNode
-    3300000: Plane
-    3300002: Plane_001
-    3300004: Plane_002
-    3300006: Plane_003
-    3300008: Plane_004
-    3300010: Plane_005
-    3300012: Plane_006
-    3300014: Plane_007
-    3300016: Plane_000
-    3300018: //RootNode
-    4300000: Plane_007
-    4300002: Plane_006
-    4300004: Plane_005
-    4300006: Plane_004
-    4300008: Plane_003
-    4300010: Plane_002
-    4300012: Plane_001
-    4300014: Plane
-    4300016: Plane_000
-    6400000: Plane_000
-    6400002: Plane_001
-    6400004: //RootNode
-    7400000: Default Take
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Plane.000
+    6400000: //RootNode
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -72,7 +25,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
@@ -102,7 +55,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
