@@ -20,14 +20,12 @@ public class PortalScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //TODO: remove this.
-	    if (Input.GetKeyDown(KeyCode.A)) {
-            switchScene();
-        }
 	}
     void OnTriggerEnter(Collider other)
     {
-        switchScene();
+        if (other.tag == "Player" || other.tag == "FPPlayer"){
+            switchScene();
+        }
     }
 
 }
