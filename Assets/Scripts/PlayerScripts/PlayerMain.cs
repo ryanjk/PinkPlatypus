@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 public class PlayerMain : MonoBehaviour {
-    private Rigidbody rb;
     public float speed;
     void Awake() {
         DontDestroyOnLoad(gameObject);
@@ -9,22 +8,11 @@ public class PlayerMain : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        rb = GetComponent<Rigidbody>();
         //TODO: fix this, can't create a script with new. should be AddComponent.
 		//_inventory = new ItemInventory ();
        // _sceneLoadData = new SceneLoadData();
 
 	}
-    void FixedUpdate()
-    {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
-        //Updated upstream
-        rb.AddForce(movement * speed);
-    }
 
 	/**
     * Add an item to the inventory
@@ -58,11 +46,18 @@ public class PlayerMain : MonoBehaviour {
 
 	}*/
 
+    public SceneLoadData getSceneLoadData() {
+        return _sceneLoadData;
+    }
+
+    public void setSceneLoadData(SceneLoadData data) {
+        _sceneLoadData = data;
+    }
 
 	private ItemInventory _inventory;
 
     //TODO: change to private, add access methods
-   // public SceneLoadData _sceneLoadData;
+    private SceneLoadData _sceneLoadData;
 
 } 
 	
