@@ -180,7 +180,7 @@ public class ShopMain : MonoBehaviour {
 	 */
 	public void closeShopWindow(){
 		Destroy(_shopUI.gameObject);
-		Cursor.visible = false;
+		//Cursor.visible = false; disabled for testing
 	}
 	
 	/*

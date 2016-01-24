@@ -10,7 +10,7 @@ using System.Collections;
 * 
 * If the player doesn't have the item a error message is printed in the debug log.
 * 
-* The "keyID" variable is the itemID of the item that opens the door.
+* The "keyID" variable is the itemID of the item that opens the door .
 */
 
 public class DoorMain : MonoBehaviour {

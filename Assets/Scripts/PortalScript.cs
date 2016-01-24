@@ -10,17 +10,9 @@ public class PortalScript : MonoBehaviour {
         //PlayerMain player = GameObject.Find("Player").GetComponent<PlayerMain>();
         //player._sceneLoadData.destination = destination;
         //player._sceneLoadData.source = source;
-        Application.LoadLevel(destination);
+        GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().changeScene(Application.loadedLevelName, destination);
     }
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" || other.tag == "FPPlayer"){

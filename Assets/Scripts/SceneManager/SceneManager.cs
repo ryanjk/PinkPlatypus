@@ -32,10 +32,11 @@ public abstract class SceneManager : MonoBehaviour {
 
     public void changeScene(string destination, string source) {
         prepare_to_leave_scene(destination, source);
+        Application.LoadLevel(destination);
     }
 
     protected abstract void prepare_scene(string destination, string source);
     protected abstract void prepare_to_leave_scene(string destination, string source);
 
-    private PlayerMain _player;
+    protected PlayerMain _player;
 }
