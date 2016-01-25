@@ -32,6 +32,11 @@ public abstract class SceneManager : MonoBehaviour {
 	}
 
     public void changeScene(string destination, string source) {
+        SceneLoadData s = new SceneLoadData();
+        s.destination = destination;
+        s.source = source;
+        _player.setSceneLoadData(s);
+
         prepare_to_leave_scene(destination, source);
         Application.LoadLevel(destination);
     }

@@ -11,6 +11,7 @@ public class DungeonSceneManager : SceneManager {
     */
     protected override void prepare_scene(string destination, string source) {
         _player.gameObject.GetComponent<PlayerController>().enabled = false;
+        _player.gameObject.GetComponent<Collider>().enabled = false;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(false);
         _player.gameObject.transform.Find("Sprite").gameObject.SetActive(false);
 
@@ -33,14 +34,11 @@ public class DungeonSceneManager : SceneManager {
     */
     protected override void prepare_to_leave_scene(string destination, string source) {
         _player.GetComponent<PlayerController>().enabled = true;
+        _player.gameObject.GetComponent<Collider>().enabled = true;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(true);
         _player.gameObject.transform.Find("Sprite").gameObject.SetActive(true);
         //DEBUG JUMP PLAYER SO THEY DON'T TELEPORT RIGHT AWAY
         _player.gameObject.transform.position += new Vector3(1f, 0f, 0f);
-        SceneLoadData leaving = new SceneLoadData();
-        leaving.destination = destination;
-        leaving.source = source;
-        _player.setSceneLoadData(leaving);
     }
 
 }
