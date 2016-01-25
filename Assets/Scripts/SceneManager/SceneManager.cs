@@ -19,11 +19,12 @@ public abstract class SceneManager : MonoBehaviour {
 
 	void Start () {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMain>();
-
-        string destination = _player.getSceneLoadData().destination;
-        string source = _player.getSceneLoadData().source;
-
-        prepare_scene(destination, source);
+        if (_player.getSceneLoadData() != null) {
+            Debug.Log("Prepping scene");
+            string destination = _player.getSceneLoadData().destination;
+            string source = _player.getSceneLoadData().source;
+            prepare_scene(destination, source);
+        }
     }
 	
 	void Update () {

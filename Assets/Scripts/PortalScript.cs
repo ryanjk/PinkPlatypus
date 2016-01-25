@@ -10,7 +10,7 @@ public class PortalScript : MonoBehaviour {
         //PlayerMain player = GameObject.Find("Player").GetComponent<PlayerMain>();
         //player._sceneLoadData.destination = destination;
         //player._sceneLoadData.source = source;
-        GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().changeScene(Application.loadedLevelName, destination);
+        (FindObjectOfType(typeof(SceneManager)) as SceneManager).changeScene(destination, Application.loadedLevelName);
     }
 
     void OnTriggerEnter(Collider other)

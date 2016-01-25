@@ -10,11 +10,13 @@ public class DungeonSceneManager : SceneManager {
     After that it can set the values of currency and keys that open doors (nothing to be done for the templatescene)
     */
     protected override void prepare_scene(string destination, string source) {
-        _player.GetComponent<Renderer>().enabled = false;
-        _player.GetComponent<PlayerController>().enabled = false;
+        _player.gameObject.GetComponent<PlayerController>().enabled = false;
+        _player.gameObject.transform.Find("Camera").gameObject.SetActive(false);
+        _player.gameObject.transform.Find("Sprite").gameObject.SetActive(false);
 
         foreach (PortalScript p in (FindObjectsOfType(typeof(PortalScript))) as PortalScript[]) {
-            p.destination = _player.getSceneLoadData().source;
+            //p.destination = _player.getSceneLoadData().source;
+            p.destination = "TemplateWorld";
         }
 
         CurrencyMain[] c = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
@@ -30,8 +32,11 @@ public class DungeonSceneManager : SceneManager {
     After that it sets the player's sceneload data to the correct source and destination
     */
     protected override void prepare_to_leave_scene(string destination, string source) {
-        _player.GetComponent<Renderer>().enabled = true;
         _player.GetComponent<PlayerController>().enabled = true;
+        _player.gameObject.transform.Find("Camera").gameObject.SetActive(true);
+        _player.gameObject.transform.Find("Sprite").gameObject.SetActive(true);
+        //DEBUG JUMP PLAYER SO THEY DON'T TELEPORT RIGHT AWAY
+        _player.gameObject.transform.position += new Vector3(1f, 0f, 0f);
         SceneLoadData leaving = new SceneLoadData();
         leaving.destination = destination;
         leaving.source = source;
