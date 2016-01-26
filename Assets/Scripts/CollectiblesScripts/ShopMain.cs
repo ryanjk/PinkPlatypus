@@ -56,7 +56,7 @@ public class ShopMain : MonoBehaviour {
 	void OnTriggerExit(Collider c){
 		if(c.tag == "Player"){
 			closeShopWindow();
-		}
+        }
 	}
 	/*
 	 * This can be used to set the price of an item in the shop.
@@ -179,9 +179,11 @@ public class ShopMain : MonoBehaviour {
 	 * It destorys the shop UI and hides the cursor.
 	 */
 	public void closeShopWindow(){
-		Destroy(_shopUI.gameObject);
-		//Cursor.visible = false; disabled for testing
-	}
+        if (_shopUI != null) {
+            Destroy(_shopUI.gameObject);
+            //Cursor.visible = false; disabled for testing
+        }
+    }
 	
 	/*
 	 * A bunch of methods that allow manipulations of the inventory the shop is using.
