@@ -24,6 +24,16 @@ public class TileMapScript : MonoBehaviour {
         stream.Close();
     }
 
+    /** 
+    * Get tile data for a specific position on the map
+    * @param x_pos the x-coordinate of the tile
+    * @param y_pos the y-coordinate of the tile
+    * @return the tile data (a clone of it, so it's not modifiable)
+    */
+    public TileMapData.Tile getTile(int x_pos, int y_pos) {
+        return _tileMapData.getTile(x_pos, y_pos).clone();
+    }
+
     void Start() {
         /*
         Use this to test the loading of map data. Leaving here for possible future use.
