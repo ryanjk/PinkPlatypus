@@ -2,62 +2,69 @@
 using System.Collections;
 
 /**
-* @author Thomas
+* @author Thomas and Ryan
 */
 public class PlayerController : MonoBehaviour {
-    private float maxSpeed = 4f;
-    private float minSpeed = 0.1f;
-    private int direction = 0;
 
-    private Direction prev_direction = Direction.NONE;
-    private float speed = 4.0f;
+    // time takes to move distance
+    private float _speed = 0.1f;
+
+    // distance per step
+    private float _distance = 0.5f;
+
+    private Direction _direction;
     private Rigidbody _rbody;
 
 	void Start () {
         _rbody = GetComponent<Rigidbody>();
-	}
+        _direction = Direction.NONE;
+    }
 	
     void Update () {
 
     }
 
-    /**
-    * From what I can gather, it seems simpler to implement
-    * movement in the FixedUpdate as opposed to Update.
-    * It starts by getting the vertical and horizontal input values,
-    * then checks to see if the input is greater than the threshold value
-    * in the given direction, to facilitate continuous motion.
-    * If it's not, then we check for input in any direction, and flip
-    * to that direction and start moving.
-    * If there's no input, we don't move (obviously).
-    */
 	void FixedUpdate () {
+        
+        // currently moving, don't even process input
+        if (_direction != Direction.NONE) {
+            return;
+        }
+
         float vert = Input.GetAxis("Vertical");
         float hori = Input.GetAxis("Horizontal");
 
-        var current_direction = input_to_direction(vert, hori);
+        var new_direction = input_to_direction(vert, hori);
 
-        // check if changing direction
-        if (current_direction == prev_direction) {
-            // not changing, keep going
-            _rbody.velocity = direction_to_velocity(current_direction);
-            set_sprite(current_direction);
+        // don't move if nothing is being pressed
+        if (new_direction == Direction.NONE) {
+            return;
         }
 
-        else if (current_direction != prev_direction) {
-            // changing, make sure player is in the center of a tile before changing
-            var on_x = _rbody.position.x % 0.5f;
-            var on_z = _rbody.position.z % 0.5f;
-            var epsilon = 0.05f;
-            if (( on_x < epsilon ) && (on_z < epsilon)) {
-                // player is in the center, can change
-                _rbody.MovePosition(new Vector3(_rbody.position.x - on_x, _rbody.position.y, _rbody.position.z - on_z));
-                _rbody.velocity = direction_to_velocity(current_direction);
-                set_sprite(current_direction);
-                prev_direction = current_direction;
-            }
-        }
+        // start moving (check out iTween library for more info on what this is doing)
+        iTween.MoveBy(gameObject, iTween.Hash(
+            "amount", _distance * direction_to_velocity(new_direction),
+            "time", _speed,
+            "oncomplete", "stop_moving",
+            "easetype", iTween.EaseType.linear
+        ));
 
+        // update player state
+        _direction = new_direction;
+        set_sprite(new_direction);
+
+    }
+
+    public void stop_moving() {
+        _direction = Direction.NONE;
+
+        // see if input is pressed and keep moving if so
+        float vert = Input.GetAxis("Vertical");
+        float hori = Input.GetAxis("Horizontal");
+
+        if (vert == 0.0f && hori == 0.0f) return;
+
+        FixedUpdate();
     }
 
     private void set_sprite (Direction direction) {
@@ -90,13 +97,13 @@ public class PlayerController : MonoBehaviour {
     private Vector3 direction_to_velocity(Direction dir) {
         switch (dir) {
             case Direction.UP:
-                return new Vector3(0.0f, 0.0f, speed);
+                return new Vector3(0.0f, 0.0f, 1.0f);
             case Direction.DOWN:
-                return new Vector3(0.0f, 0.0f, -speed);
+                return new Vector3(0.0f, 0.0f, -1.0f);
             case Direction.LEFT:
-                return new Vector3(-speed, 0.0f, 0.0f);                
+                return new Vector3(-1.0f, 0.0f, 0.0f);                
             case Direction.RIGHT:
-                return new Vector3(speed, 0.0f, 0.0f);
+                return new Vector3(1.0f, 0.0f, 0.0f);
             case Direction.NONE:
                 return new Vector3(0.0f, 0.0f, 0.0f);
             default:
