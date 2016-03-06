@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
 /**
@@ -7,14 +8,14 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     // time takes to move distance
-    private float _speed = 0.1f;
+    private float _speed = 0.3f;
 
     // distance per step
-    private float _distance = 0.5f;
+    private float _distance = 1f;
 
     private Direction _direction;
     private Rigidbody _rbody;
-
+    public SpriteRenderer U, D, R, L;
 	void Start () {
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
@@ -25,14 +26,13 @@ public class PlayerController : MonoBehaviour {
     }
 
 	void FixedUpdate () {
-        
+    
         // currently moving, don't even process input
         if (_direction != Direction.NONE) {
             return;
         }
-
-        float vert = Input.GetAxis("Vertical");
-        float hori = Input.GetAxis("Horizontal");
+            float vert = Input.GetAxis("Vertical");
+            float hori = Input.GetAxis("Horizontal");
 
         var new_direction = input_to_direction(vert, hori);
 
@@ -68,11 +68,53 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void set_sprite (Direction direction) {
-        if (direction == Direction.NONE) return;
+        if (direction == Direction.NONE || direction == Direction.DOWN) {
+            R.enabled = false;
+            L.enabled = false;
+            U.enabled = false;
+            D.enabled = true;
+            return;
+        }
+        if (direction == Direction.UP) {
+            R.enabled = false;
+            L.enabled = false;
+            U.enabled = true;
+            D.enabled = false;
+            return;
+        }
+        if (direction == Direction.RIGHT) {
+            R.enabled = true;
+            L.enabled = false;
+            U.enabled = false;
+            D.enabled = false;
+            return;
+        }
+        if (direction == Direction.LEFT) {
+            R.enabled = false;
+            L.enabled = true;
+            U.enabled = false;
+            D.enabled = false;
+            return;
+        }
 
-        transform.GetChild(0).transform.localEulerAngles = new Vector3(90f, 0f, (int) direction * 90f);
+        //transform.GetChild(0).transform.localEulerAngles = new Vector3(90f, 0f, (int) direction * 90f);
     }
-
+    public void setSprites(bool isHost) {
+        if(isHost) {
+            U = GameObject.Find("sprite_U").GetComponent<SpriteRenderer>();
+            D = GameObject.Find("sprite_D").GetComponent<SpriteRenderer>();
+            L = GameObject.Find("sprite_L").GetComponent<SpriteRenderer>();
+            R = GameObject.Find("sprite_R").GetComponent<SpriteRenderer>();
+            return;
+        }
+        else {
+            U = GameObject.Find("sprite2_U").GetComponent<SpriteRenderer>();
+            D = GameObject.Find("sprite2_D").GetComponent<SpriteRenderer>();
+            L = GameObject.Find("sprite2_L").GetComponent<SpriteRenderer>();
+            R = GameObject.Find("sprite2_R").GetComponent<SpriteRenderer>();
+            return;
+        }
+    }
     private Direction input_to_direction(float vertical, float horizontal) {
         if (vertical < 0.0f) {
             return Direction.DOWN;
