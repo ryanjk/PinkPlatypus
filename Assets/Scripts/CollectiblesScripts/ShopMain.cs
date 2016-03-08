@@ -74,7 +74,8 @@ public class ShopMain : MonoBehaviour {
 	 * It then sets all the visual components up, assigns them to variables and updates the shop.
 	 */
 	private void openShopWindow(){
-		_shopUI = Object.Instantiate(shopUIPrefab) as Canvas;
+        _player.GetComponent<PlayerController>().ignoreInput = true;
+        _shopUI = Object.Instantiate(shopUIPrefab) as Canvas;
 
 		_dropdown = _shopUI.GetComponentInChildren<Dropdown>();
 		_dropdown.onValueChanged.AddListener((int i) => {
@@ -182,6 +183,7 @@ public class ShopMain : MonoBehaviour {
         if (_shopUI != null) {
             Destroy(_shopUI.gameObject);
             //Cursor.visible = false; disabled for testing
+            _player.GetComponent<PlayerController>().ignoreInput = false;
         }
     }
 	
