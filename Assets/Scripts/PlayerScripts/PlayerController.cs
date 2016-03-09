@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour {
     private Direction _direction;
     private Rigidbody _rbody;
     public SpriteRenderer U, D, R, L; // Sprites for all 4 directions
-    public bool ignoreInput; 
+    public bool ignoreInput;
+
     void Start() {
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
@@ -49,8 +50,9 @@ public class PlayerController : MonoBehaviour {
         // start moving (check out iTween library for more info on what this is doing)
         iTween.MoveBy(gameObject, iTween.Hash(
             "amount", _distance * direction_to_velocity(new_direction),
+            "name", "player_move_tween",
             "time", _speed,
-            "oncomplete", "stop_moving",
+            "oncomplete", "on_tween_complete",
             "easetype", iTween.EaseType.linear
         ));
 
@@ -61,6 +63,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void stop_moving() {
+        _direction = Direction.NONE;
+        iTween.StopByName("player_move_tween");
+    }
+
+    public void on_tween_complete() {
         _direction = Direction.NONE;
 
         // see if input is pressed and keep moving if so
