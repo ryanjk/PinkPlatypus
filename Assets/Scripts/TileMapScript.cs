@@ -31,6 +31,9 @@ public class TileMapScript : MonoBehaviour {
     * @return the tile data (a clone of it, so it's not modifiable)
     */
     public TileMapData.Tile getTile(int x_pos, int y_pos) {
+        if (_tileMapData == null) {
+            return null;
+        }
         return _tileMapData.getTile(x_pos, y_pos).clone();
     }
 
