@@ -1,55 +1,45 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class Merchant : MonoBehaviour
+public class MerchantDebug:MonoBehaviour
 {
     private static float speed = 4f;
     private Rigidbody _rbody;
     private Transform _transform;
     private float desiredX;
     private float desiredY;
-    private Vector3 currentGoal;
-    public Vector3 finalDesiredPoint;
-    private Vector3 movementVector;
-    private Vector3 currentPosition;
+    private Vector2 currentGoal;
+    public Vector2 finalDesiredPoint;
+    private Vector2 movementVector;
+    private Vector2 currentPosition;
     float vert;
     float hori;
     private const int WALKABLE = 0;
-    private const int NUM_DIMENSIONS = 2;
+    private const int NUM_DIMENSIONS=2;
     private int[,] map;
     int[,] directions;
     int[] right;
     int[] left;
     int[] up;
     int[] down;
-    bool pathfound;
-    int currentGoalIndex;
-    List<Vector3> destinations;
-    List<int[]> truePath;
+
     private enum Direction { UP0, DOWN0, UP1, DOWN1 };
-    int currentDestinationIndex;
     void Start()
     {
-        currentDestinationIndex = 0;
-        destinations.Add(new Vector3(1, 1, 1));
-        destinations.Add(new Vector3(1, 1, 2));
-        destinations.Add(new Vector3(2, 1, 2));
-        destinations.Add(new Vector3(2, 1, 1));
-        pathfound = false;
         _transform = gameObject.transform;
-        Debug.Log(_transform.position);
+        Debug.Log(_transform.position); 
         map = exampleMap();
-        findpath(_transform.position, destinations[0]);
+        currentGoal = new Vector2(1, 1);
     }
     public static int[,] exampleMap()
     {
-        int[,] map = new int[10, 10];
+        int[,] map=new int[,]{{0,0,1},{0,0,0},{2,0,0}};
         return map;
     }
     public int[] add(int[] first, int[] second)
     {
         int[] sum = new int[NUM_DIMENSIONS];
-        for (int i = 0; i < NUM_DIMENSIONS; i++)
+        for(int i=0; i < NUM_DIMENSIONS; i++)
         {
             sum[i] = first[i] + second[i];
         }
@@ -81,7 +71,7 @@ public class Merchant : MonoBehaviour
 
         return result;
     }
-    private int[] asCloseAsHeCanGet(Direction d, int[] start, int[] dest)
+    public int[] asCloseAsHeCanGet(Direction d, int[] start, int[] dest)
     {
         int[] x = new int[NUM_DIMENSIONS];
         Array.Copy(start, x, NUM_DIMENSIONS);
@@ -94,70 +84,48 @@ public class Merchant : MonoBehaviour
             {
                 Array.Copy(next, x, NUM_DIMENSIONS);
             }
-            else
+            else 
                 break;
         }
         return x;
     }
-    private int[] asFarAsHeCanGo(int[] direction, int[] start)
+    public int[] asFarAsHeCanGo(int[] direction, int[] start)
     {
         int[] x = new int[NUM_DIMENSIONS];
-        Array.Copy(start, x, NUM_DIMENSIONS);
+        Array.Copy(start, x,NUM_DIMENSIONS);
         int[] next;
         while (true)
         {
             next = add(x, direction);
-            if (next[0] >= 0 && next[1] >= 0 && next[0] <= map.GetLength(0)
-                && next[1] <= map.GetLength(1) && map[next[0], next[1]] == WALKABLE)
+            if (next[0]>=0&&next[1]>=0&&next[0]<=map.GetLength(0)
+                &&next[1]<=map.GetLength(1)&&map[next[0], next[1]] == WALKABLE)
             {
-                Array.Copy(next, x, NUM_DIMENSIONS);
+                Array.Copy(next, x,NUM_DIMENSIONS);
             }
             else break;
         }
         return x;
     }
-    private bool move()
-    {
-
-        return false;
-    }
-    private bool findpath(Vector3 originVector, Vector3 destination)
-    {
-        Debug.Log("finding path");
+    //Among other things, findpath sets the tempDesiredPoint and the movementVector.
+	public bool findpath(Vector2 originVector, Vector2 destination)
+	{
         int[] origin = new int[NUM_DIMENSIONS];
         int[] dest = new int[NUM_DIMENSIONS];
         origin[0] = (int)originVector.x;
-        origin[1] = (int)originVector.z;
+        origin[1] = (int)originVector.y;
         dest[0] = (int)destination.x;
-        dest[1] = (int)destination.z;
+        dest[1] = (int)destination.y;
         if (map[dest[0], dest[1]] != WALKABLE)
             return false;
-        List<int[]> truePath = new List<int[]>();
+        List<int[]> truePath=new List<int[]>();
         List<int[]> tentativePath = new List<int[]>();
         int i = origin[0];
         Direction d;
         if (origin[0] < dest[0])
-        {
             d = Direction.UP0;
-            movementVector = new Vector3(.1f, 0, 0);
-        }
-        else if (origin[0] > dest[0])
-        {
-            d = Direction.DOWN0;
-            movementVector = new Vector3(-.1f, 0, 0);
-        }
-        else if (origin[1] < dest[1])
-        {
-            d = Direction.UP1;
-            movementVector = new Vector3(0, 0, .1f);
-        }
         else
-        {
-            d = Direction.DOWN1;
-            movementVector = new Vector3(0, 0, -.1f);
-        }
-
-        int[] tentativeGoal = { dest[0], origin[1] };
+            d = Direction.DOWN0;
+        int[] tentativeGoal={dest[0],origin[1]};
         tentativePath.Add(tentativeGoal);
         if (asCloseAsHeCanGet(d, origin, dest).Equals(tentativeGoal)) ;
         //else to do later
@@ -166,37 +134,33 @@ public class Merchant : MonoBehaviour
             d = Direction.UP1;
         else
             d = Direction.DOWN1;
-        if (asCloseAsHeCanGet(d, tentativeGoal, dest).Equals(dest))
+        if (asCloseAsHeCanGet(d, origin, dest).Equals(dest))
         {
+            currentGoal.x = tentativeGoal[0];
+            currentGoal.y = tentativeGoal[1];
             truePath.Add(tentativeGoal);
             truePath.Add(dest);
-            pathfound = true;
-            currentGoalIndex = 0;
-            setVector(currentGoal, truePath[currentGoalIndex]);
             return true;
         }
-
+        
         return false;
-    }
-    void setVector(Vector3 vector, int[] array)
-    {
-        vector.x = array[0];
-        vector.z = array[1];
-    }
+	}
     void Update()
     {
-        currentPosition = _transform.position;
-        if ((currentPosition - currentGoal).sqrMagnitude < 1)
+        if (currentPosition == currentGoal)
         {
-            //Debug.Log("Hallelujah");
-            //if(currentGoal.Equals)
-            // currentGoalIndex = (currentGoalIndex + 1) % truePath.Count;
-            //setVector(currentGoal, truePath[currentGoalIndex]);
+            if (currentGoal != finalDesiredPoint)
+                findpath(_transform.position, currentGoal);
         }
         else
             _transform.Translate(movementVector);
 
 
     }
-
+    
 }
+
+/*tentativePath.Add(new Vector2(i, originY));
+tempDesiredPoint = finalDesiredPoint;
+currentPosition=Vector3.ProjectOnPlane(_transform.position, new Vector3(0, 1, 0));
+movementVector = .1f * (tempDesiredPoint - currentPosition);       */
