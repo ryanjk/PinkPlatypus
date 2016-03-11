@@ -4,42 +4,77 @@ using System;
 public class Merchant : MonoBehaviour
 {
     private static float speed = 4f;
-    private Rigidbody _rbody;
     private Transform _transform;
-    private float desiredX;
-    private float desiredY;
     private Vector3 currentGoal;
-    public Vector3 finalDesiredPoint;
     private Vector3 movementVector;
-    private Vector3 currentPosition;
-    float vert;
-    float hori;
     private const int WALKABLE = 0;
     private const int NUM_DIMENSIONS = 2;
     private int[,] map;
-    int[,] directions;
-    int[] right;
-    int[] left;
-    int[] up;
-    int[] down;
-    bool pathfound;
-    int currentGoalIndex;
-    List<Vector3> destinations;
+    List<bool> pathfound;
+    int currentTurnIndex;
+    List<Vector3> destinations;//can be anywhere in the world, provided externally
     List<int[]> truePath;
+    List<List<int[]>> paths;//for each destination, there is a list of points it should get to.
+    
     private enum Direction { UP0, DOWN0, UP1, DOWN1 };
     int currentDestinationIndex;
+    private bool pathFound(int[] origin, int[] destination)
+    {
+        //for (int i = 0; i < paths.Count;i++)
+          //  if
+            return false;
+    }
+    public class OriginDestination
+    {
+        private bool pathFound;
+        private int[] origin;
+        private int[] destination;
+        public OriginDestination(int[] anOrigin, int[] aDestination)
+        {
+            origin = anOrigin;
+            destination = aDestination;
+            pathFound = false;
+        }
+        public bool getPathFound()
+        {
+            return pathFound;
+        }
+        public void setPathFound(bool b)
+        {
+            pathFound = b;
+        }
+        public int[] getOrigin()
+        {
+            return (int[]) origin.Clone();
+        }
+        public int[] getDestination()
+        {
+            return (int[]) destination.Clone();
+        }
+    }
     void Start()
     {
         currentDestinationIndex = 0;
-        destinations.Add(new Vector3(1, 1, 1));
-        destinations.Add(new Vector3(1, 1, 2));
-        destinations.Add(new Vector3(2, 1, 2));
-        destinations.Add(new Vector3(2, 1, 1));
-        pathfound = false;
+        addDestination(new Vector3(1, 1, 1));
+        addDestination(new Vector3(1, 1, 2));
         _transform = gameObject.transform;
+        int[] origin=new int[NUM_DIMENSIONS];
+        int[] destination=new int[NUM_DIMENSIONS];
+        setArray(origin, new Vector3(1, 1, 1));
+        setArray(origin, new Vector3(3, 1, 3));
+        OriginDestination od=new OriginDestination(origin,destination);
+        //addDestination(new Vector3(2, 1, 2));
+        //addDestination(new Vector3(2, 1, 1));
+        
         Debug.Log(_transform.position);
         map = exampleMap();
-        findpath(_transform.position, destinations[0]);
+        paths = new List<List<int[]>>();
+        findpath(od);
+    }
+    public void addDestination(Vector3 destination)
+    {
+        destinations.Add(destination);
+        pathfound.Add(false);
     }
     public static int[,] exampleMap()
     {
@@ -116,37 +151,27 @@ public class Merchant : MonoBehaviour
         }
         return x;
     }
-    private bool move()
-    {
-
-        return false;
-    }
-    private bool findpath(Vector3 originVector, Vector3 destination)
+    private bool findpath(OriginDestination od)
     {
         Debug.Log("finding path");
-        int[] origin = new int[NUM_DIMENSIONS];
-        int[] dest = new int[NUM_DIMENSIONS];
-        origin[0] = (int)originVector.x;
-        origin[1] = (int)originVector.z;
-        dest[0] = (int)destination.x;
-        dest[1] = (int)destination.z;
-        if (map[dest[0], dest[1]] != WALKABLE)
+        int[] origin = od.getOrigin();
+        int[] destination = od.getDestination();
+        if (map[destination[0], destination[1]] != WALKABLE)
             return false;
-        List<int[]> truePath = new List<int[]>();
         List<int[]> tentativePath = new List<int[]>();
         int i = origin[0];
         Direction d;
-        if (origin[0] < dest[0])
+        if (origin[0] < destination[0])
         {
             d = Direction.UP0;
             movementVector = new Vector3(.1f, 0, 0);
         }
-        else if (origin[0] > dest[0])
+        else if (origin[0] > destination[0])
         {
             d = Direction.DOWN0;
             movementVector = new Vector3(-.1f, 0, 0);
         }
-        else if (origin[1] < dest[1])
+        else if (origin[1] < destination[1])
         {
             d = Direction.UP1;
             movementVector = new Vector3(0, 0, .1f);
@@ -157,22 +182,24 @@ public class Merchant : MonoBehaviour
             movementVector = new Vector3(0, 0, -.1f);
         }
 
-        int[] tentativeGoal = { dest[0], origin[1] };
+        int[] tentativeGoal = { destination[0], origin[1] };
         tentativePath.Add(tentativeGoal);
-        if (asCloseAsHeCanGet(d, origin, dest).Equals(tentativeGoal)) ;
+        if (asCloseAsHeCanGet(d, origin, destination).Equals(tentativeGoal)) ;
         //else to do later
         tentativePath.Add(tentativeGoal);
-        if (origin[1] < dest[1])
+        if (origin[1] < destination[1])
             d = Direction.UP1;
         else
             d = Direction.DOWN1;
-        if (asCloseAsHeCanGet(d, tentativeGoal, dest).Equals(dest))
+        if (asCloseAsHeCanGet(d, tentativeGoal, destination).Equals(destination))
         {
-            truePath.Add(tentativeGoal);
-            truePath.Add(dest);
-            pathfound = true;
-            currentGoalIndex = 0;
-            setVector(currentGoal, truePath[currentGoalIndex]);
+            List<int[]> thisPath=new List<int[]>();
+            thisPath.Add(tentativeGoal);
+            thisPath.Add(destination);
+            paths.Add(thisPath);
+            od.setPathFound(true);
+            currentTurnIndex = 0;
+            setVector(currentGoal, truePath[currentTurnIndex]);
             return true;
         }
 
@@ -183,18 +210,26 @@ public class Merchant : MonoBehaviour
         vector.x = array[0];
         vector.z = array[1];
     }
+    void setArray(int[] array, Vector3 vector)
+    {
+        array[0] = (int) vector.x;
+        array[1] = (int) vector.z;
+    }
     void Update()
     {
-        currentPosition = _transform.position;
-        if ((currentPosition - currentGoal).sqrMagnitude < 1)
-        {
+        Debug.Log("Transform position "+_transform.position);
+        Debug.Log("currentGoal "+currentGoal);
+        //if ((_transform.position - currentGoal).sqrMagnitude < 0.5)
+        //{
+
+            //if(currentGoalIndex<truePath.)
             //Debug.Log("Hallelujah");
             //if(currentGoal.Equals)
             // currentGoalIndex = (currentGoalIndex + 1) % truePath.Count;
             //setVector(currentGoal, truePath[currentGoalIndex]);
-        }
-        else
-            _transform.Translate(movementVector);
+        //}
+        //else
+          //  _transform.Translate(movementVector);
 
 
     }
