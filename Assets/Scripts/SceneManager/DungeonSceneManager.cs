@@ -13,7 +13,10 @@ public class DungeonSceneManager : SceneManager {
         _player.gameObject.GetComponent<PlayerController>().enabled = false;
         _player.gameObject.GetComponent<Collider>().enabled = false;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(false);
-        _player.gameObject.transform.Find("Sprite").gameObject.SetActive(false);
+        _player.gameObject.transform.Find("spriteU").gameObject.SetActive(false);
+        _player.gameObject.transform.Find("spriteD").gameObject.SetActive(false);
+        _player.gameObject.transform.Find("spriteR").gameObject.SetActive(false);
+        _player.gameObject.transform.Find("spriteL").gameObject.SetActive(false);
 
         foreach (PortalScript p in (FindObjectsOfType(typeof(PortalScript))) as PortalScript[]) {
             //p.destination = _player.getSceneLoadData().source;
@@ -36,7 +39,10 @@ public class DungeonSceneManager : SceneManager {
         _player.GetComponent<PlayerController>().enabled = true;
         _player.gameObject.GetComponent<Collider>().enabled = true;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(true);
-        _player.gameObject.transform.Find("Sprite").gameObject.SetActive(true);
+        _player.gameObject.transform.Find("spriteU").gameObject.SetActive(true);
+        _player.gameObject.transform.Find("spriteD").gameObject.SetActive(true);
+        _player.gameObject.transform.Find("spriteR").gameObject.SetActive(true);
+        _player.gameObject.transform.Find("spriteL").gameObject.SetActive(true);
         //DEBUG JUMP PLAYER SO THEY DON'T TELEPORT RIGHT AWAY
         _player.gameObject.transform.position += new Vector3(1f, 0f, 0f);
     }

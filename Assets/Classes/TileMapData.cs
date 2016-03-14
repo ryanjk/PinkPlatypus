@@ -43,7 +43,7 @@ public class TileMapData {
     * @return Tile a copy of the desired tile
     */
     public Tile getTile(int x_pos, int y_pos) {
-        return _tiles[x_pos, y_pos].clone();
+        return _tiles[x_pos, y_pos];
     }
 
     /**
