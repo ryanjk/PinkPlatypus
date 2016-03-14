@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 /**
-* @author Thomas and Ryan
+* @author Thomas, Ryan and Harry
 */
 public class PlayerController : MonoBehaviour {
 
@@ -15,26 +15,32 @@ public class PlayerController : MonoBehaviour {
 
     private Direction _direction;
     private Rigidbody _rbody;
-    public SpriteRenderer U, D, R, L;
-	void Start () {
+    public SpriteRenderer U, D, R, L; // Sprites for all 4 directions
+    public bool ignoreInput;
+
+    void Start() {
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
+        ignoreInput = false;
     }
-	
-    void Update () {
+
+    void Update() {
 
     }
 
-	void FixedUpdate () {
-    
+    void FixedUpdate() {
+
         // currently moving, don't even process input
         if (_direction != Direction.NONE) {
             return;
         }
-            float vert = Input.GetAxis("Vertical");
-            float hori = Input.GetAxis("Horizontal");
-
-        var new_direction = input_to_direction(vert, hori);
+        float vert = 0f;
+        float hori = 0f;
+        if (!ignoreInput) {
+            vert = Input.GetAxis("Vertical");
+            hori = Input.GetAxis("Horizontal");
+        }
+            var new_direction = input_to_direction(vert, hori);
 
         // don't move if nothing is being pressed
         if (new_direction == Direction.NONE) {
@@ -44,8 +50,9 @@ public class PlayerController : MonoBehaviour {
         // start moving (check out iTween library for more info on what this is doing)
         iTween.MoveBy(gameObject, iTween.Hash(
             "amount", _distance * direction_to_velocity(new_direction),
+            "name", "player_move_tween",
             "time", _speed,
-            "oncomplete", "stop_moving",
+            "oncomplete", "on_tween_complete",
             "easetype", iTween.EaseType.linear
         ));
 
@@ -57,17 +64,22 @@ public class PlayerController : MonoBehaviour {
 
     public void stop_moving() {
         _direction = Direction.NONE;
+        iTween.StopByName("player_move_tween");
+    }
+
+    public void on_tween_complete() {
+        _direction = Direction.NONE;
 
         // see if input is pressed and keep moving if so
-        float vert = Input.GetAxis("Vertical");
-        float hori = Input.GetAxis("Horizontal");
-
+            float vert = Input.GetAxis("Vertical");
+            float hori = Input.GetAxis("Horizontal");
+        
         if (vert == 0.0f && hori == 0.0f) return;
 
         FixedUpdate();
     }
 
-    private void set_sprite (Direction direction) {
+    private void set_sprite(Direction direction) {
         if (direction == Direction.NONE || direction == Direction.DOWN) {
             R.enabled = false;
             L.enabled = false;
@@ -99,22 +111,6 @@ public class PlayerController : MonoBehaviour {
 
         //transform.GetChild(0).transform.localEulerAngles = new Vector3(90f, 0f, (int) direction * 90f);
     }
-    public void setSprites(bool isHost) {
-        if(isHost) {
-            U = GameObject.Find("sprite_U").GetComponent<SpriteRenderer>();
-            D = GameObject.Find("sprite_D").GetComponent<SpriteRenderer>();
-            L = GameObject.Find("sprite_L").GetComponent<SpriteRenderer>();
-            R = GameObject.Find("sprite_R").GetComponent<SpriteRenderer>();
-            return;
-        }
-        else {
-            U = GameObject.Find("sprite2_U").GetComponent<SpriteRenderer>();
-            D = GameObject.Find("sprite2_D").GetComponent<SpriteRenderer>();
-            L = GameObject.Find("sprite2_L").GetComponent<SpriteRenderer>();
-            R = GameObject.Find("sprite2_R").GetComponent<SpriteRenderer>();
-            return;
-        }
-    }
     private Direction input_to_direction(float vertical, float horizontal) {
         if (vertical < 0.0f) {
             return Direction.DOWN;
@@ -143,7 +139,7 @@ public class PlayerController : MonoBehaviour {
             case Direction.DOWN:
                 return new Vector3(0.0f, 0.0f, -1.0f);
             case Direction.LEFT:
-                return new Vector3(-1.0f, 0.0f, 0.0f);                
+                return new Vector3(-1.0f, 0.0f, 0.0f);
             case Direction.RIGHT:
                 return new Vector3(1.0f, 0.0f, 0.0f);
             case Direction.NONE:

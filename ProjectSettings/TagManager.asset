@@ -6,7 +6,6 @@ TagManager:
   tags:
   - FPPlayer
   - SceneManager
-  - NetworkManager
   layers:
   - Default
   - TransparentFX

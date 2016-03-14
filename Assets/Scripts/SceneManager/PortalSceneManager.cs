@@ -7,7 +7,6 @@ public class PortalSceneManager : SceneManager {
         if (source.Equals("menu")) {
             // assume origin is the center for now
             _player.gameObject.transform.position.Set(0.0f, 1.0f, 0.0f);
-            _player.GetComponent<PlayerController>().setSprites(true);
         }
 
         else {
