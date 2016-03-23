@@ -150,9 +150,9 @@ public class Merchant : MonoBehaviour
             int[] next;
             while (x[0]!=dest[0]||x[1]!=dest[1])
             {
-                Debug.Log("In while loop:" + "x[0]=" + x[0] + "x[1]=" + x[1]);
+                //Debug.Log("In while loop:" + "x[0]=" + x[0] + "x[1]=" + x[1]);
                 next = thinkOfStepping(d, x);
-                Debug.Log("d=" + d + "next[0]=" + next[0] + "next[1]=" + next[1]);
+                //Debug.Log("d=" + d + "next[0]=" + next[0] + "next[1]=" + next[1]);
                 if (next[0] >= 0 && next[1] >= 0 && next[0] <map.GetLength(0)
                     && next[1] < map.GetLength(1) && map[next[0], next[1]] == WALKABLE)
                 {
@@ -219,23 +219,23 @@ public class Merchant : MonoBehaviour
     private Vector3 setVector(int[] array)
     {
         Vector3 vector;
-        vector.x = array[0];
+        vector.x = array[0]-10;
         vector.y = 1;
-        vector.z = array[1];
+        vector.z = array[1]-10;
         Debug.Log("vector="+vector);
         return vector;
     }
     private int[] setArray(Vector3 vector)
     {
         int[] array = new int[NUM_DIMENSIONS];
-        array[0] = (int)vector.x;
-        array[1] = (int)vector.z;
+        array[0] = (int)vector.x+10;
+        array[1] = (int)vector.z+10;
         return array;
     }
 
     public static int[,] exampleMap()
     {
-        int[,] map = new int[10, 10];
+        int[,] map = new int[50, 50];
         return map;
     }
     private Vector3 directionToVector(Direction d)
@@ -256,9 +256,10 @@ public class Merchant : MonoBehaviour
         _transform = gameObject.transform;
         int[] origin = new int[NUM_DIMENSIONS];
         int[] destination=new int[NUM_DIMENSIONS];
-        origin=setArray(new Vector3(1, 1, 1));
-        destination=setArray(new Vector3(3, 1, 3));
+        origin=setArray(new Vector3(-5, 1, -2));
+        destination=setArray(new Vector3(3, 1, 5));
         OriginDestination od=new OriginDestination(origin,destination);
+        currentOriginDestination = od;
         od.setMap(exampleMap());
         od.findpath();
         Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
@@ -273,9 +274,9 @@ public class Merchant : MonoBehaviour
     {
         //Debug.Log(_transform.position);
         //Debug.Log(currentGoal);
-        if ((_transform.position - currentGoal).sqrMagnitude < 1)//If it is at its current goal
+        if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
         {
-            Debug.Log("I'm here");
+            Debug.Log("Almost there");
             if (paths == null)
                 Debug.Log("paths==null");
             if (paths[currentDestinationIndex] == null)
@@ -288,17 +289,24 @@ public class Merchant : MonoBehaviour
             {
                 if (notAtCurrentDestination)
                 {
+                    Debug.Log("notAtCurrentDestination");
                     currentTurnIndex++;//In the latter case, increment its "intermediate goal"
+                    currentGoal=setVector(currentOriginDestination.getPoint(1));
                 }
                 else if (currentDestinationNotFinal)
                 {
+                    Debug.Log("currentDestinationNotFinal");
                     currentDestinationIndex++;//In the former case, increment its destination
                     currentTurnIndex = 0;
                 }
-                currentMovementVector=directionToVector(paths[currentDestinationIndex].getDirection(currentTurnIndex)); //In either case, set the movement vector accordingly
+                currentMovementVector = directionToVector(paths[currentDestinationIndex].getDirection(currentTurnIndex)); //In either case, set the movement vector accordingly
                 _transform.Translate(currentMovementVector);
             }
             //else, he has reached his final destination, so he should not move.
+            else
+            {
+                Debug.Log("I'm here");
+            }
         }
         else//if he is not near his current goal, then he should keep moving in the same direction.
             _transform.Translate(currentMovementVector); 
