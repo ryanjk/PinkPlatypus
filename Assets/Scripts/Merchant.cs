@@ -262,13 +262,22 @@ public class Merchant : MonoBehaviour
         OriginDestination od=new OriginDestination(origin,destination);
         currentOriginDestination = od;
         od.setMap(exampleMap());
-        od.findpath();
-        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
-        currentGoal=setVector(od.getPoint(0));
-        Debug.Log("currentGoal=" + currentGoal);
-        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
+        
         paths=new List<OriginDestination>();
         paths.Add(od);
+        OriginDestination od2=new OriginDestination(destination, setArray(new Vector3(-6, 1, 8)));
+        paths.Add(od2);
+        od.findpath();
+        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
+        currentGoal = setVector(od.getPoint(0));
+        Debug.Log("currentGoal=" + currentGoal);
+        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
+        od2.setMap(exampleMap());
+        od2.findpath();
+        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
+        currentGoal = setVector(od.getPoint(0));
+        Debug.Log("currentGoal=" + currentGoal);
+        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
     }
 
     void Update()
@@ -277,7 +286,6 @@ public class Merchant : MonoBehaviour
         //Debug.Log(currentGoal);
         if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
         {
-            Debug.Log("Almost there");
             if (paths == null)
                 Debug.Log("paths==null");
             if (paths[currentDestinationIndex] == null)
@@ -292,22 +300,24 @@ public class Merchant : MonoBehaviour
                 {
                     Debug.Log("notAtCurrentDestination");
                     currentTurnIndex++;//In the latter case, increment its "intermediate goal"
-                    currentGoal=setVector(currentOriginDestination.getPoint(1));
+                    currentGoal=setVector(currentOriginDestination.getPoint(currentTurnIndex));
                 }
                 else if (currentDestinationNotFinal)
                 {
                     Debug.Log("currentDestinationNotFinal");
                     currentDestinationIndex++;//In the former case, increment its destination
+                    currentOriginDestination = paths[currentDestinationIndex];
                     currentTurnIndex = 0;
+                    currentGoal = setVector(currentOriginDestination.getPoint(currentTurnIndex));
                 }
+                Debug.Log("paths.Count="+paths.Count);
+                Debug.Log("currentDestinationIndex" + currentDestinationIndex);
+                Debug.Log("currentTurnIndex="+currentTurnIndex);
                 currentMovementVector = directionToVector(paths[currentDestinationIndex].getDirection(currentTurnIndex)); //In either case, set the movement vector accordingly
                 _transform.Translate(currentMovementVector);
             }
             //else, he has reached his final destination, so he should not move.
-            else
-            {
-                Debug.Log("I'm here");
-            }
+
         }
         else//if he is not near his current goal, then he should keep moving in the same direction.
             _transform.Translate(currentMovementVector); 
