@@ -5,7 +5,7 @@ public class PauseMenuScript : MonoBehaviour {
 
 	private int _level;
 	private bool _paused;
-	public Vector3 _pos;
+	private Vector3 _pos;
 	// Use this for initialization
 	void Start () {
 		
@@ -13,7 +13,7 @@ public class PauseMenuScript : MonoBehaviour {
 		if (_level.Equals (1))
 			_level = 2; //To avoid going back to starting portal room and creating 2 players
 		_paused = false;
-		//_pos = gameObject.transform.position;
+		_pos = gameObject.transform.position;
 
 	}
 	
@@ -29,18 +29,19 @@ public class PauseMenuScript : MonoBehaviour {
 					child.gameObject.SetActive (true);
 				}
 				if (_level.Equals (1))
-					_level = 2; 
+					_level = 5; 
 				
 				Application.LoadLevel (_level);
 				Time.timeScale = 1;
-				gameObject.transform.position= new Vector3(4.0f, 1.0f, 2.0f);
+				gameObject.transform.position= _pos;
 
 				_paused = false;
 			}
 			else{
 				_level = Application.loadedLevel;
 				_pos = gameObject.transform.position;
-				Application.LoadLevel (5);
+
+				Application.LoadLevel("LoadMenu");
 
 				foreach (Transform child in this.transform){
 				child.gameObject.SetActive(false);

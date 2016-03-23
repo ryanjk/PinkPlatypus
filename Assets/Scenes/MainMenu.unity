@@ -239,7 +239,7 @@ MonoBehaviour:
   newGame: 0
   saveGame: 0
   loadGame: 0
-  scores: 0
+  scores: 1
   addPlayer: 0
   viewItems: 0
   exit: 0
