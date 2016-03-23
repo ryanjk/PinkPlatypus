@@ -256,7 +256,8 @@ public class Merchant : MonoBehaviour
         _transform = gameObject.transform;
         int[] origin = new int[NUM_DIMENSIONS];
         int[] destination=new int[NUM_DIMENSIONS];
-        origin=setArray(new Vector3(-5, 1, -2));
+       // origin=setArray(new Vector3(-5, 1, -2));
+        origin = setArray(_transform.position);
         destination=setArray(new Vector3(3, 1, 5));
         OriginDestination od=new OriginDestination(origin,destination);
         currentOriginDestination = od;
