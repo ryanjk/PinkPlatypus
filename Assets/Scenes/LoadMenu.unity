@@ -222,7 +222,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 10202232, guid: d97d84204860340f5a6a29f439477a05, type: 2}
       propertyPath: m_Text
-      value: Load Menu
+      value: Pause Menu
       objectReference: {fileID: 0}
     - target: {fileID: 10202232, guid: d97d84204860340f5a6a29f439477a05, type: 2}
       propertyPath: m_TabSize
@@ -313,18 +313,3 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 56ef296ab63414baa876a7f405dc02c1, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &876285968 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 131248, guid: 56ef296ab63414baa876a7f405dc02c1, type: 2}
-  m_PrefabInternal: {fileID: 876285967}
---- !u!114 &876285969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 876285968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6664eb582125d439953d16980f545e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
