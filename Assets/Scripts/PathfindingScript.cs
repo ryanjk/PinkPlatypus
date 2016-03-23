@@ -219,31 +219,34 @@ public class PathfindingScript : MonoBehaviour {
             return right;
         return up;
     }
+    public Vector3 dest_pt;
+    public bool going = false;
+
     void Start() {
+        _transform = gameObject.transform;
+    }
+
+    private void Go() {
+        going = true;
         currentDestinationIndex = 0;
         currentTurnIndex = 0;
-        destinations = new List<Vector3>();
-        _transform = gameObject.transform;
+        destinations = new List<Vector3>();        
         int[] origin = new int[NUM_DIMENSIONS];
         int[] destination = new int[NUM_DIMENSIONS];
         // origin=setArray(new Vector3(-5, 1, -2));
         origin = setArray(_transform.position);
-        destination = setArray(new Vector3(3, 1, 5));
+        destination = setArray(new Vector3(dest_pt.x, 1, dest_pt.z));
         OriginDestination od = new OriginDestination(origin, destination);
         currentOriginDestination = od;
         od.setMap(exampleMap());
 
         paths = new List<OriginDestination>();
         paths.Add(od);
-        OriginDestination od2 = new OriginDestination(destination, setArray(new Vector3(-6, 1, 8)));
-        paths.Add(od2);
         od.findpath();
         Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
         currentGoal = setVector(od.getPoint(0));
         Debug.Log("currentGoal=" + currentGoal);
         currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
-        od2.setMap(exampleMap());
-        od2.findpath();
         Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
         currentGoal = setVector(od.getPoint(0));
         Debug.Log("currentGoal=" + currentGoal);
@@ -251,9 +254,15 @@ public class PathfindingScript : MonoBehaviour {
     }
 
     void Update() {
+        if (!going && Input.GetMouseButtonDown(0)) {
+            var world_pt = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var new_dest = new Vector3(Mathf.RoundToInt(world_pt.x), world_pt.y, Mathf.RoundToInt(world_pt.z));
+            dest_pt = new_dest;
+            Go();
+        }
         //Debug.Log(_transform.position);
         //Debug.Log(currentGoal);
-        if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
+        else if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
         {
             if (paths == null)
                 Debug.Log("paths==null");
@@ -282,10 +291,14 @@ public class PathfindingScript : MonoBehaviour {
                 currentMovementVector = directionToVector(paths[currentDestinationIndex].getDirection(currentTurnIndex)); //In either case, set the movement vector accordingly
                 _transform.Translate(currentMovementVector);
             }
-            //else, he has reached his final destination, so he should not move.
+            else { // he has reached his final destination
+                going = false;
+                _transform.position = new Vector3(Mathf.RoundToInt(_transform.position.x), _transform.position.y, Mathf.RoundToInt(_transform.position.z));
+            } 
 
         }
-        else//if he is not near his current goal, then he should keep moving in the same direction.
+        else { //if he is not near his current goal, then he should keep moving in the same direction.
             _transform.Translate(currentMovementVector);
+        }
     }
 }
