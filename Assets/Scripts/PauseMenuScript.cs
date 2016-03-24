@@ -20,7 +20,7 @@ public class PauseMenuScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		_pos = gameObject.transform.position;
+		//_pos = gameObject.transform.position;
 		if (Input.GetKeyDown(KeyCode.Return)) {
 			
 			if (_paused.Equals (true)) {
@@ -29,16 +29,25 @@ public class PauseMenuScript : MonoBehaviour {
 					child.gameObject.SetActive (true);
 				}
 				if (_level.Equals (1))
-					_level = 5; 
-				
-				Application.LoadLevel (_level);
+					_level = 5;
+
+                SceneLoadData newSceneLoadData = new SceneLoadData();
+                newSceneLoadData.destination = gameObject.GetComponent<PlayerMain>().getSceneLoadData().source;
+                newSceneLoadData.source = "LoadMenu";
+                gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
+
+                Application.LoadLevel (_level);
 				//Time.timeScale = 1;
 				gameObject.transform.position= _pos;
 
 				_paused = false;
 			}
-			else{
-				_level = Application.loadedLevel;
+			else {
+                SceneLoadData newSceneLoadData = new SceneLoadData();
+                newSceneLoadData.destination = "LoadMenu";
+                newSceneLoadData.source = Application.loadedLevelName;
+                gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
+                _level = Application.loadedLevel;
 				_pos = gameObject.transform.position;
 
 				Application.LoadLevel("LoadMenu");
