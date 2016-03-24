@@ -26,7 +26,8 @@ public class MainMenu : MonoBehaviour {
 			Application.LoadLevel("WorldGenDemo");//temporary, for test
 		}
 		if (loadGame) {
-		}
+            Application.LoadLevel("StartingPortalRoom");
+        }
 		if (scores) {
 			Application.LoadLevel("PathfindingDemo");
 		}

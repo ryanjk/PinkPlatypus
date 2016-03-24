@@ -14,7 +14,7 @@ using System.Collections;
 
 public class CurrencyMain : MonoBehaviour {
 
-	private int value;
+	public int value;
 
 	/**
 	 * Gives the player currency of amount equal to this component's "value" variable.
@@ -23,8 +23,8 @@ public class CurrencyMain : MonoBehaviour {
 	void giveCurrency(){
 		GameObject player = GameObject.FindWithTag("Player");
 		if(player != null){
-			//PlayerMain playerScript = player.GetComponent<PlayerMain>();
-			//playerScript.addItem(0,value);
+			PlayerMain playerScript = player.GetComponent<PlayerMain>();
+			playerScript.addItem(0,value);
 			Debug.Log ("Giving " + value + " currency to Player.");
 		}
 		else{
@@ -56,6 +56,6 @@ public class CurrencyMain : MonoBehaviour {
 	 * Sets the default value of the currency object to 1 unit of currency.
 	 */
 	void Start(){
-		value = 1;
+		//value = 1;
 	}
 }

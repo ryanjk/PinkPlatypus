@@ -32,7 +32,7 @@ public class PauseMenuScript : MonoBehaviour {
 					_level = 5; 
 				
 				Application.LoadLevel (_level);
-				Time.timeScale = 1;
+				//Time.timeScale = 1;
 				gameObject.transform.position= _pos;
 
 				_paused = false;
@@ -47,7 +47,7 @@ public class PauseMenuScript : MonoBehaviour {
 				child.gameObject.SetActive(false);
 				}
 
-				Time.timeScale = 0;
+				//Time.timeScale = 0;
 
 				_paused = true;
 			}
