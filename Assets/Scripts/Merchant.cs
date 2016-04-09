@@ -5,8 +5,6 @@ using System;
 public class Merchant : MonoBehaviour
 {
     private Transform _transform; //an object keeping track of the Merchant's position
-    private bool pathfound;
-    OriginDestination od;
     /*Where the merchant is heading. Because he only moves horizontally and vertically, it must differ from the merchant's position by only one
      coordinate.*/
     private Vector3 currentGoal;
@@ -17,12 +15,27 @@ public class Merchant : MonoBehaviour
     private const int NUM_DIMENSIONS = 2; //there are two dimensions of movement: up-down, left-right.
 
     //The class needs a map data structure so that the Merchant knows where is walkable and where is not.
-    public static int[,] map;
-    int currentGoalIndex;
-    List<Vector3> destinations;//can be anywhere in the world, provided externally
-    List<OriginDestination> paths;//for each destination, there is a list of points it should get to.
-    float speed;
-    List<Node> currentPath;
+    private static int[,] map;
+    private int currentGoalIndex;
+    private List<OriginDestination> paths;//for each destination, there is a list of points it should get to.
+    private float speed;
+    private List<Node> currentPath;
+    public Merchant()
+    {
+
+    }
+    public void setDestination(Vector3 destinationVector)
+    {
+        int[] originArray;
+        int pathCount = paths.Count;
+        if (pathCount == 0)
+            originArray = setArray(gameObject.transform.position);
+        else
+            originArray = paths[paths.Count - 1].getDestination();
+        paths.Add(new OriginDestination(originArray, setArray(destinationVector)));     
+    }
+    public bool finishedSettingDestinationsAndMap;
+    
     public class Node
     {
         public int[] position;
@@ -38,6 +51,10 @@ public class Merchant : MonoBehaviour
             f = aF;
             directionFromParent = aDirection == null ? null : (int[])aDirection.Clone();
         }
+    }
+    public void setMap(int[,] aMap)
+    {
+        map = aMap;
     }
     int currentDestinationIndex;
     //I make each origin-destination pair into an inner class. This class has a method that finds a path between the points and other information.
@@ -68,21 +85,6 @@ public class Merchant : MonoBehaviour
             return path[index].directionFromParent;
         }
 
-
-        public void setMap(int[,] aMap)
-        {
-            map = aMap;
-        }
-
-        //@param point a point that represents a temporary destination for the Merchant
-        //@param d the direction in which the Merchant much travel to get to that point.
-        /*     public void addPointToPath(int[] point, Direction d)
-             {
-                 path.Add(point);
-                 directionList.Add(d);
-                 Debug.Log("Added point " + path[path.Count - 1][0] + "," + path[path.Count - 1][1] + "to index" + (path.Count - 1));
-             }
-             */
         //Used when the path is incorrect and needs to be deleted.
         public void clearPath()
         {
@@ -90,8 +92,6 @@ public class Merchant : MonoBehaviour
         }
         public int[] getPoint(int index)
         {
-            Debug.Log("requesting point at index " + index);
-            Debug.Log(path[index]);
             return (int[])path[index].position.Clone();
         }
 
@@ -102,6 +102,7 @@ public class Merchant : MonoBehaviour
             destination = aDestination;
             path = new List<Node>();
             pathFound = false;
+            findpath();
         }
 
         //Returns true if a path has been found, false otherwise
@@ -122,11 +123,6 @@ public class Merchant : MonoBehaviour
         public int[] getDestination()
         {
             return (int[])destination.Clone(); //Returns a Clone so that the destination cannot be modified
-        }
-        private class PointDirectionPair
-        {
-            public int[] point;
-            public int[] direction;
         }
         static int[] up = { 1, 0 };
         static int[] down = { -1, 0 };
@@ -178,10 +174,8 @@ public class Merchant : MonoBehaviour
         }
         public void findpath()
         {
-            Debug.Log("finding path");
             if (map[destination[0], destination[1]] != WALKABLE)
                 return;
-            List<int[]> tentativePath = new List<int[]>();
             HashSet<Node> tree = new HashSet<Node>();
             HashSet<Node> frontier = new HashSet<Node>();
             Node originNode = addNode(origin, null, null);
@@ -197,7 +191,6 @@ public class Merchant : MonoBehaviour
                     {
                         minValue = value;
                         minNode = n;
-                        Debug.Log("minNode=" + minNode.position[0] + "," + minNode.position[1]);
                     }
                 }
                 frontier.Remove(minNode);
@@ -214,16 +207,10 @@ public class Merchant : MonoBehaviour
                         if (y[0] == destination[0] && y[1] == destination[1])
                         {
                             path = new List<Node>();
-                            Debug.Log("path found");
                             path.Add(addNode(y, minNode, x));
                             for (Node n = minNode; n != null; n = n.previous)
                             {
                                 path.Insert(0, n);
-                            }
-                            Debug.Log("this is the path");
-                            for (int i = 0; i < path.Count; i++)
-                            {
-                                Debug.Log(path[i].position[0] + "," + path[i].position[1]);
                             }
                             pathFound = true;
                         }
@@ -245,8 +232,6 @@ public class Merchant : MonoBehaviour
                             tree.Add(n);
                         }
                     }
-                    else
-                        Debug.Log(y[0] + "," + y[1] + "is unwalkable.");
 
 
                 }
@@ -260,7 +245,6 @@ public class Merchant : MonoBehaviour
         vector.x = array[0] - 10;
         vector.y = 1;
         vector.z = array[1] - 10;
-        Debug.Log("vector=" + vector);
         return vector;
     }
     private int[] setArray(Vector3 vector)
@@ -270,16 +254,6 @@ public class Merchant : MonoBehaviour
         array[1] = (int)vector.z + 10;
         return array;
     }
-
-    public static int[,] exampleMap()
-    {
-        int[,] map = new int[50, 50];
-        for (int i = 0; i < 8; i++)
-            map[3, i] = 1;
-
-        return map;
-    }
-
     private static int[] add(int[] first, int[] second)
     {
         int[] sum = new int[NUM_DIMENSIONS];
@@ -293,85 +267,57 @@ public class Merchant : MonoBehaviour
     {
         return new Vector3(direction[0], 0, direction[1]);
     }
+    void Awake()
+    {
+        paths = new List<OriginDestination>();
+        finishedSettingDestinationsAndMap = false;
+    }
     void Start()
     {
-        currentDestinationIndex = 0;
-        destinations = new List<Vector3>();
-        _transform = gameObject.transform;
-
-        //int[] origin = new int[NUM_DIMENSIONS];
-        //int[] destination=new int[NUM_DIMENSIONS];
-        //origin = setArray(_transform.position);
-        //destination=setArray(new Vector3(3, 1, 5));
-        int[] origin = { 4, 2 };
-        int[] destination = { 2, 1 };
-        od = new OriginDestination(origin, destination);
-        currentOriginDestination = od;
-        od.setMap(exampleMap());
-        paths = new List<OriginDestination>();
-        pathfound = false;
-        od.findpath();
         speed = 0.1f;
-            paths.Add(od);
-            currentGoalIndex = 0;
-            currentGoal = setVector(currentOriginDestination.getPoint(currentGoalIndex));
-            currentMovementVector = speed * directionToVector(od.getDirection(1));
-        /*OriginDestination od2=new OriginDestination(destination, setArray(new Vector3(-6, 1, 8)));
-        paths.Add(od2);
-        od.findpath();
-        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
-        currentGoal = setVector(od.getPoint(0));
-        Debug.Log("currentGoal=" + currentGoal);
-        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
-        od2.setMap(exampleMap());
-        od2.findpath();
-        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
-        currentGoal = setVector(od.getPoint(0));
-        Debug.Log("currentGoal=" + currentGoal);
-        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));*/
+        currentDestinationIndex = 0;
+        _transform = gameObject.transform;
+        currentDestinationIndex = 0;
+        currentGoalIndex = 0;
+        currentGoal = _transform.position;
     }
-
+    
     void Update()
     {
-        //Debug.Log(_transform.position);
-        //Debug.Log(currentGoal);
-        if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
+        if (finishedSettingDestinationsAndMap)
         {
-            Debug.Log("Here");
-            bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfTurns();
-            bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count;
-
-            //check whether it needs to change its destination or whether it needs to change its "intermediate goal" to get to its current destination
-            if (currentDestinationNotFinal || notAtCurrentDestination)
+            if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
             {
-                if (notAtCurrentDestination)
+                bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfTurns();
+                bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count;
+
+                //check whether it needs to change its destination or whether it needs to change its "intermediate goal" to get to its current destination
+                if (currentDestinationNotFinal || notAtCurrentDestination)
                 {
-                    Debug.Log("notAtCurrentDestination");
-                    currentGoalIndex++;//In the latter case, increment its "intermediate goal"
+                    if (notAtCurrentDestination)
+                    {
+                        currentGoalIndex++;//In the latter case, increment its "intermediate goal"
+                    }
+                    else if (currentDestinationNotFinal)
+                    {
+                        currentDestinationIndex++;//In the former case, increment its destination
+                        currentGoalIndex = 0;
+                    }
+                    currentGoal = setVector(paths[currentDestinationIndex].getPoint(currentGoalIndex));
+                    /*Debug.Log("currentDestinationIndex = "+currentDestinationIndex);
+                    Debug.Log("currentDestination=" + paths[currentDestinationIndex].getDestination()[0] + "," + paths[currentDestinationIndex].getDestination()[1]);
+                    Debug.Log("currentGoalIndex - "+currentGoalIndex);
+                    Debug.Log("currentGoal=" + paths[currentDestinationIndex].getDirection(currentGoalIndex)[0] + "," + paths[currentDestinationIndex].getDirection(currentGoalIndex)[1]);*/
+                    currentMovementVector = speed * directionToVector(paths[currentDestinationIndex].getDirection(currentGoalIndex)); //In either case, set the movement vector accordingly
                 }
-                else if (currentDestinationNotFinal)
-                {
-                    Debug.Log("currentDestinationNotFinal");
-                    currentDestinationIndex++;//In the former case, increment its destination
-                    currentOriginDestination = paths[currentDestinationIndex];
-                    currentGoalIndex = 0;
-                }
-                currentGoal = setVector(currentOriginDestination.getPoint(currentGoalIndex));
-                Debug.Log("paths.Count=" + paths.Count);
-                Debug.Log("currentDestinationIndex" + currentDestinationIndex);
-                Debug.Log("currentGoalIndex=" + currentGoalIndex);
-                currentMovementVector = speed * directionToVector(paths[currentDestinationIndex].getDirection(currentGoalIndex)); //In either case, set the movement vector accordingly
+                //else, he has reached his final destination, so he should not move.
+
             }
-            //else, he has reached his final destination, so he should not move.
+            else//if he is not near his current goal, then he should keep moving in the same direction.
+            {
+                _transform.Translate(currentMovementVector);
 
+            }
         }
-        else//if he is not near his current goal, then he should keep moving in the same direction.
-        {
-            Debug.Log("Not here");
-            Debug.Log("currentMovementVector=" + currentMovementVector);
-            _transform.Translate(currentMovementVector);
-
-        }
-        Debug.Log("At " + _transform.position);
     }
 } 

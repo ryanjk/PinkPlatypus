@@ -5,32 +5,47 @@ using System;
 public class Merchant2 : MonoBehaviour
 {
     private Transform _transform; //an object keeping track of the Merchant's position
-
     /*Where the merchant is heading. Because he only moves horizontally and vertically, it must differ from the merchant's position by only one
      coordinate.*/
     private Vector3 currentGoal;
     private Vector3 currentMovementVector; //the vector he translates by in every frame. It is one of the following four vectors:
-    Vector3 up = new Vector3(0, 0, .1f);
-    Vector3 down = new Vector3(0, 0, -.1f);
-    Vector3 right = new Vector3(.1f, 0, 0);
-    Vector3 left = new Vector3(-.1f, 0, 0);
 
     private OriginDestination currentOriginDestination;
     private const int WALKABLE = 0; //a tile on which the merchant (and the player) can step.
     private const int NUM_DIMENSIONS = 2; //there are two dimensions of movement: up-down, left-right.
 
     //The class needs a map data structure so that the Merchant knows where is walkable and where is not.
-    private int[,] map;
-    int currentTurnIndex;
-    List<Vector3> destinations;//can be anywhere in the world, provided externally
-    List<OriginDestination> paths;//for each destination, there is a list of points it should get to.
-
-    public enum Direction { UP0, DOWN0, UP1, DOWN1 };//directions of travel of the merchant
+    private static int[,] map;
+    private int currentGoalIndex;
+    private List<Vector3> destinations;//can be anywhere in the world, provided externally
+    private List<OriginDestination> paths;//for each destination, there is a list of points it should get to.
+    private float speed;
+    private List<Node> currentPath;
+    public void setDestination(Vector3 destination)
+    {
+        paths.Add(new OriginDestination(paths[paths.Count - 1].getDestination(), setArray(destination)));
+    }
+    public class Node
+    {
+        public int[] position;
+        public Node previous;
+        public int pathLengthFromOrigin;
+        public int f;
+        public int[] directionFromParent;
+        public Node(int[] aPosition, Node aPrevious, int aPathLength, int aF, int[] aDirection)
+        {
+            position = aPosition;
+            previous = aPrevious;
+            pathLengthFromOrigin = aPathLength;
+            f = aF;
+            directionFromParent = aDirection == null ? null : (int[])aDirection.Clone();
+        }
+    }
     int currentDestinationIndex;
-
     //I make each origin-destination pair into an inner class. This class has a method that finds a path between the points and other information.
     public class OriginDestination
     {
+
         private bool pathFound;
         private int[] origin;
         private int[] destination;
@@ -38,11 +53,11 @@ public class Merchant2 : MonoBehaviour
         /*each int[] in the List is of length 2 and represents the coordinates of a point that is a temporary goal for the Merchant as 
          * it travels from origin to destination. Thus, each one is a point at which the Merchant changes direction, except for the last 
          * int[], which is the actual destination.*/
-        public List<int[]> path;
+        public List<Node> path;
 
         /*The Merchant iterates through the list and follows the direction at the current position in the list.*/
-        private List<Direction> directions;
-        private int[,] map;
+
+        // private int[,] map;
 
         //Returns the length of the List "path". I did not call it getPathLength so as not to confuse it with "path length" as in how much he has to walk.
         public int getNumberOfTurns()
@@ -50,10 +65,9 @@ public class Merchant2 : MonoBehaviour
             return path.Count;
         }
 
-
-        public Direction getDirection(int index) //Returns the Direction in the "directions" list at the specified index.
+        public int[] getDirection(int index) //Returns the Direction in the "directions" list at the specified index.
         {
-            return directions[index];
+            return path[index].directionFromParent;
         }
 
 
@@ -61,16 +75,6 @@ public class Merchant2 : MonoBehaviour
         {
             map = aMap;
         }
-
-        //@param point a point that represents a temporary destination for the Merchant
-        //@param d the direction in which the Merchant much travel to get to that point.
-        public void addPointToPath(int[] point, Direction d)
-        {
-            path.Add(point);
-            directions.Add(d);
-            Debug.Log("Added point " + path[path.Count - 1][0] + "," + path[path.Count - 1][1] + "to index" + (path.Count - 1));
-        }
-
         //Used when the path is incorrect and needs to be deleted.
         public void clearPath()
         {
@@ -78,9 +82,7 @@ public class Merchant2 : MonoBehaviour
         }
         public int[] getPoint(int index)
         {
-            Debug.Log("requesting point at index " + index);
-            Debug.Log(path[index]);
-            return (int[])path[index].Clone();
+            return (int[])path[index].position.Clone();
         }
 
         //Constructor of an OriginDestination object.
@@ -88,8 +90,7 @@ public class Merchant2 : MonoBehaviour
         {
             origin = anOrigin;
             destination = aDestination;
-            path = new List<int[]>();
-            directions = new List<Direction>();
+            path = new List<Node>();
             pathFound = false;
         }
 
@@ -110,111 +111,135 @@ public class Merchant2 : MonoBehaviour
         }
         public int[] getDestination()
         {
-            return (int[])destination.Clone(); //Returns a Clone so that the origin cannot be modified
+            return (int[])destination.Clone(); //Returns a Clone so that the destination cannot be modified
         }
-
-        //@param position the starting position
-        //@param d the direction of motion
-        //@return the position after a movement of 1 unit in that direction
-        private int[] thinkOfStepping(Direction d, int[] position)
+        private class PointDirectionPair
         {
-            int[] result = new int[NUM_DIMENSIONS];
-            if (d == Direction.UP0)
-            {
-                result[0] = position[0] + 1;
-                result[1] = position[1];
-            }
-            else if (d == Direction.DOWN0)
-            {
-                result[0] = position[0] - 1;
-                result[1] = position[1];
-            }
-            else if (d == Direction.UP1)
-            {
-                result[0] = position[0];
-                result[1] = position[1] + 1;
-            }
-            else
-            {
-                result[0] = position[0];
-                result[1] = position[1] - 1;
-            }
-
-            return result;
+            public int[] point;
+            public int[] direction;
         }
-        private int[] asCloseAsHeCanGet(Direction d, int[] start, int[] dest) //If the merchant walks in one direction from start to dest, the point at which he stops.
+        static int[] up = { 1, 0 };
+        static int[] down = { -1, 0 };
+        static int[] right = { 0, 1 };
+        static int[] left = { 0, -1 };
+        private static int[][] directions = { up, down, left, right };
+        private List<int[]> vicinity(int[] point)
         {
-            int[] x = new int[NUM_DIMENSIONS];
-            Array.Copy(start, x, NUM_DIMENSIONS);
-            Debug.Log("x[0]=" + x[0] + "x[1]=" + x[1]);
-            int[] next;
-            while (x[0] != dest[0] || x[1] != dest[1])
-            {
-                //Debug.Log("In while loop:" + "x[0]=" + x[0] + "x[1]=" + x[1]);
-                next = thinkOfStepping(d, x);
-                //Debug.Log("d=" + d + "next[0]=" + next[0] + "next[1]=" + next[1]);
-                if (next[0] >= 0 && next[1] >= 0 && next[0] < map.GetLength(0)
-                    && next[1] < map.GetLength(1) && map[next[0], next[1]] == WALKABLE)
-                {
-                    Array.Copy(next, x, NUM_DIMENSIONS);
-                }
-                else
-                    break;
-            }
-            Debug.Log("Return value:" + "x[0]=" + x[0] + "x[1]=" + x[1]);
-            return x;
-        }
 
-        /*private int[] add(int[] first, int[] second)
+            List<int[]> list = new List<int[]>();
+            for (int i = 0; i < directions.Length; i++)
+            {
+                int[] sum = add(point, directions[i]);
+                bool accept = true;
+                for (int j = 0; j < NUM_DIMENSIONS; j++)
+                    if (sum[j] < 0 || sum[j] > map.GetLength(j))
+                    {
+                        accept = false;
+                        break;
+                    }
+                if (accept)
+                    list.Add(sum);
+            }
+            return list;
+        }
+        private int h(int[] point)
         {
-            int[] sum = new int[NUM_DIMENSIONS];
+            int sum = 0;
             for (int i = 0; i < NUM_DIMENSIONS; i++)
             {
-                sum[i] = first[i] + second[i];
+                sum += Math.Abs(point[i] - destination[i]);
             }
             return sum;
-        }*/
-        public bool findpath()
-        {
-            Debug.Log("finding path");
-            int[] origin = getOrigin();
-            int[] destination = getDestination();
-            if (map[destination[0], destination[1]] != WALKABLE)
-                return false;
-            List<int[]> tentativePath = new List<int[]>();
-            Direction d;
-            Direction e;
-            int[] tentativeGoal = { destination[0], origin[1] };//tries to move "horizontally" first
-            if (origin[0] != destination[0])
-            {
-                if (origin[0] < destination[0])
-                    d = Direction.UP0;
-                else
-                    d = Direction.DOWN0;
-                if (asCloseAsHeCanGet(d, origin, tentativeGoal)[0] != tentativeGoal[0])
-                {
-                    Debug.Log("Didn't work 1.");
-                    return false;
-                }
-                addPointToPath(tentativeGoal, d);
-            }
-            if (origin[1] != destination[1])
-            {
-                if (origin[1] < destination[1])
-                    e = Direction.UP1;
-                else
-                    e = Direction.DOWN1;
-                if (asCloseAsHeCanGet(e, tentativeGoal, destination)[1] != destination[1])
-                {
-                    clearPath();
-                    Debug.Log("Didn't work 2.");
-                    return false;
-                }
-                addPointToPath(destination, e);
-            }
-            Debug.Log("I'm pleased to say it has worked.");
-            return true;
+        }
 
+        private Node addNode(int[] aPosition, Node aPrevious, int[] direction)
+        {
+            if (aPrevious == null)
+                return new Node(aPosition, null, 0, h(aPosition), direction);
+            return new Node(aPosition, aPrevious, aPrevious.pathLengthFromOrigin + 1, aPrevious.pathLengthFromOrigin + 1 + h(aPosition), direction);
+        }
+        private void setParent(Node aNode, Node parent, int[] direction)
+        {
+            aNode.previous = parent;
+            int newPathLength = parent.pathLengthFromOrigin + 1;
+            aNode.f = aNode.f - aNode.pathLengthFromOrigin + newPathLength;
+            aNode.pathLengthFromOrigin = newPathLength;
+            aNode.directionFromParent = direction;
+        }
+        public void findpath()
+        {
+            if (map[destination[0], destination[1]] != WALKABLE)
+                return;
+            List<int[]> tentativePath = new List<int[]>();
+            HashSet<Node> tree = new HashSet<Node>();
+            HashSet<Node> frontier = new HashSet<Node>();
+            Node originNode = addNode(origin, null, null);
+            frontier.Add(originNode);
+            while (frontier.Count > 0)
+            {
+                int minValue = Int16.MaxValue;
+                Node minNode = null;
+                foreach (Node n in frontier)
+                {
+                    int value = n.f;
+                    if (minValue > value)
+                    {
+                        minValue = value;
+                        minNode = n;
+                    }
+                }
+                frontier.Remove(minNode);
+                tree.Add(minNode);
+                foreach (int[] x in directions)
+                {
+                    int[] y = add(minNode.position, x);
+                    //int newDistance = minNode.pathLengthFromOrigin + 1 + h(y);
+                    bool found = false;
+                    if (y[0] < 0 || y[1] < 0 || y[0] >= map.GetLength(0) || y[1] >= map.GetLength(1))
+                        continue;
+                    if (map[y[0], y[1]] == WALKABLE)
+                    {
+                        if (y[0] == destination[0] && y[1] == destination[1])
+                        {
+                            path = new List<Node>();
+                            Debug.Log("path found");
+                            path.Add(addNode(y, minNode, x));
+                            for (Node n = minNode; n != null; n = n.previous)
+                            {
+                                path.Insert(0, n);
+                            }
+                            Debug.Log("this is the path");
+                            for (int i = 0; i < path.Count; i++)
+                            {
+                                Debug.Log(path[i].position[0] + "," + path[i].position[1]);
+                            }
+                            pathFound = true;
+                        }
+
+                        foreach (Node n in tree)
+                        {
+                            if (n.position[0] == y[0] && n.position[1] == y[1])
+                            {
+                                found = true;
+                                if (n.pathLengthFromOrigin > minNode.pathLengthFromOrigin + 1)
+                                    setParent(n, minNode, x);
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            Node n = addNode(y, minNode, x);
+                            frontier.Add(n);
+                            tree.Add(n);
+                        }
+                    }
+                    else
+                        Debug.Log(y[0] + "," + y[1] + "is unwalkable.");
+
+
+                }
+            }
+            return;
         }
     }
     private Vector3 setVector(int[] array)
@@ -237,60 +262,53 @@ public class Merchant2 : MonoBehaviour
     public static int[,] exampleMap()
     {
         int[,] map = new int[50, 50];
+        for (int i = 0; i < 8; i++)
+            map[3, i] = 1;
+
         return map;
     }
-    private Vector3 directionToVector(Direction d)
+
+    private static int[] add(int[] first, int[] second)
     {
-        if (d == Direction.DOWN0)
-            return left;
-        if (d == Direction.DOWN1)
-            return down;
-        if (d == Direction.UP0)
-            return right;
-        return up;
+        int[] sum = new int[NUM_DIMENSIONS];
+        for (int i = 0; i < NUM_DIMENSIONS; i++)
+        {
+            sum[i] = first[i] + second[i];
+        }
+        return sum;
+    }
+    private Vector3 directionToVector(int[] direction)
+    {
+        return new Vector3(direction[0], 0, direction[1]);
     }
     void Start()
     {
         currentDestinationIndex = 0;
-        currentTurnIndex = 0;
         destinations = new List<Vector3>();
         _transform = gameObject.transform;
-        int[] origin = new int[NUM_DIMENSIONS];
-        int[] destination = new int[NUM_DIMENSIONS];
-        origin = setArray(_transform.position);
-        destination = setArray(new Vector3(3, 1, 5));
+        int[] origin = setArray(_transform.position);
+        int[] destination = { 2, 1 };
+        int[] destination2 = { 4, 4 };
         OriginDestination od = new OriginDestination(origin, destination);
         currentOriginDestination = od;
         od.setMap(exampleMap());
-
         paths = new List<OriginDestination>();
-        paths.Add(od);
-        OriginDestination od2 = new OriginDestination(destination, setArray(new Vector3(-6, 1, 8)));
-        paths.Add(od2);
         od.findpath();
-        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
-        currentGoal = setVector(od.getPoint(0));
-        Debug.Log("currentGoal=" + currentGoal);
-        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
-        od2.setMap(exampleMap());
+        speed = 0.1f;
+        paths.Add(od);
+        OriginDestination od2 = new OriginDestination(destination, destination2);
         od2.findpath();
-        Debug.Log(od.getPoint(0)[0] + "," + od.getPoint(0)[1]);
-        currentGoal = setVector(od.getPoint(0));
-        Debug.Log("currentGoal=" + currentGoal);
-        currentMovementVector = directionToVector(od.getDirection(currentTurnIndex));
+        paths.Add(od2);
+        currentGoalIndex = 0;
+        currentGoal = setVector(currentOriginDestination.getPoint(currentGoalIndex));
+        currentMovementVector = speed * directionToVector(od.getDirection(1));
     }
 
     void Update()
     {
-        //Debug.Log(_transform.position);
-        //Debug.Log(currentGoal);
         if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
         {
-            if (paths == null)
-                Debug.Log("paths==null");
-            if (paths[currentDestinationIndex] == null)
-                Debug.Log("paths[currentDestinationIndex]==null");
-            bool notAtCurrentDestination = currentTurnIndex + 1 < paths[currentDestinationIndex].getNumberOfTurns();
+            bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfTurns();
             bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count;
 
             //check whether it needs to change its destination or whether it needs to change its "intermediate goal" to get to its current destination
@@ -298,28 +316,24 @@ public class Merchant2 : MonoBehaviour
             {
                 if (notAtCurrentDestination)
                 {
-                    Debug.Log("notAtCurrentDestination");
-                    currentTurnIndex++;//In the latter case, increment its "intermediate goal"
-                    currentGoal = setVector(currentOriginDestination.getPoint(currentTurnIndex));
+                    currentGoalIndex++;//In the latter case, increment its "intermediate goal"
                 }
                 else if (currentDestinationNotFinal)
                 {
-                    Debug.Log("currentDestinationNotFinal");
                     currentDestinationIndex++;//In the former case, increment its destination
                     currentOriginDestination = paths[currentDestinationIndex];
-                    currentTurnIndex = 0;
-                    currentGoal = setVector(currentOriginDestination.getPoint(currentTurnIndex));
+                    currentGoalIndex = 0;
                 }
-                Debug.Log("paths.Count=" + paths.Count);
-                Debug.Log("currentDestinationIndex" + currentDestinationIndex);
-                Debug.Log("currentTurnIndex=" + currentTurnIndex);
-                currentMovementVector = directionToVector(paths[currentDestinationIndex].getDirection(currentTurnIndex)); //In either case, set the movement vector accordingly
-                _transform.Translate(currentMovementVector);
+                currentGoal = setVector(currentOriginDestination.getPoint(currentGoalIndex));
+                currentMovementVector = speed * directionToVector(paths[currentDestinationIndex].getDirection(currentGoalIndex)); //In either case, set the movement vector accordingly
             }
             //else, he has reached his final destination, so he should not move.
 
         }
         else//if he is not near his current goal, then he should keep moving in the same direction.
+        {
             _transform.Translate(currentMovementVector);
+
+        }
     }
 }
