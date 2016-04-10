@@ -9,17 +9,18 @@ public class PortalSceneManager : SceneManager {
             _player.gameObject.transform.position.Set(0.0f, 1.0f, 0.0f);
         }
 
-        else if(!source.Equals("LoadMenu")){
+        else if (!source.Equals("LoadMenu")) {
             // assume that the name of the source is the same as the name of the portal gameobject (e.g. world1, world2, etc)
             GameObject portal = null;
             if (GameObject.Find(source) != null) {
                 portal = GameObject.Find(source);
             }
-            else { portal = defaultPortal; }
+            else {
+                portal = defaultPortal;
+            }
             var pos = portal.transform.position;
             _player.gameObject.transform.position = new Vector3(2.0f + pos.x, pos.y, pos.z);
         }
-
     }
 
     protected override void prepare_to_leave_scene(string destination, string source) {

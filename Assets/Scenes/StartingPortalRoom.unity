@@ -454,7 +454,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Name
-      value: world2
+      value: yellow_overworld
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -758,7 +758,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8039aaa274ad9c547952f93592f1ece8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: TemplateWorld
+  destination: green_overworld
+  source: PortalRoom
 --- !u!199 &491175104
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -2253,7 +2254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8039aaa274ad9c547952f93592f1ece8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: TemplateWorld
+  destination: yellow_overworld
+  source: PortalRoom
 --- !u!199 &1135626104
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -3660,7 +3662,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Name
-      value: world3
+      value: blue_overworld
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -3727,6 +3729,18 @@ Prefab:
     - target: {fileID: 402204, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
       propertyPath: m_LocalScale.z
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 11467206, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
+      propertyPath: source
+      value: PortalRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 11467206, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
+      propertyPath: destination
+      value: purple_overworld
+      objectReference: {fileID: 0}
+    - target: {fileID: 194998, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
+      propertyPath: m_Name
+      value: purple_overworld
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
@@ -3842,7 +3856,7 @@ Prefab:
       objectReference: {fileID: 2100000, guid: 12805d4ac47c8d94ab46228686f598b6, type: 2}
     - target: {fileID: 100000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Name
-      value: world5
+      value: green_overworld
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_LocalScale.x
@@ -3940,7 +3954,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8039aaa274ad9c547952f93592f1ece8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: TemplateWorld
+  destination: red_overworld
+  source: PortalRoom
 --- !u!199 &1476917695
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -5083,7 +5098,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Name
-      value: world4
+      value: red_overworld
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 79fec496c1c4a45a5b73021ec4d793e7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5454,7 +5469,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8039aaa274ad9c547952f93592f1ece8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: TemplateWorld
+  destination: blue_overworld
+  source: PortalRoom
 --- !u!199 &1768369375
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
