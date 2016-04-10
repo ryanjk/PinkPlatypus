@@ -8,6 +8,11 @@ TagManager:
   - SceneManager
   - NetworkManager
   - NetworkPlayer
+  - God
+  - Merchant
+  - Shop
+  - Messages
+  - MessageBox
   layers:
   - Default
   - TransparentFX

@@ -17,7 +17,7 @@ public class NPlayerController : NetworkBehaviour {
     private Rigidbody _rbody;
     public SpriteRenderer U, D, R, L, U2, D2, R2, L2; // Sprites for all 4 directions
     public Camera cam;
-    private bool ignoreInput;
+    public bool ignoreInput;
     private bool host;
 
     void Start() {
