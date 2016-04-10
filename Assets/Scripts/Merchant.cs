@@ -279,7 +279,7 @@ public class Merchant : MonoBehaviour
     }
     void Start()
     {
-        speed = 0.1f;
+        speed = 0.08f;
         currentDestinationIndex = 0;
         _transform = gameObject.transform;
         currentDestinationIndex = 0;

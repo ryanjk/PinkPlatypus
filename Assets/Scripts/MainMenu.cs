@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour {
 	}
 	
 	void OnMouseUp(){
-		if (newGame) {\
+		if (newGame) {
 			//Application.LoadLevel(1);
 			Application.LoadLevel("WorldGenDemo");//temporary, for test
 		}
@@ -29,7 +29,7 @@ public class MainMenu : MonoBehaviour {
             Application.LoadLevel("StartingPortalRoom");
         }
 		if (scores) {
-			Application.LoadLevel("PathfindingDemo");\
+			Application.LoadLevel("PathfindingDemo");
 		}
 		if (exit) {
 			Application.Quit();

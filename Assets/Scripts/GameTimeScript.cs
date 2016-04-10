@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-<<<<<<< HEAD
-=======
 using System;
->>>>>>> refs/remotes/origin/master
 
 /**
 * GameTimeScript
