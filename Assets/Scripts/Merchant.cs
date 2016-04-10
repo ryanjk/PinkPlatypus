@@ -20,10 +20,6 @@ public class Merchant : MonoBehaviour
     private List<OriginDestination> paths;//for each destination, there is a list of points it should get to.
     private float speed;
     private List<Node> currentPath;
-    public Merchant()
-    {
-
-    }
     public void setDestination(Vector3 destinationVector)
     {
         int[] originArray;
@@ -33,6 +29,17 @@ public class Merchant : MonoBehaviour
         else
             originArray = paths[paths.Count - 1].getDestination();
         paths.Add(new OriginDestination(originArray, setArray(destinationVector)));     
+    }
+    public Vector3[] getOriginDestination(int index)
+    {
+        Vector3[] x=new Vector3[2];
+        x[0] = setVector(paths[index].getOrigin());
+        x[1] = setVector(paths[index].getDestination());
+        return x;
+    }
+    public int getPathLength(int index)
+    {
+        return paths[index].getNumberOfPoints();
     }
     public bool finishedSettingDestinationsAndMap;
     
@@ -58,10 +65,10 @@ public class Merchant : MonoBehaviour
     }
     int currentDestinationIndex;
     //I make each origin-destination pair into an inner class. This class has a method that finds a path between the points and other information.
-    public class OriginDestination
+    private class OriginDestination
     {
-
-        private bool pathFound;
+        //private bool pathFound;
+        public bool leave;
         private int[] origin;
         private int[] destination;
 
@@ -75,7 +82,7 @@ public class Merchant : MonoBehaviour
        // private int[,] map;
 
         //Returns the length of the List "path". I did not call it getPathLength so as not to confuse it with "path length" as in how much he has to walk.
-        public int getNumberOfTurns()
+        public int getNumberOfPoints()
         {
             return path.Count;
         }
@@ -101,21 +108,21 @@ public class Merchant : MonoBehaviour
             origin = anOrigin;
             destination = aDestination;
             path = new List<Node>();
-            pathFound = false;
+            //pathFound = false;
             findpath();
         }
 
         //Returns true if a path has been found, false otherwise
-        public bool getPathFound()
+        /*public bool getPathFound()
         {
             return pathFound;
-        }
+        }*/
 
         //Sets the pathFound variable to b
-        private void setPathFound(bool b)
+        /*private void setPathFound(bool b)
         {
             pathFound = b;
-        }
+        }*/
         public int[] getOrigin()
         {
             return (int[])origin.Clone(); //Returns a Clone so that the origin cannot be modified
@@ -209,10 +216,8 @@ public class Merchant : MonoBehaviour
                             path = new List<Node>();
                             path.Add(addNode(y, minNode, x));
                             for (Node n = minNode; n != null; n = n.previous)
-                            {
                                 path.Insert(0, n);
-                            }
-                            pathFound = true;
+                            //pathFound = true;
                         }
 
                         foreach (Node n in tree)
@@ -278,7 +283,7 @@ public class Merchant : MonoBehaviour
         currentDestinationIndex = 0;
         _transform = gameObject.transform;
         currentDestinationIndex = 0;
-        currentGoalIndex = 0;
+        currentGoalIndex = 1;
         currentGoal = _transform.position;
     }
     
@@ -288,8 +293,8 @@ public class Merchant : MonoBehaviour
         {
             if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
             {
-                bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfTurns();
-                bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count;
+                bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfPoints();
+                bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count && paths[currentDestinationIndex].leave;
 
                 //check whether it needs to change its destination or whether it needs to change its "intermediate goal" to get to its current destination
                 if (currentDestinationNotFinal || notAtCurrentDestination)
@@ -301,7 +306,7 @@ public class Merchant : MonoBehaviour
                     else if (currentDestinationNotFinal)
                     {
                         currentDestinationIndex++;//In the former case, increment its destination
-                        currentGoalIndex = 0;
+                        currentGoalIndex = 1;
                     }
                     currentGoal = setVector(paths[currentDestinationIndex].getPoint(currentGoalIndex));
                     /*Debug.Log("currentDestinationIndex = "+currentDestinationIndex);
