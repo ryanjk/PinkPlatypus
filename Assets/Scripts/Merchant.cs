@@ -279,7 +279,7 @@ public class Merchant : MonoBehaviour
     }
     void Start()
     {
-        speed = 0.1f;
+        speed = 0.08f;
         currentDestinationIndex = 0;
         _transform = gameObject.transform;
         currentDestinationIndex = 0;
@@ -294,7 +294,7 @@ public class Merchant : MonoBehaviour
             if ((_transform.position - currentGoal).sqrMagnitude < .01)//If it is at its current goal
             {
                 bool notAtCurrentDestination = currentGoalIndex + 1 < paths[currentDestinationIndex].getNumberOfPoints();
-                bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count && paths[currentDestinationIndex].leave;
+                bool currentDestinationNotFinal = currentDestinationIndex + 1 < paths.Count/* && paths[currentDestinationIndex].leave*/;
 
                 //check whether it needs to change its destination or whether it needs to change its "intermediate goal" to get to its current destination
                 if (currentDestinationNotFinal || notAtCurrentDestination)

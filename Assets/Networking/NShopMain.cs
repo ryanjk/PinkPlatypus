@@ -2,8 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class ShopMain : MonoBehaviour {
+public class NShopMain : NetworkBehaviour {
 
     /**
     * ShopMain
@@ -30,17 +31,16 @@ public class ShopMain : MonoBehaviour {
 	void Start () {
         
 		_inventory = this.GetComponent<ItemInventory>();
-		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMain>();
-        //This was stuff put in for testing
-        //_inventory.addItem(1,10);
-        _inventory.addItem(101);
-        _inventory.addItem(102);
-        //_player.addItem(0,100);
-        _prices.Add(101, 5);
-        _prices.Add(102, 15);
-        //foreach (int i in _inventory.getItemList().Keys){
-		//	_prices.Add(i, 1);
-		//}
+		//Testing stuff: give the shop items and the players 100$
+		//_inventory.addItem(1,10);
+		//_inventory.addItem(101);
+		//_player.addItem(0,100);
+
+        // All items are cost at 1 unit by default.
+        // This can be changed at any point by the SceneManager by calling setPrice()
+		foreach(int i in _inventory.getItemList().Keys){
+			_prices.Add(i, 1);
+		}
 	}
 
 	/*
@@ -49,7 +49,8 @@ public class ShopMain : MonoBehaviour {
      * @param Collider c: The collider of the object that ran into the shop's collider. Should only be the player.
 	 */
 	void OnTriggerEnter(Collider c){
-		if(c.tag == "Player"){
+		if(c.tag == "Player" && c.gameObject.GetComponent<NPlayerController>().isHost()){
+            _player = c.gameObject.GetComponent<PlayerMain>();
 			openShopWindow();
 			Cursor.visible = true;
 		}
@@ -81,7 +82,7 @@ public class ShopMain : MonoBehaviour {
 	 * It then sets all the visual components up, assigns them to variables and updates the shop.
 	 */
 	private void openShopWindow(){
-        _player.GetComponent<PlayerController>().ignoreInput = true; // While the menu is open, ignore the player's movement
+        _player.GetComponent<NPlayerController>().ignoreInput = true; // While the menu is open, ignore the player's movement
         _shopUI = Object.Instantiate(shopUIPrefab) as Canvas;
 
 		_dropdown = _shopUI.GetComponentInChildren<Dropdown>();
@@ -131,7 +132,8 @@ public class ShopMain : MonoBehaviour {
 	 */
 	public void buy(){
 		if(this._dropdown.value > 0){
-			if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
+			/* commented out to avoid errors in testing but code is fully functionary
+            if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
 				_player.removeItem(0,((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]]));
 				_player.addItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
 				_inventory.removeItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
@@ -140,9 +142,9 @@ public class ShopMain : MonoBehaviour {
 				updateDropdownList();
 				updateCurrentItemInfo();
 			}
-			else{
+			else{*/
 				Debug.Log("Not enough money to buy this!");
-			}
+			//}
 		}
 	}
 	
@@ -197,7 +199,7 @@ public class ShopMain : MonoBehaviour {
         if (_shopUI != null) {
             Destroy(_shopUI.gameObject);
             //Cursor.visible = false; disabled for testing
-            _player.GetComponent<PlayerController>().ignoreInput = false; // The player can move again
+            _player.GetComponent<NPlayerController>().ignoreInput = false; // The player can move again
         }
     }
 	

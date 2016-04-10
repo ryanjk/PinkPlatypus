@@ -11,20 +11,32 @@ using UnityEngine.UI;
  */
 public class Talk : MonoBehaviour
 {
-    public Text text;
+    private Text _text;
+    private Image _container;
+    public string message;
     void Start()
     {
+        _text = GameObject.FindGameObjectWithTag("Messages").GetComponent<Text>();
+        _container = GameObject.FindGameObjectWithTag("MessageBox").GetComponent<Image>();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag=="Player"||other.tag=="FPPlayer")
-        text.text = "You need the key.";
+        if(other.tag=="Player"||other.tag=="FPPlayer") {
+            _container.enabled = true;
+            _text.enabled = true;
+            _text.text = message;
+
+        }
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "FPPlayer")
-            text.text = "";
+        if (other.tag == "Player" || other.tag == "FPPlayer") {
+            _container.enabled = false;
+            _text.enabled = false;
+
+            _text.text = "";
+        }
     }
     private Dictionary<string, string> _conversations;
 }
