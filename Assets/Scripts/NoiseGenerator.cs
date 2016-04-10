@@ -21,13 +21,18 @@ public class NoiseGenerator {
     */
     public float[,] GenerateNoise(int width, int height, int seed = -1) {
         if (seed != -1) {
-            Random.seed = seed;
+            random = new System.Random(seed);
         }
-        return GenerateBlendedArray(GenerateRandomArray(width, height, seed), _octaves);
+        else {
+            seed = System.DateTime.Now.Second;
+            random = new System.Random();
+        }
+        _seed = seed;
+        return GenerateBlendedArray(GenerateRandomArray(width, height), _octaves);
     }
 
     public int get_seed() {
-        return Random.seed;
+        return _seed;
     }
 
     /**
@@ -35,13 +40,13 @@ public class NoiseGenerator {
     * @param width The width of the desired array
     * @param height The height of the desired array
     */
-    private float[,] GenerateRandomArray(int width, int height, int seed) {
+    private float[,] GenerateRandomArray(int width, int height) {
         float[,] result = new float[width, height];
 
         // each cell in the array gets a random float
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                result[i, j] = Random.value;
+                result[i, j] = (float) random.NextDouble();
             }
         }
         return result;
@@ -152,4 +157,6 @@ public class NoiseGenerator {
     // These values should be played around with a bit to settle on something usable
     private int _octaves = 6;
     private float _persistence = 0.5f;
+    private System.Random random;
+    private int _seed;
 }

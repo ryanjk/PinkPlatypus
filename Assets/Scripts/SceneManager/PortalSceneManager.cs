@@ -10,7 +10,6 @@ public class PortalSceneManager : SceneManager {
         }
 
         else {
-            // assume that the name of the source is the same as the name of the portal gameobject (e.g. world1, world2, etc)
             var portal = GameObject.Find(source);
             var pos = portal.transform.position;
             _player.gameObject.transform.position = new Vector3(2.0f + pos.x, pos.y, pos.z);
