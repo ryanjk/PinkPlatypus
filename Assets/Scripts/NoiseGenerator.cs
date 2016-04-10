@@ -19,8 +19,15 @@ public class NoiseGenerator {
     * @param width The width of the desired array
     * @param height The height of the desired array
     */
-    public float[,] GenerateNoise(int width, int height) {
-        return GenerateBlendedArray(GenerateRandomArray(width, height), _octaves);
+    public float[,] GenerateNoise(int width, int height, int seed = -1) {
+        if (seed != -1) {
+            Random.seed = seed;
+        }
+        return GenerateBlendedArray(GenerateRandomArray(width, height, seed), _octaves);
+    }
+
+    public int get_seed() {
+        return Random.seed;
     }
 
     /**
@@ -28,7 +35,7 @@ public class NoiseGenerator {
     * @param width The width of the desired array
     * @param height The height of the desired array
     */
-    private float[,] GenerateRandomArray(int width, int height) {
+    private float[,] GenerateRandomArray(int width, int height, int seed) {
         float[,] result = new float[width, height];
 
         // each cell in the array gets a random float

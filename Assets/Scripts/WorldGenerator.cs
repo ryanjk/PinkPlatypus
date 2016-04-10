@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class WorldGenerator : MonoBehaviour {
 
     private int map_width = 50;
-    private int map_height = 25;
+    private int map_height = 50;
 
     void Start() {
         generate_world("1", map_width, map_height);
@@ -17,10 +18,11 @@ public class WorldGenerator : MonoBehaviour {
     }
 
     public void generate_world(string world_id, int width, int height) {
-        var beginning_time = System.DateTime.Now.Millisecond;
-        
+        long beginning_time = System.DateTime.Now.Millisecond;
+
         // create noise
-        var map_data = new NoiseGenerator().GenerateNoise(height, width);
+        var noise_generator = new NoiseGenerator();
+        var map_data = noise_generator.GenerateNoise(height, width);
 
         // flatten noise to 0 or 1
         var threshold = 0.6f; // walkable iff value <= threshold
@@ -77,6 +79,14 @@ public class WorldGenerator : MonoBehaviour {
 
         // make sure key points are reachable
 
+        build_path_between(portal_entrance, dungeon_entrance, map_data);
+        build_path_between(town_1.pos, portal_entrance, map_data);
+        build_path_between(town_2.pos, portal_entrance, map_data);
+        build_path_between(town_3.pos, portal_entrance, map_data);
+        build_path_between(town_3.pos, town_1.pos, map_data);
+        build_path_between(town_3.pos, town_2.pos, map_data);
+        build_path_between(town_2.pos, town_1.pos, map_data);
+
         // print the map and other info (changing as more of the 'generate_world' function is completed)
         Debug.Log(string.Format("Time taken: {0} ms", System.DateTime.Now.Millisecond - beginning_time));
         Debug.Log(string.Format("Portal position is: {1}, {0}\n", portal_entrance[0], portal_entrance[1]));
@@ -89,14 +99,20 @@ public class WorldGenerator : MonoBehaviour {
             for (int j = 0; j < width; ++j) {
                 var value = map_data[i, j];
                 var value_to_char = "";
-                if (value == 0.0f) {
+
+                /*
+                if (path_portal_dungeon.Contains(new Point(i,j)) && (value != 3.0f && value != 4.0f)) {
+                    value_to_char = "Z";
+                }
+
+                else */ if (value == 0.0f) {
                     value_to_char = "X"; // non-walkable
                 }
                 else if (value == 1.0f) {
                     value_to_char = "."; // walkable
                 }
                 else if (value == 2.0f) {
-                    value_to_char = "o"; // town
+                    value_to_char = "T"; // town
                 }
                 else if (value == 3.0f) {
                     value_to_char = "P"; // portal entrance
@@ -132,6 +148,157 @@ public class WorldGenerator : MonoBehaviour {
         return true;
     }
 
+    private List<Point> get_path(int[] from_p, int[] to_p, float[,] map_data) {
+
+        var from = new Point(from_p[0], from_p[1]);
+        var to = new Point(to_p[0], to_p[1]);
+
+        var visited = new HashSet<Point>(); // already visited
+        var to_visit = new HashSet<Point>(); // to visit
+        var came_from = new Dictionary<Point, Point>(); // maps node to best node to it
+        var g_score = new Dictionary<Point, int>(); // maps node to cost of getting to it from start
+        var f_score = new Dictionary<Point, int>(); // maps node to total cost of getting from the start to goal through it
+
+        for (int i = 0; i < map_height; ++i) {
+            for (int j = 0; j < map_width; ++j) {
+                var point = new Point(i, j);
+                g_score[point] = int.MaxValue;
+                f_score[point] = int.MaxValue;
+            }
+        }
+
+        g_score[from] = 0;
+        f_score[from] = heuristic_estimate(from, to);
+
+        to_visit.Add(from);
+        while (to_visit.Count != 0) {
+            var current = new Point();
+            int cur_min_val = int.MaxValue;
+            foreach (var pair in f_score) { // get point with minimum f-score in the set
+                if (pair.Value < cur_min_val && to_visit.Contains(pair.Key)) {
+                    cur_min_val = pair.Value;
+                    current = pair.Key;
+                }
+            }
+
+            if (current.Equals(to)) {
+                return reconstruct_path(came_from, current);
+            }
+
+            to_visit.Remove(current);
+            visited.Add(current);
+
+            foreach (var neighbour in get_neighbours(current, to, map_data)) {
+
+                if (visited.Contains(neighbour)) {
+                    continue;
+                }
+
+                var tentative_gscore = g_score[current] + 1;
+                if (!to_visit.Contains(neighbour)) {
+                    to_visit.Add(neighbour);
+                }
+                else if (tentative_gscore >= g_score[neighbour]) {
+                    continue;
+                }
+
+                came_from[neighbour] = current;
+                g_score[neighbour] = tentative_gscore;
+                f_score[neighbour] = g_score[neighbour] + heuristic_estimate(neighbour, to);
+            }
+        }
+
+        return new List<Point>();
+
+    }
+
+    private void build_path_between(int[] from, int[] to, float[,] map_data) {
+        var path = get_path(from, to, map_data);
+        foreach (var point in path) {
+            if (map_data[point.x, point.y] == 0.0f) {
+                map_data[point.x, point.y] = 1.0f;
+            }
+        }
+    }
+
+    private struct Point {
+        public int x;
+        public int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType()) {
+                return false;
+            }
+
+            var p2 = (Point)obj;
+            return ((x == p2.x) && (y == p2.y));
+        }
+
+        // override object.GetHashCode
+        public override int GetHashCode() {
+            int result = 17;
+            result = result * 31 + x;
+            result = result * 31 + y;
+            return result;
+        }
+    }
+
+    private List<Point> get_neighbours(Point node, Point destination, float[,] map_data) {
+        var walkable_tiles = new float[] { 0.0f, 1.0f, 2.0f };
+        var neighbours = new List<Point>();
+        if (node.x != 0) { // get upper neighbour
+            var n_point = new Point(node.x - 1, node.y);
+            var neighbour_value = map_data[node.x - 1, node.y];
+            if (walkable_tiles.Contains(neighbour_value) || n_point.Equals(destination)) {
+                neighbours.Add(n_point);
+            }
+        }
+        if (node.x != map_height - 1) { // get bottom neighbour
+            var neighbour_value = map_data[node.x + 1, node.x];
+            var n_point = new Point(node.x + 1, node.y);
+            if (walkable_tiles.Contains(neighbour_value) || n_point.Equals(destination)) {
+                neighbours.Add(n_point);
+            }
+        }
+        if (node.y != 0) { // get left neighbour
+            var n_point = new Point(node.x, node.y - 1);
+            var neighbour_value = map_data[node.x, node.y - 1];
+            if (walkable_tiles.Contains(neighbour_value) || n_point.Equals(destination)) {
+                neighbours.Add(n_point);
+            }
+        }
+        if (node.y != map_width - 1) { // get right neighbour
+            var n_point = new Point(node.x, node.y + 1);
+            var neighbour_value = map_data[node.x, node.y + 1];
+            if (walkable_tiles.Contains(neighbour_value) || n_point.Equals(destination)) {
+                neighbours.Add(n_point);
+            }
+        }
+        return neighbours;
+    }
+
+    private List<Point> reconstruct_path(Dictionary<Point, Point> came_from, Point current) {
+        var path = new List<Point>();
+        path.Add(current);
+        while (came_from.Keys.Contains(current)) {
+            current = came_from[current];
+            path.Add(current);
+        }
+        return path;
+    }
+
+    private int heuristic_estimate(Point from, Point to) {
+        int x_diff = from.x - to.x;
+        int y_diff = from.y - to.y;
+        int sqr_dist = x_diff * x_diff + y_diff * y_diff;
+        return sqr_dist;
+    }
+
     private class Town {
         public int[] pos;
         public int width;
@@ -142,4 +309,5 @@ public class WorldGenerator : MonoBehaviour {
             this.height = height;
         }
     }
+
 }
