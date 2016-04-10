@@ -134,7 +134,7 @@ public class NoiseGenerator {
 
         // normalize each value
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < width; j++) {
+            for (int j = 0; j < height; j++) {
                 result[i, j] /= totalAmplitude;
             }
         }
