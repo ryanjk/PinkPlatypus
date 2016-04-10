@@ -52,7 +52,9 @@ public class OverworldSceneManager : SceneManager {
                     case Type.DUNGEON_PORTAL: {
                         new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
                         var dungeon_portal = Instantiate(dungeon_portal_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
-                    } break; 
+                        dungeon_portal.GetComponent<PortalScript>().destination = "TemplateDungeon";
+                        dungeon_portal.GetComponent<PortalScript>().source = destination;
+                        } break; 
                 }
                 if (new_game_object != null) {
                     new_game_object.transform.SetParent(map_container.transform);

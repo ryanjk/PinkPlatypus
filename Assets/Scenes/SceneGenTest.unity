@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable_tile_prefab: {fileID: 135828, guid: 8dfd3925f0f67574ea153cd71498323d, type: 2}
-  nonwalkable_tile_prefab: {fileID: 115590, guid: 54f6e81d55a2302438ca419da7805dd8,
+  nonwalkable_tile_prefab: {fileID: 115590, guid: f5c697f1ff985a3459a456fdcbaf864d,
     type: 2}
   portal_prefab: {fileID: 135828, guid: f4260634ae3eca944b02d45737de6e6e, type: 2}
   dungeon_portal_prefab: {fileID: 135828, guid: 7b87026d129a53e41b8b2413d18d87dd,

@@ -46,6 +46,9 @@ public abstract class SceneManager : MonoBehaviour {
         else if (destination.Contains("PortalRoom")) {
             scene_to_load = "PortalRoom";
         }
+        else if (destination.Contains("Dungeon")) {
+            scene_to_load = "TemplateDungeon";
+        }
 
         Application.LoadLevel(scene_to_load);
     }
