@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /** 
 * CurrencyMain
@@ -14,7 +15,10 @@ using System.Collections;
 
 public class CurrencyMain : MonoBehaviour {
 
-	private int value;
+	public int value;
+
+    public int id;
+    public bool picked_up;
 
 	/**
 	 * Gives the player currency of amount equal to this component's "value" variable.
@@ -30,7 +34,8 @@ public class CurrencyMain : MonoBehaviour {
 		else{
 			Debug.Log ("Player Object not found");
 		}
-		Destroy(gameObject);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        picked_up = true;
 	}
 
 	/**
@@ -38,7 +43,7 @@ public class CurrencyMain : MonoBehaviour {
 	 * Calls giveCurrency() if the object colliding is the First Person Player.
 	 */
 	void OnTriggerEnter(Collider other){
-		if(other.tag == "FPPlayer"){
+		if(other.tag == "FPPlayer" && !picked_up){
 			giveCurrency();
 		}
 	}
@@ -57,5 +62,6 @@ public class CurrencyMain : MonoBehaviour {
 	 */
 	void Start(){
 		value = 1;
+        picked_up = false;
 	}
 }

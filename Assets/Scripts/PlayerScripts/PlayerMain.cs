@@ -21,24 +21,33 @@ public class PlayerMain : MonoBehaviour {
     */
 	public void addItem(int pId, int pQuantity){
 		_inventory.addItem (pId, pQuantity);
-	}
+    }
 
-	/**
+    /**
+    * Count an item in the inventory
+    * @param itemID: ID of the item to count
+    * @return int the quantity of the item the player has
+    */
+    public int countItem(int pItemID) {
+        return _inventory.countItem(pItemID);
+    }
+
+    /**
     * Remove an item from the inventory
     * @param itemID: ID of the item to add
     * @return bool true if item is successfully removed, false otherwise
     */
-	public bool removeItem(int pItemID) {
+    public bool removeItem(int pItemID) {
 		return _inventory.removeItem(pItemID, 1);
-	}
+    }
 
-	/**
+    /**
     * Remove an item from the inventory
     * @param itemID: ID of the item to add
     * @param quantity: Number of items to remove
     * @return bool true if the exact quantity of items are successfully removed, false otherwise
     */
-	public bool removeItem(int pItemID, int pQuantity) {
+    public bool removeItem(int pItemID, int pQuantity) {
 		return _inventory.removeItem(pItemID, pQuantity);
 	}
 	/*
@@ -54,7 +63,7 @@ public class PlayerMain : MonoBehaviour {
         _sceneLoadData = data;
     }
 
-	private ItemInventory _inventory;
+	public ItemInventory _inventory;
 
     //TODO: change to private, add access methods
     private SceneLoadData _sceneLoadData;

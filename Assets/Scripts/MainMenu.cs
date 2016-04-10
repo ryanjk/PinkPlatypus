@@ -21,12 +21,15 @@ public class MainMenu : MonoBehaviour {
 	}
 	
 	void OnMouseUp(){
-		if (newGame) {
-			Application.LoadLevel(1);
+		if (newGame) {\
+			//Application.LoadLevel(1);
+			Application.LoadLevel("WorldGenDemo");//temporary, for test
 		}
 		if (loadGame) {
-		}
+            Application.LoadLevel("StartingPortalRoom");
+        }
 		if (scores) {
+			Application.LoadLevel("PathfindingDemo");\
 		}
 		if (exit) {
 			Application.Quit();
