@@ -26,5 +26,9 @@ public class Talk : MonoBehaviour
         if (other.tag == "Player" || other.tag == "FPPlayer")
             text.text = "";
     }
+
+	public string merchantSchedule(string time){
+		return "Who? The mysterious creep? I think he will be here around" + time;
+	}
     private Dictionary<string, string> _conversations;
 }
