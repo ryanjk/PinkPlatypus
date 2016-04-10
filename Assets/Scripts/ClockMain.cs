@@ -29,6 +29,6 @@ public class ClockMain : MonoBehaviour {
         else {
             second = "" + time.getSecond();
         }
-        clock.text = hour + ":" + minute + ":" + second;
+        clock.text = hour + ":" + minute;
 	}
 }

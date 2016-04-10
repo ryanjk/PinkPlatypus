@@ -46,7 +46,7 @@ public class GameTimeScript : MonoBehaviour {
     private int current_min = 0;
     private int current_sec = 0;
 
-    private static int GAME_SEC_PER_SEC = 5;
+    private static int GAME_SEC_PER_SEC = 60;
     private static int SEC_PER_HOUR = 60 * 60;
     private static int SEC_PER_MIN = 60;
 }
