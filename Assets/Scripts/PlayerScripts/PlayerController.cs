@@ -8,7 +8,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     // time takes to move distance
-    private float _speed = 0.3f;
+    private float _speed = 0.22f;
 
     // distance per step
     private float _distance = 1f;

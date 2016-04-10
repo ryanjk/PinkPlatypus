@@ -15,7 +15,7 @@ using System.Collections;
 
 public class DoorMain : MonoBehaviour {
 	
-	private int keyID;
+	public int keyID;
 	
 	/**
 	 * See UnityDocs: http://docs.unity3d.com/ScriptReference/Collider.OnTriggerEnter.html
@@ -27,13 +27,13 @@ public class DoorMain : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.E)){
 			GameObject player = GameObject.FindWithTag("Player");
 			if(player != null){
-				//PlayerMain playerScript = player.GetComponent<PlayerMain>();
-				//if(playerScript.countItem(keyID) > 0){
+				PlayerMain playerScript = player.GetComponent<PlayerMain>();
+				if(playerScript.countItem(keyID) == 1){
 					Destroy(gameObject);
-				//}
-				//else{
-				//	Debug.Log ("Key not in Player Inventory");
-				//}
+				}
+				else{
+					Debug.Log ("Key not in Player Inventory");
+				}
 			}
 			else{
 				Debug.Log ("Player Object not found");
@@ -59,7 +59,7 @@ public class DoorMain : MonoBehaviour {
 	 * Sets the default keyID to 101 (the first world's key)
 	 */
 	void Start(){
-		keyID = 101;
+		//keyID = 101;
 	}
 
 }

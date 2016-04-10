@@ -10,10 +10,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartingPortalRoom.unity
   - enabled: 1
-    path: Assets/Scenes/PortalRoom.unity
-  - enabled: 1
     path: Assets/Scenes/TemplateDungeon.unity
   - enabled: 1
     path: Assets/Scenes/TemplateWorld.unity
   - enabled: 1
     path: Assets/Scenes/LoadMenu.unity
+  - enabled: 1
+    path: Assets/Scenes/PortalRoom.unity
+  - enabled: 1
+    path: Assets/Scenes/WorldGenDemo.unity
+  - enabled: 1
+    path: Assets/Scenes/PathfindingDemo.unity

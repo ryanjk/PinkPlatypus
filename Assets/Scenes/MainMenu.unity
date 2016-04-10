@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 38382893}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
   m_LocalPosition: {x: -4.67999983, y: 0, z: -1.28999996}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .25, y: .25, z: .25}
   m_Children: []
   m_Father: {fileID: 1916775339}
   m_RootOrder: 2
@@ -149,7 +149,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 2
-  m_FontSize: 10
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -190,8 +190,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.5, y: 1.14990222, z: 0}
-  m_Center: {x: 2.75, y: -.574951112, z: 0}
+  m_Size: {x: 22, y: 4, z: 0}
+  m_Center: {x: 10.5, y: -2, z: 0}
 --- !u!114 &38382899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   newGame: 0
   saveGame: 0
   loadGame: 0
-  scores: 0
+  scores: 1
   addPlayer: 0
   viewItems: 0
   exit: 0
@@ -248,14 +248,14 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 108446331}
-  m_Text: View Scores
+  m_Text: Pathfinding Demo
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 2
-  m_FontSize: 10
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -294,7 +294,7 @@ Transform:
   m_GameObject: {fileID: 108446331}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
   m_LocalPosition: {x: -2.1099999, y: 0, z: -2.98000002}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .25, y: .25, z: .25}
   m_Children: []
   m_Father: {fileID: 1916775339}
   m_RootOrder: 3
@@ -308,8 +308,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.70000029, y: 1.14990222, z: 0}
-  m_Center: {x: 2.85000014, y: -.574951112, z: 0}
+  m_Size: {x: 34, y: 5, z: 0}
+  m_Center: {x: 16, y: -2.25, z: 0}
 --- !u!114 &108446337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ Transform:
   m_GameObject: {fileID: 228865077}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
   m_LocalPosition: {x: 3.49000001, y: 0, z: -4.57000017}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .25, y: .25, z: .25}
   m_Children: []
   m_Father: {fileID: 1916775339}
   m_RootOrder: 4
@@ -385,7 +385,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 2
-  m_FontSize: 10
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -426,8 +426,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.70000005, y: 1.14990222, z: 0}
-  m_Center: {x: .850000024, y: -.574951112, z: 0}
+  m_Size: {x: 8, y: 4, z: 0}
+  m_Center: {x: 3.5, y: -2, z: 0}
 --- !u!114 &228865083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,7 +606,7 @@ RectTransform:
   m_GameObject: {fileID: 1288002889}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
   m_LocalPosition: {x: 0, y: 0, z: .140000001}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .25, y: .25, z: .25}
   m_Children: []
   m_Father: {fileID: 1916775339}
   m_RootOrder: 1
@@ -647,7 +647,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 2
-  m_FontSize: 10
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -688,8 +688,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.0999999, y: 1.14990222, z: 0}
-  m_Center: {x: 2.54999995, y: -.574951112, z: 0}
+  m_Size: {x: 20, y: 4, z: 0}
+  m_Center: {x: 10, y: -2, z: 0}
 --- !u!114 &1288002895
 MonoBehaviour:
   m_ObjectHideFlags: 0

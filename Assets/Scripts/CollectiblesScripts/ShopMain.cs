@@ -28,14 +28,16 @@ public class ShopMain : MonoBehaviour {
 
 		_inventory = this.GetComponent<ItemInventory>();
 		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMain>();
-		//This was stuff put in for testing
-		//_inventory.addItem(1,10);
-		//_inventory.addItem(101);
-		//_player.addItem(0,100);
-
-		foreach(int i in _inventory.getItemList().Keys){
-			_prices.Add(i, 1);
-		}
+        //This was stuff put in for testing
+        //_inventory.addItem(1,10);
+        _inventory.addItem(101);
+        _inventory.addItem(102);
+        //_player.addItem(0,100);
+        _prices.Add(101, 5);
+        _prices.Add(102, 15);
+        //foreach (int i in _inventory.getItemList().Keys){
+		//	_prices.Add(i, 1);
+		//}
 	}
 
 	/*
@@ -120,7 +122,7 @@ public class ShopMain : MonoBehaviour {
 	 */
 	public void buy(){
 		if(this._dropdown.value > 0){
-			/*if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
+			if(_player.countItem(0) >= ((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]])){
 				_player.removeItem(0,((int)_slider.value*_prices[_dropdownIDs[_dropdown.value]]));
 				_player.addItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
 				_inventory.removeItem(_dropdownIDs[_dropdown.value], (int)_slider.value);
@@ -129,9 +131,9 @@ public class ShopMain : MonoBehaviour {
 				refreshShopWindow();
 				updateQuantities();
 			}
-			else{*/
+			else{
 				Debug.Log("Not enough money to buy this!");
-			//}
+			}
 		}
 	}
 	
