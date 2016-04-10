@@ -6,6 +6,8 @@ TagManager:
   tags:
   - FPPlayer
   - SceneManager
+  - NetworkManager
+  - NetworkPlayer
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - No Self Collide
   - 
   - 
   - 
