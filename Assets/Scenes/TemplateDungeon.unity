@@ -318,7 +318,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 219288605}
   - 114: {fileID: 219288604}
-  - 114: {fileID: 219288603}
   m_Layer: 0
   m_Name: God
   m_TagString: God
@@ -326,20 +325,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &219288603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11462614, guid: cc6618d6972bd204d92fa0f79a1b964a,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 219288602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da93397213f5d645b56c57d527a567e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currency: {fileID: 718786289}
-  player: {fileID: 0}
 --- !u!114 &219288604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +349,7 @@ Transform:
   m_Children:
   - {fileID: 1237681103}
   - {fileID: 10560457}
+  - {fileID: 1362431858}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1 &249469328
@@ -1656,8 +1642,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1362431858}
   - 114: {fileID: 1362431857}
+  - 114: {fileID: 1362431859}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1684,8 +1671,21 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 219288605}
+  m_RootOrder: 2
+--- !u!114 &1362431859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1362431856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da93397213f5d645b56c57d527a567e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currency: {fileID: 718786289}
+  player: {fileID: 0}
 --- !u!1 &1393175756
 GameObject:
   m_ObjectHideFlags: 0
@@ -2712,7 +2712,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11431566, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}
       propertyPath: value
-      value: 100
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}

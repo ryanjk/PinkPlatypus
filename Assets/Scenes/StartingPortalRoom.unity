@@ -167,6 +167,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 99470306}
   - 114: {fileID: 99470305}
+  - 114: {fileID: 99470307}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -196,8 +197,21 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 1001202939}
+  m_RootOrder: 2
+--- !u!114 &99470307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 99470304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da93397213f5d645b56c57d527a567e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currency: {fileID: 183354746}
+  player: {fileID: 0}
 --- !u!1 &150117005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1993,7 +2007,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1001202939}
   - 114: {fileID: 1001202941}
-  - 114: {fileID: 1001202940}
   m_Layer: 0
   m_Name: God
   m_TagString: God
@@ -2013,22 +2026,9 @@ Transform:
   m_Children:
   - {fileID: 1146900371}
   - {fileID: 419526582}
+  - {fileID: 99470306}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &1001202940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11462614, guid: cc6618d6972bd204d92fa0f79a1b964a,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1001202938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da93397213f5d645b56c57d527a567e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currency: {fileID: 183354746}
-  player: {fileID: 0}
 --- !u!114 &1001202941
 MonoBehaviour:
   m_ObjectHideFlags: 0

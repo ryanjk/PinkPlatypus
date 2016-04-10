@@ -15,7 +15,7 @@ using System;
 
 public class CurrencyMain : MonoBehaviour {
 
-	private int value;
+	public int value;
 
     public int id;
     public bool picked_up;

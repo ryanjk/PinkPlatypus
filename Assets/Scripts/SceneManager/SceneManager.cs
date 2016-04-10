@@ -19,9 +19,6 @@ public abstract class SceneManager : MonoBehaviour {
 
 	void Start () {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMain>();
-        if (GameObject.FindWithTag("God") != null) {
-            GameObject.FindWithTag("God").GetComponent<TEMPCurrencyUpdater>().player = _player;
-        }
         if (_player.getSceneLoadData() != null) {
             Debug.Log("Prepping scene");
             string destination = _player.getSceneLoadData().destination;
