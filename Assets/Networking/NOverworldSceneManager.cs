@@ -21,7 +21,11 @@ public class NOverworldSceneManager : SceneManager {
         _player = p;
         return;
     }
-
+    public void stopHosting() {
+        if (GameObject.FindGameObjectsWithTag("Player").Length < 2) {
+            //changeScene()
+        }
+    }
     protected override void prepare_scene(string destination, string source) {
     }
     protected override void prepare_to_leave_scene(string destination, string source) {
