@@ -32,8 +32,9 @@ public abstract class SceneManager : MonoBehaviour {
 	}
 
     public void changeScene(string destination, string source) {
-
-        _player.gameObject.GetComponent<PlayerController>().stop_moving();
+        if (destination != "LoadMenu" && source != "LoadMenu") {
+            _player.gameObject.GetComponent<PlayerController>().stop_moving();
+        }
 
         SceneLoadData s = new SceneLoadData();
         s.destination = destination;

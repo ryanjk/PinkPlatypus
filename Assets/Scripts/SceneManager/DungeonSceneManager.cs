@@ -15,6 +15,7 @@ public class DungeonSceneManager : SceneManager {
     protected override void prepare_scene(string destination, string source) {
         _player.gameObject.GetComponent<PlayerController>().enabled = false;
         _player.gameObject.GetComponent<Collider>().enabled = false;
+        _player.gameObject.GetComponent<PauseMenuScript>().enabled = false;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(false);
         _player.gameObject.transform.Find("spriteU").gameObject.SetActive(false);
         _player.gameObject.transform.Find("spriteD").gameObject.SetActive(false);
@@ -106,6 +107,7 @@ public class DungeonSceneManager : SceneManager {
         // prepare player to leave
         _player.GetComponent<PlayerController>().enabled = true;
         _player.gameObject.GetComponent<Collider>().enabled = true;
+        _player.gameObject.GetComponent<PauseMenuScript>().enabled = true;
         _player.gameObject.transform.Find("Camera").gameObject.SetActive(true);
         _player.gameObject.transform.Find("spriteU").gameObject.SetActive(true);
         _player.gameObject.transform.Find("spriteD").gameObject.SetActive(true);

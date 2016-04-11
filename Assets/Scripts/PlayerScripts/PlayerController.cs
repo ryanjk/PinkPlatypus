@@ -67,6 +67,10 @@ public class PlayerController : MonoBehaviour {
         iTween.StopByName("player_move_tween");
     }
 
+    public bool isStopped() {
+        return (_direction == Direction.NONE);
+    }
+
     public void on_tween_complete() {
         _direction = Direction.NONE;
 

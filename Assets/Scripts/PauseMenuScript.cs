@@ -37,11 +37,11 @@ public class PauseMenuScript : MonoBehaviour {
                 gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
 
                 Application.LoadLevel (_level);
-				gameObject.transform.position = _pos;
+				//gameObject.transform.position = _pos;
 
 				_paused = false;
 			}
-			else {
+			else if(gameObject.GetComponent<PlayerController>().isStopped()){
                 SceneLoadData newSceneLoadData = new SceneLoadData();
                 newSceneLoadData.destination = "LoadMenu";
                 if (gameObject.GetComponent<PlayerMain>().getSceneLoadData()!= null) {
@@ -51,7 +51,7 @@ public class PauseMenuScript : MonoBehaviour {
                 //newSceneLoadData.source = Application.loadedLevelName;
                 gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
                 _level = Application.loadedLevelName;
-				_pos = gameObject.transform.position;
+				//_pos = gameObject.transform.position;
 
 				Application.LoadLevel("LoadMenu");
 
