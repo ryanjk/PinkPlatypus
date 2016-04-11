@@ -5,6 +5,8 @@ using System;
 //The merchant has a number of places to go. It finds a path to each of its required places and then goes there.
 public class Merchant : MonoBehaviour
 {
+    public SpriteRenderer U, D, L, R; // assigned in Unity editor
+    private Direction _direction;
     private Transform _transform; //an object keeping track of the Merchant's position
     /*Where the merchant is heading. Because he only moves horizontally and vertically, it must differ from the merchant's position by only one
      coordinate.*/
@@ -83,6 +85,46 @@ public class Merchant : MonoBehaviour
     {
         return new Vector3(direction[0], 0, direction[1]);
     }
+    private void setSprite(Direction newDirection) {
+        if (newDirection == Direction.DOWN || newDirection == Direction.DOWN) {
+            U.enabled = false;
+            L.enabled = false;
+            R.enabled = false;
+            D.enabled = true;
+            return;
+        } else if (newDirection == Direction.LEFT) {
+            U.enabled = false;
+            L.enabled = true;
+            R.enabled = false;
+            D.enabled = false;
+            return;
+        } else if (newDirection == Direction.RIGHT) {
+            U.enabled = false;
+            L.enabled = false;
+            R.enabled = true;
+            D.enabled = false;
+            return;
+        } else if (newDirection == Direction.UP) {
+            U.enabled = true;
+            L.enabled = false;
+            R.enabled = false;
+            D.enabled = false;
+            return;
+        }
+    }
+    private Direction getDirection() {
+        if (currentMovementVector.x > 0) return Direction.RIGHT;
+        else if (currentMovementVector.x < 0) return Direction.LEFT;
+        else if (currentMovementVector.z > 0) return Direction.UP;
+        else return Direction.DOWN;
+    }
+    private enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        NONE
+    }
     void Awake()
     {
         paths = new List<OriginDestination>();
@@ -136,6 +178,7 @@ public class Merchant : MonoBehaviour
                 _transform.Translate(currentMovementVector);
 
             }
+            setSprite(getDirection());
         }
     }
 } 
