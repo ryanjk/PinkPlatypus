@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 public class NetworkActor : NetworkBehaviour {
 
     public void Start() {
-        Debug.Log(GameObject.FindGameObjectsWithTag("Player").Length);
-        if (GameObject.FindGameObjectsWithTag("Player").Length >= 2) {
+        Debug.Log(GameObject.FindGameObjectsWithTag("NetworkPlayer").Length);
+        if (GameObject.FindGameObjectsWithTag("NetworkPlayer").Length >= 2) {
             if (this.isLocalPlayer || this.isServer)
                 player.GetComponent<NPlayerController>().switchToPlayer2();
             if (!this.isLocalPlayer)

@@ -12,12 +12,12 @@ public class MerchantPlacer : MonoBehaviour {
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
 
-        schedule.loadSchedule("schedule_data.bin");
+        //schedule.loadSchedule("schedule_data.bin");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        var merchant = GameObject.FindGameObjectWithTag("Merchant");
+       /* var merchant = GameObject.FindGameObjectWithTag("Merchant");
         if (merchant == null) {
             var currently_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
             if (currently_in.world_id == tile_map.get_map_id()) {
@@ -73,7 +73,7 @@ public class MerchantPlacer : MonoBehaviour {
             ));
             is_moving = true;
             Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.y, next_move.x));
-        }
+        } */
     }
 
     public void on_tween_complete() {
