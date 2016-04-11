@@ -6,7 +6,13 @@ TagManager:
   tags:
   - FPPlayer
   - SceneManager
+  - NetworkManager
+  - NetworkPlayer
   - God
+  - Merchant
+  - Shop
+  - Messages
+  - MessageBox
   layers:
   - Default
   - TransparentFX
@@ -16,7 +22,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - No Self Collide
   - 
   - 
   - 

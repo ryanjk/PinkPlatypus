@@ -13,14 +13,26 @@
 * (decided by the local private variable _octaves), weighting each octave with
 * an amplitude determined by the _persistence local private variable.
 */
-public class NoiseGenerator : MonoBehaviour {
+public class NoiseGenerator {
     /**
     * Creates a 2D array of floats using Perlin noise alg
     * @param width The width of the desired array
     * @param height The height of the desired array
     */
-    public float[,] generateNoise(int width, int height) {
-        return generateBlendedArray(generateRandomArray(width, height), _octaves);
+    public float[,] GenerateNoise(int width, int height, int seed = -1) {
+        if (seed != -1) {
+            random = new System.Random(seed);
+        }
+        else {
+            seed = System.DateTime.Now.Second;
+            random = new System.Random();
+        }
+        _seed = seed;
+        return GenerateBlendedArray(GenerateRandomArray(width, height), _octaves);
+    }
+
+    public int get_seed() {
+        return _seed;
     }
 
     /**
@@ -28,13 +40,13 @@ public class NoiseGenerator : MonoBehaviour {
     * @param width The width of the desired array
     * @param height The height of the desired array
     */
-    private float[,] generateRandomArray(int width, int height) {
+    private float[,] GenerateRandomArray(int width, int height) {
         float[,] result = new float[width, height];
 
         // each cell in the array gets a random float
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                result[i, j] = Random.value;
+                result[i, j] = (float) random.NextDouble();
             }
         }
         return result;
@@ -45,7 +57,7 @@ public class NoiseGenerator : MonoBehaviour {
     * @param randomArray The base array of random floats
     * @param octaveNum The current octave number of this array
     */
-    private float[,] generateOctave(float[,] randomArray, int octaveNum) {
+    private float[,] GenerateOctave(float[,] randomArray, int octaveNum) {
         // getting width and length of desired array from input array
         // and creating the array to be returned
         int width = randomArray.GetLength(0);
@@ -95,7 +107,7 @@ public class NoiseGenerator : MonoBehaviour {
     * @param randomArray The base array of random floats
     * @param octaves The number of octaves in our noise generator
     */
-    private float[,] generateBlendedArray(float[,] randomArray, int octaves) {
+    private float[,] GenerateBlendedArray(float[,] randomArray, int octaves) {
         // get the width and length of the input array
         int width = randomArray.GetLength(0);
         int height = randomArray.GetLength(1);
@@ -105,7 +117,7 @@ public class NoiseGenerator : MonoBehaviour {
 
         // generate the required number of octaves
         for (int i = 0; i < octaves; i++) {
-            smoothNoise[i] = generateOctave(randomArray, i);
+            smoothNoise[i] = GenerateOctave(randomArray, i);
         }
 
         // the result array to be returned
@@ -114,10 +126,9 @@ public class NoiseGenerator : MonoBehaviour {
         // the weight to give each octave, and an accumulator for the total amp.
         float amplitude = 1.0f;
         float totalAmplitude = 0.0f;
-
         // iterating backwards through the array of octaves
         // i.e. "larger" first
-        for (int curOctave = octaves - 1; curOctave >= 0; curOctave--) {
+        for(int curOctave = octaves - 1; curOctave >= 0; curOctave--) {
             // persistence multiplied by the current value of the amplitude
             // and accumulate totalAmplitude
             amplitude *= _persistence;
@@ -144,6 +155,7 @@ public class NoiseGenerator : MonoBehaviour {
 
     // These values should be played around with a bit to settle on something usable
     private int _octaves = 6;
-    private float _persistence = 0.8f;
+    private float _persistence = 0.5f;
+    private System.Random random;
+    private int _seed;
 }
-

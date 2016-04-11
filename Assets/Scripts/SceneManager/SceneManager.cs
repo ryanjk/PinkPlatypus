@@ -38,7 +38,19 @@ public abstract class SceneManager : MonoBehaviour {
         _player.setSceneLoadData(s);
 
         prepare_to_leave_scene(destination, source);
-        Application.LoadLevel(destination);
+
+        var scene_to_load = "";
+        if (destination.Contains("overworld")) {
+            scene_to_load = "SceneGenTest";
+        }
+        else if (destination.Contains("PortalRoom")) {
+            scene_to_load = "PortalRoom";
+        }
+        else if (destination.Contains("Dungeon")) {
+            scene_to_load = "TemplateDungeon";
+        }
+
+        Application.LoadLevel(scene_to_load);
     }
 
     protected abstract void prepare_scene(string destination, string source);

@@ -37,6 +37,22 @@ public class TileMapScript : MonoBehaviour {
         return _tileMapData.getTile(x_pos, y_pos).clone();
     }
 
+    public int getMapWidth() {
+        return _tileMapData.getWidth();
+    }
+
+    public int getMapHeight() {
+        return _tileMapData.getHeight();
+    }
+
+    public int[] get_key_point (TileMapData.KeyPoint key_point) {
+        return _tileMapData.get_key_point(key_point);
+    }
+
+    public void print_map() {
+        Debug.Log(_tileMapData);
+    }
+
     void Start() {
         /*
         Use this to test the loading of map data. Leaving here for possible future use.

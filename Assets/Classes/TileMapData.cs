@@ -23,7 +23,7 @@ public class TileMapData {
     public TileMapData(int width, int height) {
         _width = width;
         _height = height;
-        _tiles = new Tile[width, height];
+        _tiles = new Tile[height, width];
     }
 
     /**
@@ -46,18 +46,77 @@ public class TileMapData {
         return _tiles[x_pos, y_pos];
     }
 
+    public int getWidth() {
+        return _width;
+    }
+
+    public int getHeight() {
+        return _height;
+    }
+
     /**
     * Tile class
     * data structure that contains information every tile stores. For now, just store if the tile is walkable.
     */
     [Serializable]
     public class Tile {
-        public bool is_walkable;
+        public float value;
 
         public Tile clone() {
             Tile copy = new Tile();
-            copy.is_walkable = is_walkable;
+            copy.value = value;
             return copy;
+        }
+
+        public Type get_type() {
+            Type value_to_char = Type.NONE;
+            if (value == 0.0f) {
+                value_to_char = Type.OVERWORLD_NONWALKABLE; // non-walkable
+            }
+            else if (value == 1.0f) {
+                value_to_char = Type.OVERWORLD_WALKABLE; // walkable
+            }
+            else if (value == 2.0f) {
+                value_to_char = Type.TOWN; // town
+            }
+            else if (value == 3.0f) {
+                value_to_char = Type.ENTRY_PORTAL; // portal entrance
+            }
+            else if (value == 3.1f) {
+                value_to_char = Type.ENTRY_PORTAL_BORDER;
+            }
+            else if (value == 4.0f) {
+                value_to_char = Type.DUNGEON_PORTAL; // portal entrance
+            }
+            else if (value == 4.1f) {
+                value_to_char = Type.DUNGEON_PORTAL_BORDER;
+            }
+            return value_to_char;
+        }
+
+        public enum Type {
+            OVERWORLD_WALKABLE,
+            OVERWORLD_NONWALKABLE,
+            ENTRY_PORTAL_BORDER,
+            ENTRY_PORTAL,
+            DUNGEON_PORTAL_BORDER,
+            DUNGEON_PORTAL,
+            TOWN,
+
+            NONE
+        }
+
+        public override string ToString() {
+            switch(get_type()) {
+                case Type.OVERWORLD_NONWALKABLE: return "X";
+                case Type.OVERWORLD_WALKABLE: return ".";
+                case Type.TOWN: return "T";
+                case Type.ENTRY_PORTAL: return "P";
+                case Type.ENTRY_PORTAL_BORDER: return "p";
+                case Type.DUNGEON_PORTAL: return "D";
+                case Type.DUNGEON_PORTAL_BORDER: return "d";
+                default: return "";
+            }
         }
     }
 
@@ -74,22 +133,44 @@ public class TileMapData {
 
     public override string ToString() {
         string s = "";
-        for (int i = 0; i < _width; i++) {
+        for (int i = 0; i < _height; i++) {
             s += "\n";
-            for (int j = 0; j < _height; j++) {
-                if (_tiles[i, j].is_walkable) {
-                    s += "1 ";
-                }
-                else {
-                    s += "0 ";
-                }
+            for (int j = 0; j < _width; j++) {
+                s += _tiles[i, j].ToString() + " ";
             }
         }
         return s;
     }
 
+    public enum KeyPoint {
+        PORTAL_ENTRANCE, DUNGEON_ENTRANCE, TOWN_1, TOWN_2, TOWN_3
+    }
+
+    public int[] get_key_point(KeyPoint key_point) {
+        switch(key_point) {
+            case KeyPoint.DUNGEON_ENTRANCE:
+                return dungeon_entrance;
+            case KeyPoint.PORTAL_ENTRANCE:
+                return portal_entrance;
+            case KeyPoint.TOWN_1:
+                return town_1;
+            case KeyPoint.TOWN_2:
+                return town_2;
+            case KeyPoint.TOWN_3:
+                return town_3;
+            default:
+                return null;
+        }
+    }
+
     private int _width;
     private int _height;
     private Tile[,] _tiles;
+
+    public int[] portal_entrance = new int[2];
+    public int[] dungeon_entrance = new int[2];
+    public int[] town_1 = new int[2];
+    public int[] town_2 = new int[2];
+    public int[] town_3 = new int[2];
 
 }

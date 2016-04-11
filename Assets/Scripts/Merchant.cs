@@ -90,9 +90,11 @@ public class Merchant : MonoBehaviour
     }
     void Start()
     {
+
 		currentOriginDestination= new OriginDestination();
-        speed = 0.1f;
+        speed = 0.08f;
 		currentOriginDestination.currentDestinationIndex = 0;
+
         _transform = gameObject.transform;
 		currentOriginDestination.currentDestinationIndex = 0;
         currentGoalIndex = 1;

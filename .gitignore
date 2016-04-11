@@ -4,6 +4,7 @@
 [Bb]uild/
 
 Assets/UnityVS*
+blablabla*
 
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
@@ -30,3 +31,4 @@ obj/
 .Trashes
 ehthumbs.db
 Thumbs.db
+Assets/Scenes/Prefabs/Obstable Tile.prefab
