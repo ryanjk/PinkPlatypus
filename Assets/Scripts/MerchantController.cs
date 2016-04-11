@@ -20,4 +20,5 @@ public class MerchantController : MonoBehaviour {
         Debug.Log(merchant.getPathLength(1));
         merchant.finishedSettingDestinationsAndMap = true;
 	}
+	
 }

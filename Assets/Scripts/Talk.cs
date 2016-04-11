@@ -38,5 +38,9 @@ public class Talk : MonoBehaviour
             _text.text = "";
         }
     }
+
+	public string merchantSchedule(string time){
+		return "Who? The mysterious creep? I think he will be here around " + time;
+	}
     private Dictionary<string, string> _conversations;
 }
