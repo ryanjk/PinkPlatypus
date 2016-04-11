@@ -86,7 +86,7 @@ public class Merchant : MonoBehaviour
         return new Vector3(direction[0], 0, direction[1]);
     }
     private void setSprite(Direction newDirection) {
-        if (newDirection == Direction.DOWN || newDirection == Direction.DOWN) {
+        if (newDirection == Direction.DOWN || newDirection == Direction.NONE) {
             U.enabled = false;
             L.enabled = false;
             R.enabled = false;
