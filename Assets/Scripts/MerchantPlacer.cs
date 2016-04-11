@@ -4,18 +4,24 @@ using System.Collections;
 public class MerchantPlacer : MonoBehaviour {
 
     public GameObject merchant_prefab;
-
+	private Merchant merchant;
 	// Use this for initialization
 	void Start () {
         time = FindObjectOfType<GameTimeScript>();
         tile_map = FindObjectOfType<TileMapScript>();
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
-
+		GameObject g = GameObject.FindGameObjectWithTag("Merchant");
+		merchant = (Merchant) g.GetComponent("Merchant");
         //schedule.loadSchedule("schedule_data.bin");
-	}
-	
-	// Update is called once per frame
+		merchant.setDestination(new Vector3(0, 0, 0));
+		Debug.Log(merchant.getPathLength(0));
+		//merchant.setDestination(new Vector3(-6, 0, -6));
+		//Debug.Log(merchant.getPathLength(1));
+		//merchant.finishedSettingDestinationsAndMap = true;
+    }
+    
+    // Update is called once per frame
 	void Update () {
        /* var merchant = GameObject.FindGameObjectWithTag("Merchant");
         if (merchant == null) {

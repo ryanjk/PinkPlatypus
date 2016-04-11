@@ -9,7 +9,7 @@ public class OriginDestination
 	public bool leave;
 	private int[] origin;
 	private int[] destination;
-	private static int[,] map;
+	private static TileMapScript map;
 	private const int WALKABLE = 0; //a tile on which the merchant (and the player) can step.
 	private const int NUM_DIMENSIONS = 2; //there are two dimensions of movement: up-down, left-right.
 	/*each int[] in the List is of length 2 and represents the coordinates of a point that is a temporary goal for the Merchant as 
@@ -18,16 +18,18 @@ public class OriginDestination
 	public List<Node> path;
 
 	public OriginDestination(){
+		map=new TileMapScript();
 	}
 	/*The Merchant iterates through the list and follows the direction at the current position in the list.*/
 	
 	// private int[,] map;
 	
 	//Returns the length of the List "path". I did not call it getPathLength so as not to confuse it with "path length" as in how much he has to walk.
-	public void setMap(int[,] aMap)
+	public void setMap(TileMapScript aMap)
 	{
 		map = aMap;
 	}
+
 	public int currentDestinationIndex;
 	//I make each origin-destination pair into an inner class. This class has a method that finds a path between the points and other information.
 
@@ -103,7 +105,7 @@ public class OriginDestination
 			int[] sum = add(point, directions[i]);
 			bool accept = true;
 			for (int j = 0; j < NUM_DIMENSIONS; j++)
-				if (sum[j] < 0 || sum[j] > map.GetLength(j))
+				if (sum[j] < 0 )//|| sum[j] > map.GetLength(j))
 			{
 				accept = false;
 				break;
@@ -139,7 +141,7 @@ public class OriginDestination
 	}
 	public void findpath()
 	{
-		if (map[destination[0], destination[1]] != WALKABLE)
+		if (map.getTile(destination[0], destination[1]).isWalkable())
 			return;
 		HashSet<Node> tree = new HashSet<Node>();
 		HashSet<Node> frontier = new HashSet<Node>();
@@ -165,9 +167,9 @@ public class OriginDestination
 				int[] y = add(minNode.position, x);
 				//int newDistance = minNode.pathLengthFromOrigin + 1 + h(y);
 				bool found = false;
-				if (y[0] < 0 || y[1] < 0 || y[0] >= map.GetLength(0) || y[1] >= map.GetLength(1))
+				if (y[0] < 0 || y[1] < 0 )//|| y[0] >= map.GetLength(0) || y[1] >= map.GetLength(1))
 					continue;
-				if (map[y[0], y[1]] == WALKABLE)
+				if (map.getTile(y[0], y[1]).isWalkable())
 				{
 					if (y[0] == destination[0] && y[1] == destination[1])
 					{
