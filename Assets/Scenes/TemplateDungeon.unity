@@ -1676,7 +1676,6 @@ RectTransform:
   m_Children:
   - {fileID: 1416297513}
   - {fileID: 22539697}
-  - {fileID: 1731027465}
   m_Father: {fileID: 219288605}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
