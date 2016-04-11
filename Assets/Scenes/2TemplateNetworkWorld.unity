@@ -148,6 +148,10 @@ Prefab:
       propertyPath: m_Name
       value: NPC (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 121676, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11442212, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
     - {fileID: 11444040, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
@@ -212,6 +216,14 @@ Prefab:
     - target: {fileID: 2323426, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6533916, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 121676, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11442212, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
@@ -1257,6 +1269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: TemplateDungeon
+  source: 
 --- !u!1 &1201155839 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 179220, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
