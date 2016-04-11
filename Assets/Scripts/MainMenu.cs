@@ -28,6 +28,9 @@ public class MainMenu : MonoBehaviour {
 		if (loadGame) {
             Application.LoadLevel("StartingPortalRoom");
         }
+        if(addPlayer) {
+            
+        }
 		if (scores) {
 			Application.LoadLevel("PathfindingDemo");
 		}

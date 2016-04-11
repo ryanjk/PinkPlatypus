@@ -32,3 +32,5 @@ obj/
 ehthumbs.db
 Thumbs.db
 Assets/Scenes/Prefabs/Obstable Tile.prefab
+*.bin
+Assets/Resources/player_inventory.bin.meta

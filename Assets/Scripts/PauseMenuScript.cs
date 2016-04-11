@@ -44,7 +44,10 @@ public class PauseMenuScript : MonoBehaviour {
 			else {
                 SceneLoadData newSceneLoadData = new SceneLoadData();
                 newSceneLoadData.destination = "LoadMenu";
-                newSceneLoadData.source = gameObject.GetComponent<PlayerMain>().getSceneLoadData().destination;
+                if (gameObject.GetComponent<PlayerMain>().getSceneLoadData()!= null) {
+                    newSceneLoadData.source = gameObject.GetComponent<PlayerMain>().getSceneLoadData().destination;
+                }
+                else newSceneLoadData.source = "StartingPortalRoom";
                 //newSceneLoadData.source = Application.loadedLevelName;
                 gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
                 _level = Application.loadedLevelName;
