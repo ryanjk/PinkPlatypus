@@ -47,14 +47,20 @@ public class OverworldSceneManager : SceneManager {
                         var portal = Instantiate(portal_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
                         portal.GetComponent<PortalScript>().destination = "PortalRoom";
                         portal.GetComponent<PortalScript>().source = destination;
-                        _player.transform.position = world_pos + new Vector3(0.0f, 1.0f, -1.0f);
+                        if (source.Contains("PortalRoom")) {
+                            _player.transform.position = world_pos + new Vector3(0.0f, 1.0f, -1.0f);
+                        }
                     } break;
                     case Type.DUNGEON_PORTAL: {
                         new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
                         var dungeon_portal = Instantiate(dungeon_portal_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
-                        dungeon_portal.GetComponent<PortalScript>().destination = "TemplateDungeon";
+                        var world_color = destination.Substring(0, destination.IndexOf('_'));
+                        dungeon_portal.GetComponent<PortalScript>().destination = world_color + "_dungeon";
                         dungeon_portal.GetComponent<PortalScript>().source = destination;
-                        } break; 
+                        if (source.Contains("dungeon")) {
+                            _player.transform.position = world_pos + new Vector3(0.0f, 1.0f, -1.0f);
+                        }
+                        } break;
                 }
                 if (new_game_object != null) {
                     new_game_object.transform.SetParent(map_container.transform);

@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaab58e579a9b174d9583af710bb11ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 1192602056}
+  message: 
 --- !u!4 &584195944 stripped
 Transform:
   m_PrefabParentObject: {fileID: 437670, guid: 9b359412a79345e43ab479a11804b7ef, type: 2}
@@ -1079,6 +1079,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1192602055}
+  - {fileID: 1879680044}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_AnchorMin: {x: 0, y: 0}
@@ -1661,6 +1662,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653397fd3e774f644a65e403a2c03cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  red: {fileID: 2100000, guid: 4e9a4d68de890044a8ba4d58771370c0, type: 2}
+  green: {fileID: 2100000, guid: 12805d4ac47c8d94ab46228686f598b6, type: 2}
+  blue: {fileID: 2100000, guid: c1ff04220116fad44ae70a24090f4e2d, type: 2}
+  yellow: {fileID: 2100000, guid: b598bbb35570fa742ba7759ec438a1a3, type: 2}
+  purple: {fileID: 2100000, guid: 5d00d8c6b6af51749a961bdbf07b468f, type: 2}
 --- !u!4 &1362431858
 Transform:
   m_ObjectHideFlags: 0
@@ -2339,6 +2345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: TemplateWorld
+  source: 
 --- !u!1001 &1620836128
 Prefab:
   m_ObjectHideFlags: 0
@@ -2487,9 +2494,108 @@ Prefab:
       propertyPath: value
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 11431566, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}
+      propertyPath: id
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &1879680043
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 911916915}
+    m_Modifications:
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchorMin.x
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchorMin.y
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchorMax.x
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_AnchorMax.y
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11449540, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11443492, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 8e2a62616a5cc5a4fb473308b21c7e98, type: 2}
+  m_IsPrefabParent: 0
+--- !u!224 &1879680044 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 22486248, guid: 8e2a62616a5cc5a4fb473308b21c7e98,
+    type: 2}
+  m_PrefabInternal: {fileID: 1879680043}
 --- !u!1 &1912115609
 GameObject:
   m_ObjectHideFlags: 0
@@ -2714,6 +2820,10 @@ Prefab:
       propertyPath: value
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 11431566, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}
+      propertyPath: id
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8bb6af11d793ca941a55a0d80c5b2427, type: 2}
   m_IsPrefabParent: 0
@@ -2803,3 +2913,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: TemplateWorld
+  source: 

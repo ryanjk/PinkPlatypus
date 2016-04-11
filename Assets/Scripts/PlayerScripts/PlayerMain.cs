@@ -1,5 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System;
+using System.Collections.Generic;
+
 public class PlayerMain : MonoBehaviour {
     public float speed;
     void Awake() {
@@ -11,8 +17,20 @@ public class PlayerMain : MonoBehaviour {
         //TODO: fix this, can't create a script with new. should be AddComponent.
 		//_inventory = new ItemInventory ();
        // _sceneLoadData = new SceneLoadData();
-
+       if (_times_ran == 0) {
+            load_inventory();
+            _times_ran++;
+        }
 	}
+
+    void OnApplicationQuit() {
+        Debug.Log("saving player inventory");
+        _inventory.saveToDisk();
+    }
+
+    public void load_inventory() {
+        _inventory.loadFromDisk();
+    }
 
 	/**
     * Add an item to the inventory
@@ -67,6 +85,8 @@ public class PlayerMain : MonoBehaviour {
 
     //TODO: change to private, add access methods
     private SceneLoadData _sceneLoadData;
+
+    private static int _times_ran = 0;
 
 } 
 	

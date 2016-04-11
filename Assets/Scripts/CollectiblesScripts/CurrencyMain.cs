@@ -26,12 +26,12 @@ public class CurrencyMain : MonoBehaviour {
 	 */
 	void giveCurrency(){
 		GameObject player = GameObject.FindWithTag("Player");
-		if(player != null){
-			//PlayerMain playerScript = player.GetComponent<PlayerMain>();
-			//playerScript.addItem(0,value);
+		if(player != null) {
+			PlayerMain playerScript = player.GetComponent<PlayerMain>();
+			playerScript.addItem(0,value);
 			Debug.Log ("Giving " + value + " currency to Player.");
 		}
-		else{
+		else {
 			Debug.Log ("Player Object not found");
 		}
         gameObject.GetComponent<MeshRenderer>().enabled = false;
@@ -61,7 +61,6 @@ public class CurrencyMain : MonoBehaviour {
 	 * Sets the default value of the currency object to 1 unit of currency.
 	 */
 	void Start(){
-		value = 1;
         picked_up = false;
 	}
 }

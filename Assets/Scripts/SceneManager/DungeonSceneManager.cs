@@ -21,8 +21,8 @@ public class DungeonSceneManager : SceneManager {
         _player.gameObject.transform.Find("spriteR").gameObject.SetActive(false);
         _player.gameObject.transform.Find("spriteL").gameObject.SetActive(false);
 
-        // figure out what rupees to place (disabled for now)
-        /*try {
+        // figure out what rupees to place
+        try {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(".\\Assets\\Resources\\" + destination + "_rupee_data.dat", FileMode.Open);
             RupeeSaveData[] rupees = formatter.Deserialize(stream) as RupeeSaveData[];
@@ -42,17 +42,45 @@ public class DungeonSceneManager : SceneManager {
         catch (FileNotFoundException e) {
             Debug.Log("No dungeon save data to load yet");
         }
-        */
+        
         foreach (PortalScript p in (FindObjectsOfType(typeof(PortalScript))) as PortalScript[]) {
-            //p.destination = _player.getSceneLoadData().source;
-            p.destination = "TemplateWorld";
+            p.destination = source;
+            p.source = destination;
         }
 
-        //CurrencyMain[] c = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
-        //Insert stuff to set currency values here
-
-       DoorMain[] d = (FindObjectsOfType(typeof(DoorMain))) as DoorMain[];
-        //Set keys for doors here
+        var first_door = GameObject.Find("Door").GetComponent<DoorMain>();
+        var second_door = GameObject.Find("Door2").GetComponent<DoorMain>();
+        string source_color = source.Substring(0, source.IndexOf('_'));
+        if (source_color == "red") {
+            first_door.keyID = 101;
+            second_door.keyID = 102;
+            first_door.gameObject.GetComponent<MeshRenderer>().material = red;
+            second_door.gameObject.GetComponent<MeshRenderer>().material = red;
+        }
+        else if (source_color == "blue") {
+            first_door.keyID = 201;
+            second_door.keyID = 202;
+            first_door.gameObject.GetComponent<MeshRenderer>().material = blue;
+            second_door.gameObject.GetComponent<MeshRenderer>().material = blue;
+        }
+        else if (source_color == "green") {
+            first_door.keyID = 301;
+            second_door.keyID = 302;
+            first_door.gameObject.GetComponent<MeshRenderer>().material = green;
+            second_door.gameObject.GetComponent<MeshRenderer>().material = green;
+        }
+        else if (source_color == "yellow") {
+            first_door.keyID = 401;
+            second_door.keyID = 402;
+            first_door.gameObject.GetComponent<MeshRenderer>().material = yellow;
+            second_door.gameObject.GetComponent<MeshRenderer>().material = yellow;
+        }
+        else if (source_color == "purple") {
+            first_door.keyID = 501;
+            second_door.keyID = 502;
+            first_door.gameObject.GetComponent<MeshRenderer>().material = purple;
+            second_door.gameObject.GetComponent<MeshRenderer>().material = purple;
+        }
     }
 
     /*
@@ -61,8 +89,8 @@ public class DungeonSceneManager : SceneManager {
     After that it sets the player's sceneload data to the correct source and destination
     */
     protected override void prepare_to_leave_scene(string destination, string source) {
-        // save rupees (disabled for now)
-        /*CurrencyMain[] rupee_game_objects = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
+        // save rupees
+        CurrencyMain[] rupee_game_objects = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
         RupeeSaveData[] rupees = new RupeeSaveData[rupee_game_objects.Length];
         for (int i = 0; i < rupee_game_objects.Length; ++i) {
             RupeeSaveData save_data;
@@ -73,7 +101,7 @@ public class DungeonSceneManager : SceneManager {
         IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(".\\Assets\\Resources\\" + source + "_rupee_data.dat", FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, rupees);
-        stream.Close(); */
+        stream.Close();
 
         // prepare player to leave
         _player.GetComponent<PlayerController>().enabled = true;
@@ -92,5 +120,11 @@ public class DungeonSceneManager : SceneManager {
         public int id;
         public bool picked_up;
     }
+
+    public Material red;
+    public Material green;
+    public Material blue;
+    public Material yellow;
+    public Material purple;
 
 }

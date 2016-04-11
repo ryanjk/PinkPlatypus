@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 /**
 * ItemInventory
@@ -21,7 +25,25 @@ using System.Collections.Generic;
 * the item ID passed to it corresponds to an item in the global database. If this isn't the case, the assertion will fail and
 * if Assert.raiseExceptions is set to true, the execution will stop. Otherwise it will print a message and continue.
 */
+
 public class ItemInventory : MonoBehaviour {
+
+    public void saveToDisk() {
+        Stream stream = new FileStream(".\\Assets\\Resources\\player_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+        Serialize(_items, stream);
+        stream.Close();
+    }
+
+    public void loadFromDisk() {
+        try {
+            Stream stream = new FileStream(".\\Assets\\Resources\\player_inventory.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            _items = Deserialize(stream);
+            stream.Close();
+        }
+        catch (Exception e) {
+            _items = new Dictionary<int, int>();
+        }
+    }
 
     /**
     * Add an item to the inventory
@@ -122,8 +144,30 @@ public class ItemInventory : MonoBehaviour {
     }
 
     void Awake() {
-        _items = new Dictionary<int, int>();
+        //_items = new Dictionary<int, int>();
     }
 
-    private Dictionary<int, int> _items;
+    private Dictionary<int, int> _items = new Dictionary<int, int>();
+
+    public void Serialize(Dictionary<int, int> dictionary, Stream stream) {
+        BinaryWriter writer = new BinaryWriter(stream);
+        writer.Write(dictionary.Count);
+        foreach (var kvp in dictionary) {
+            writer.Write(kvp.Key);
+            writer.Write(kvp.Value);
+        }
+        writer.Flush();
+    }
+
+    public Dictionary<int, int> Deserialize(Stream stream) {
+        BinaryReader reader = new BinaryReader(stream);
+        int count = reader.ReadInt32();
+        var dictionary = new Dictionary<int, int>(count);
+        for (int n = 0; n < count; n++) {
+            var key = reader.ReadInt32();
+            var value = reader.ReadInt32();
+            dictionary.Add(key, value);
+        }
+        return dictionary;
+    }
 }

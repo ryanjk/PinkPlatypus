@@ -1,13 +1,13 @@
 ID,Name,isKey
 0,Currency,false
 1,Arrow,false
-101,W1 Key 1,true
-102,W1 Key 2,true
-201,W2 Key 1,true
-202,W2 Key 2,true
-301,W3 Key 1,true
-302,W3 Key 2,true
-401,W4 Key 1,true
-402,W4 Key 2,true
-501,W5 Key 1,true
-502,W5 Key 2,true
+101,Red Key 1,true
+102,Red Key 2,true
+201,Blue Key 1,true
+202,Blue Key 2,true
+301,Green Key 1,true
+302,Green Key 2,true
+401,Yellow Key 1,true
+402,Yellow Key 2,true
+501,Purple Key 1,true
+502,Purple Key 2,true
