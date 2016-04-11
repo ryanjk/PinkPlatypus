@@ -47,8 +47,7 @@ public class Talk : MonoBehaviour
                               "Need some keys? Wait until TIME",
                               "I can't wait until TIME",
                               "TIME. Remember it"};
-        Random random = new Random();
-        string returnString = _messages[_messages.Length * (int)Random.value - 1];
+        string returnString = _messages[(int) ((_messages.Length - 1) * Random.value)];
         returnString.Replace("TIME", time);
 		return returnString;
 	}
