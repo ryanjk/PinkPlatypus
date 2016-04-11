@@ -40,7 +40,17 @@ public class Talk : MonoBehaviour
     }
 
 	public string merchantSchedule(string time){
-		return "Who? The mysterious creep? I think he will be here around " + time;
+        string[] _messages = {"Who? The mysterious creep? I think he will be here around TIME",
+                              "Stick around until about TIME, that's when the caravan rolls in",
+                              "I hear the merchant stops here at TIME",
+                              "TIME is a pretty interesting time of the day for this place",
+                              "Need some keys? Wait until TIME",
+                              "I can't wait until TIME",
+                              "TIME. Remember it"};
+        Random random = new Random();
+        string returnString = _messages[_messages.Length * (int)Random.value - 1];
+        returnString.Replace("TIME", time);
+		return returnString;
 	}
     private Dictionary<string, string> _conversations;
 }
