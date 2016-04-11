@@ -19,9 +19,13 @@ public class TileMapScript : MonoBehaviour {
     */
     public void loadMap(string filename) {
         IFormatter formatter = new BinaryFormatter();
-        Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Open);
+        Stream stream = new FileStream(".\\Assets\\Resources\\" + filename + "_map_data.bin", FileMode.Open);
         _tileMapData = (TileMapData)formatter.Deserialize(stream);
         stream.Close();
+    }
+
+    public float[,] get_raw_data() {
+        return _tileMapData.getTiles();
     }
 
     /** 

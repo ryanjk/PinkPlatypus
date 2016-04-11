@@ -104,7 +104,7 @@ public class ScheduleData {
     public class ScheduleEntry : IComparable<ScheduleEntry> {
         public int hour;
         public int minute;
-        public int world_id;
+        public string world_id;
         public int x_pos;
         public int y_pos;
 

@@ -165,6 +165,17 @@ public class TileMapData {
 
     private int _width;
     private int _height;
+
+    public float[,] getTiles() {
+        float[,] tiles = new float[_height, _width];
+        for (int i = 0; i < _height; ++i) {
+            for (int j = 0; j < _width; ++j) {
+                tiles[i, j] = _tiles[i, j].value;
+            }
+        }
+        return tiles;
+    }
+
     private Tile[,] _tiles;
 
     public int[] portal_entrance = new int[2];

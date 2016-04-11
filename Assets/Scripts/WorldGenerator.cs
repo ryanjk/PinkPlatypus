@@ -8,11 +8,11 @@ public class WorldGenerator : MonoBehaviour {
     private int map_height = 50;
 
     void Start() {
-        generate_world("red_overworld", map_width, map_height);
+        /*generate_world("red_overworld", map_width, map_height);
         generate_world("blue_overworld", map_width, map_height);
         generate_world("green_overworld", map_width, map_height);
         generate_world("purple_overworld", map_width, map_height);
-        generate_world("yellow_overworld", map_width, map_height);
+        generate_world("yellow_overworld", map_width, map_height); */
     }
 
     void Update() {
@@ -22,7 +22,7 @@ public class WorldGenerator : MonoBehaviour {
     }
 
     public void generate_world(string world_id, int width, int height) {
-        ulong beginning_time = (ulong) System.DateTime.Now.Millisecond;
+        var timer = System.Diagnostics.Stopwatch.StartNew();
 
         // create noise
         var noise_generator = new NoiseGenerator();
@@ -106,7 +106,7 @@ public class WorldGenerator : MonoBehaviour {
         tilemap_data.saveToDisk(world_id + "_map_data.bin");
 
         // print the map and other info (changing as more of the 'generate_world' function is completed)
-        Debug.Log(string.Format("Time taken: {0} ms", (ulong) System.DateTime.Now.Millisecond - beginning_time));
+        Debug.Log(string.Format("Time to generate worlds: {0} ms", timer.ElapsedMilliseconds));
         string map_output = "";
         for (int i = 0; i < height; ++i) {
             map_output += "\n";
@@ -186,7 +186,7 @@ public class WorldGenerator : MonoBehaviour {
         return true;
     }
 
-    private List<Point> get_path(int[] from_p, int[] to_p, float[,] map_data) {
+    public List<Point> get_path(int[] from_p, int[] to_p, float[,] map_data) {
 
         var from = new Point(from_p[0], from_p[1]);
         var to = new Point(to_p[0], to_p[1]);
@@ -259,7 +259,7 @@ public class WorldGenerator : MonoBehaviour {
         }
     }
 
-    private struct Point {
+    public struct Point {
         public int x;
         public int y;
 
