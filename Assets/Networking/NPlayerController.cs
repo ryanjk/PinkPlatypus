@@ -19,6 +19,7 @@ public class NPlayerController : NetworkBehaviour {
     public Camera cam;
     public bool ignoreInput;
     private bool host;
+    private bool firstUpdate;
 
     void Start() {
         _rbody = GetComponent<Rigidbody>();
@@ -28,10 +29,25 @@ public class NPlayerController : NetworkBehaviour {
         R2.enabled = false;
         L2.enabled = false;
         D2.enabled = false;
+        firstUpdate = false;
         host = true;
     }
 
     void Update() {
+        if (!firstUpdate && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length < 2) {
+            firstUpdate = true;
+            gameObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position + new Vector3(0f, 0.3f, 0f) ;
+        }
+        else if (!firstUpdate && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length == 2) {
+            firstUpdate = true;
+            foreach(GameObject g in GameObject.FindGameObjectsWithTag("NetworkPlayer")) {
+                if (g != this) {
+                    gameObject.transform.position = GameObject.FindGameObjectWithTag("NetworkPlayer").transform.position + new Vector3(0f, 0.3f, 0f) ;
+                    break;
+                }
+
+            }
+        }
     }
 
     public void switchToPlayer2() {

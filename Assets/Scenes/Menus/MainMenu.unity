@@ -131,9 +131,10 @@ MonoBehaviour:
   newGame: 0
   saveGame: 0
   loadGame: 1
-  scores: 0
+  enterAddress: 0
   addPlayer: 0
-  viewItems: 0
+  connect: 0
+  back: 0
   exit: 0
 --- !u!102 &38382896
 TextMesh:
@@ -217,7 +218,7 @@ GameObject:
   - 65: {fileID: 108446336}
   - 114: {fileID: 108446337}
   m_Layer: 0
-  m_Name: Scores
+  m_Name: Server Connect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,9 +238,10 @@ MonoBehaviour:
   newGame: 0
   saveGame: 0
   loadGame: 0
-  scores: 1
+  enterAddress: 1
   addPlayer: 0
-  viewItems: 0
+  connect: 0
+  back: 0
   exit: 0
 --- !u!102 &108446333
 TextMesh:
@@ -248,7 +250,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 108446331}
-  m_Text: Pathfinding Demo
+  m_Text: Connect to Server
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -367,9 +369,10 @@ MonoBehaviour:
   newGame: 0
   saveGame: 0
   loadGame: 0
-  scores: 0
+  enterAddress: 0
   addPlayer: 0
-  viewItems: 0
+  connect: 0
+  back: 0
   exit: 1
 --- !u!102 &228865080
 TextMesh:
@@ -629,9 +632,10 @@ MonoBehaviour:
   newGame: 1
   saveGame: 0
   loadGame: 0
-  scores: 0
+  enterAddress: 0
   addPlayer: 0
-  viewItems: 0
+  connect: 0
+  back: 0
   exit: 0
 --- !u!102 &1288002892
 TextMesh:

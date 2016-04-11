@@ -231,6 +231,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1001 &1333005045
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_CustomConfig
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_DontDestroyOnLoad
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1714377759
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,14 +306,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1714377759}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77af9b2575f2d5b408a6be40f7f21e30, type: 3}
+  m_Script: {fileID: 11500000, guid: 35e6a879de628ac47835ddfcb6fc40e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   walkable_tile_prefab: {fileID: 135828, guid: 8dfd3925f0f67574ea153cd71498323d, type: 2}
   nonwalkable_tile_prefab: {fileID: 115590, guid: f5c697f1ff985a3459a456fdcbaf864d,
     type: 2}
-  portal_prefab: {fileID: 135828, guid: f4260634ae3eca944b02d45737de6e6e, type: 2}
-  dungeon_portal_prefab: {fileID: 135828, guid: 7b87026d129a53e41b8b2413d18d87dd,
+  portal_prefab: {fileID: 179150, guid: 24f847fb0ec60a64f9844e5be7eaea0b, type: 2}
+  dungeon_portal_prefab: {fileID: 198634, guid: 069b3a762e71e054eadb0313c6ca3d7b,
     type: 2}
 --- !u!114 &1714377761
 MonoBehaviour:

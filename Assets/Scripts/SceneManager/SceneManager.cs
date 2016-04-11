@@ -25,6 +25,7 @@ public abstract class SceneManager : MonoBehaviour {
             string source = _player.getSceneLoadData().source;
             prepare_scene(destination, source);
         }
+        else Debug.Log("Can't prep scene");
     }
 	
 	void Update () {

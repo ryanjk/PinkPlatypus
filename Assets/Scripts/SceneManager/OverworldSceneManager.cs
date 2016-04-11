@@ -10,8 +10,7 @@ public class OverworldSceneManager : SceneManager {
 
     public GameObject portal_prefab;
     public GameObject dungeon_portal_prefab;
-
-    public GameObject player_prefab;
+    
 
     protected override void prepare_scene(string destination, string source) {
 
