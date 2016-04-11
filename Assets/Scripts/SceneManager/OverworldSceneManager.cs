@@ -7,11 +7,10 @@ public class OverworldSceneManager : SceneManager {
 
     public GameObject walkable_tile_prefab;
     public GameObject nonwalkable_tile_prefab;
+    public GameObject town_tile_prefab;
 
     public GameObject portal_prefab;
     public GameObject dungeon_portal_prefab;
-
-    public GameObject player_prefab;
 
     protected override void prepare_scene(string destination, string source) {
 
@@ -21,7 +20,7 @@ public class OverworldSceneManager : SceneManager {
         var map_data = GetComponent<TileMapScript>();
         map_data.loadMap(destination + "_map_data.bin");
 
-        map_data.print_map();
+        //map_data.print_map();
 
         // place each tile
         var map_container = new GameObject("Map");
@@ -40,7 +39,7 @@ public class OverworldSceneManager : SceneManager {
                         new_game_object = Instantiate(nonwalkable_tile_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
                     } break;
                     case Type.TOWN: {
-                        new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
+                        new_game_object = Instantiate(town_tile_prefab, world_pos, Quaternion.identity) as GameObject;
                     } break;
                     case Type.ENTRY_PORTAL: {
                         new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;

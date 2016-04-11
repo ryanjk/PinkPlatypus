@@ -20,23 +20,23 @@ public class ScheduleGenerator : MonoBehaviour {
         var timer = System.Diagnostics.Stopwatch.StartNew();
 
         var red_map = gameObject.AddComponent<TileMapScript>();
-        red_map.loadMap("red_overworld");
+        red_map.loadMap("red_overworld_map_data.bin");
         //var red_map_data = red_map.get_raw_data();
 
         var blue_map = gameObject.AddComponent<TileMapScript>();
-        blue_map.loadMap("blue_overworld");
+        blue_map.loadMap("blue_overworld_map_data.bin");
        // var blue_map_data = blue_map.get_raw_data();
 
         var green_map = gameObject.AddComponent<TileMapScript>();
-        green_map.loadMap("green_overworld");
+        green_map.loadMap("green_overworld_map_data.bin");
        // var green_map_data = green_map.get_raw_data();
 
         var purple_map = gameObject.AddComponent<TileMapScript>();
-        purple_map.loadMap("purple_overworld");
+        purple_map.loadMap("purple_overworld_map_data.bin");
         //var purple_map_data = purple_map.get_raw_data();
 
         var yellow_map = gameObject.AddComponent<TileMapScript>();
-        yellow_map.loadMap("yellow_overworld");
+        yellow_map.loadMap("yellow_overworld_map_data.bin");
       //  var yellow_map_data = yellow_map.get_raw_data();
 
         var schedule_data = new ScheduleData();
@@ -67,17 +67,18 @@ public class ScheduleGenerator : MonoBehaviour {
         schedule_data.saveToDisk("schedule_data.bin");
 
         Debug.Log(string.Format("Time to generate schedule: {0} ms", timer.ElapsedMilliseconds));
-
     }
 
     private int build_schedule_part(int start_min, KeyPoint from, KeyPoint to, ref ScheduleData schedule_data, string map_id, TileMapScript map_data) {
 
         var from_point = map_data.get_key_point(from);
         var to_point = map_data.get_key_point(to);
-        var path = world_generator.get_path(from_point, to_point, map_data.get_raw_data());
+        var path = world_generator.get_path(from_point, to_point, map_data.get_raw_data(), false);
 
         if (path.Count == 0) {
             Debug.Log("can't make schedule, NO PATH");
+            Debug.Log(string.Format("From ({0}, {1}) to ({2},{3})", from_point[0], from_point[1], to_point[0], to_point[1]));
+            map_data.print_map();
             return -1;
         }
 

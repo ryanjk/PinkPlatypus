@@ -111,6 +111,7 @@ GameObject:
   - 65: {fileID: 6560672}
   - 23: {fileID: 2393864}
   - 114: {fileID: 11406338}
+  - 114: {fileID: 11443142}
   m_Layer: 0
   m_Name: ShopCollider
   m_TagString: Shop
@@ -305,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57de51f05bcf3894c8ab95393b132f95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopUIPrefab: {fileID: 0}
+  shopUIPrefab: {fileID: 22390554, guid: 807632e93ecdfda41b72a3eff89edf07, type: 2}
 --- !u!114 &11440318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -322,6 +323,17 @@ MonoBehaviour:
   L: {fileID: 21250712}
   R: {fileID: 21254290}
   finishedSettingDestinationsAndMap: 0
+--- !u!114 &11443142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda08b78cb6f63d4ca26da4bde2d5d55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21237378
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -458,7 +470,12 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: shopUIPrefab
+      value: 
+      objectReference: {fileID: 22390554, guid: 807632e93ecdfda41b72a3eff89edf07,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 136526}

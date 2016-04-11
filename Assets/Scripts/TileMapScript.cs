@@ -19,13 +19,18 @@ public class TileMapScript : MonoBehaviour {
     */
     public void loadMap(string filename) {
         IFormatter formatter = new BinaryFormatter();
-        Stream stream = new FileStream(".\\Assets\\Resources\\" + filename + "_map_data.bin", FileMode.Open);
+        Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Open);
         _tileMapData = (TileMapData)formatter.Deserialize(stream);
         stream.Close();
+        map_id = filename.Substring(0, filename.IndexOf('_'));
     }
 
     public float[,] get_raw_data() {
         return _tileMapData.getTiles();
+    }
+
+    public string get_map_id() {
+        return map_id;
     }
 
     /** 
@@ -77,5 +82,6 @@ public class TileMapScript : MonoBehaviour {
     }
 
     private TileMapData _tileMapData;
+    private string map_id;
 
 }
