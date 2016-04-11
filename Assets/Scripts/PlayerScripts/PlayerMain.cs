@@ -77,7 +77,7 @@ public class PlayerMain : MonoBehaviour {
         return _sceneLoadData;
     }
 
-    public void setSceneLoasdData(SceneLoadData data) {
+    public void setSceneLoadData(SceneLoadData data) {
         _sceneLoadData = data;
     }
 
