@@ -38,3 +38,8 @@ Assets/Resources/purple_dungeon_rupee_data.dat
 Assets/Resources/purple_dungeon_rupee_data.dat.meta
 Assets/Resources/green_dungeon_rupee_data.dat.meta
 Assets/Resources/green_dungeon_rupee_data.dat
+*.bin
+
+*.bin
+
+*.cs

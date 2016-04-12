@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class MerchantController : MonoBehaviour {
-    public static int[,] exampleMap()
-    {
+	public static TileMapScript exampleMap()
+    {/*
         int[,] map = new int[50, 50];
         for (int i = 0; i < 8; i++)
-            map[3, i] = 1;
+            map[3, i] = 1;*/
+		TileMapScript map = FindObjectOfType<TileMapScript>();
         return map;
     }
 

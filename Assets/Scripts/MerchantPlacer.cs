@@ -4,7 +4,7 @@ using System.Collections;
 public class MerchantPlacer : MonoBehaviour {
 
     public GameObject merchant_prefab;
-
+	private Merchant merchant;
 	// Use this for initialization
 	void Start () {
         time = FindObjectOfType<GameTimeScript>();
@@ -12,11 +12,13 @@ public class MerchantPlacer : MonoBehaviour {
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
 
+
         is_moving = false;
         schedule.loadSchedule("schedule_data.bin");
 	}
 	
 	// Update is called once per frame
+
 	void Update () {
         var merchant = GameObject.FindGameObjectWithTag("Merchant");
         bool just_added_merchant = false;

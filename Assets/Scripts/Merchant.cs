@@ -52,17 +52,8 @@ public class Merchant : MonoBehaviour
         return paths[index].getNumberOfPoints();
     }
     public bool finishedSettingDestinationsAndMap;
-    
-  /*
-    public void setMap(int[,] aMap)
-    {
-        map = aMap;
-    }
-    int currentDestinationIndex;
-    //I make each origin-destination pair into an inner class. This class has a method that finds a path between the points and other information.
-    
-   */ 
-	public void setMap(int[,] aMap)
+
+	public void setMap(TileMapScript aMap)
 	{
 		currentOriginDestination.setMap (aMap);
 	}

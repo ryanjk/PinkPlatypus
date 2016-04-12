@@ -67,7 +67,11 @@ public class TileMapData {
             copy.value = value;
             return copy;
         }
-
+		public Boolean isWalkable(){
+			if(get_type()==Type.OVERWORLD_NONWALKABLE)
+				return false;
+			return true;
+		}
         public Type get_type() {
             Type value_to_char = Type.NONE;
             if (value == 0.0f) {
