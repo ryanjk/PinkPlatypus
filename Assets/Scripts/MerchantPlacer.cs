@@ -11,6 +11,7 @@ public class MerchantPlacer : MonoBehaviour {
         tile_map = FindObjectOfType<TileMapScript>();
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
+
         is_moving = false;
         schedule.loadSchedule("schedule_data.bin");
 	}
@@ -34,7 +35,7 @@ public class MerchantPlacer : MonoBehaviour {
                 path_pos = path_pos >= path.Count ? path.Count - 1 : path_pos;
                 var spawn_point_2d = path[path_pos];
                 var spawn_point = new Vector3(spawn_point_2d.x, 1.0f, spawn_point_2d.y);
-                merchant = Instantiate(merchant_prefab, spawn_point, Quaternion.identity) as GameObject;
+                merchant = Instantiate(merchant_prefab, spawn_point, Quaternion.Euler(0.0f, 270.0f, 0.0f)) as GameObject;
                 Debug.Log("no merchant, adding him in");
                 just_added_merchant = true;
             }
@@ -78,6 +79,7 @@ public class MerchantPlacer : MonoBehaviour {
                 "easetype", iTween.EaseType.linear
             ));
             is_moving = true;
+            merchant.GetComponent<Merchant>().set_sprite_from_movement(merchant_grid_pos, new int[] { next_move.x, next_move.y });
             Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
         }
         else {

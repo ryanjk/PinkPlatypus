@@ -8,7 +8,7 @@ public class WorldGenerator : MonoBehaviour {
     private int map_height = 50;
 
     void Start() {
-       /* generate_world("red_overworld", map_width, map_height);
+        /*generate_world("red_overworld", map_width, map_height);
         generate_world("blue_overworld", map_width, map_height);
         generate_world("green_overworld", map_width, map_height);
         generate_world("purple_overworld", map_width, map_height);
@@ -40,7 +40,6 @@ public class WorldGenerator : MonoBehaviour {
         // place portal entrance
         var portal_entrance = new int[] { Random.Range(0, height - 3), Random.Range(0, width - 3) };
         place_portal_in_map(portal_entrance, 3.0f, ref map_data);
-        //map_data[portal_entrance[0], portal_entrance[1]] = 3.0f;
 
         // place dungeon entrance
         var dungeon_entrance = new int[2];
@@ -106,10 +105,8 @@ public class WorldGenerator : MonoBehaviour {
                 tilemap_data.setTile(i, j, tile);
             }
         }
-       // tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
-       // tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
-        tilemap_data.portal_entrance = new int[] { portal_entrance[0], portal_entrance[1] };
-        tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0], dungeon_entrance[1] };
+        tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
+        tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
         tilemap_data.town_1 = new int[] { town_1.pos[0], town_1.pos[1] };
         tilemap_data.town_2 = new int[] { town_2.pos[0], town_2.pos[1] };
         tilemap_data.town_3 = new int[] { town_3.pos[0], town_3.pos[1] };
