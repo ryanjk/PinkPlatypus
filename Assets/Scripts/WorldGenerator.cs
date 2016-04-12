@@ -8,17 +8,7 @@ public class WorldGenerator : MonoBehaviour {
     private int map_height = 50;
 
     void Start() {
-        /*generate_world("red_overworld", map_width, map_height);
-        generate_world("blue_overworld", map_width, map_height);
-        generate_world("green_overworld", map_width, map_height);
-        generate_world("purple_overworld", map_width, map_height);
-        generate_world("yellow_overworld", map_width, map_height); */
-    }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.G)) {
-       //     generate_world("1", map_width, map_height);
-        }
     }
 
     public void generate_world(string world_id, int width, int height) {

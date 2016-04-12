@@ -6,9 +6,8 @@ using KeyPoint = TileMapData.KeyPoint;
 public class ScheduleGenerator : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         world_generator = FindObjectOfType<WorldGenerator>();
-        generate_schedule();
 	}
 	
 	// Update is called once per frame

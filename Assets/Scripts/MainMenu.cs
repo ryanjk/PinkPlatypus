@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.IO;
 
 public class MainMenu : MonoBehaviour {
 
@@ -26,10 +27,28 @@ public class MainMenu : MonoBehaviour {
 	
 	void OnMouseUp(){
 		if (newGame) {
-			//Application.LoadLevel(1);
-			Application.LoadLevel("WorldGenDemo");//temporary, for test
-		}
-		if (loadGame) {
+
+            // clear the old save data
+            File.Delete(".\\Assets\\Resources\\player_inventory.bin");
+            File.Delete(".\\Assets\\Resources\\merchant_inventory.bin");
+
+            world_generator = gameObject.AddComponent<WorldGenerator>();
+            schedule_generator = gameObject.AddComponent<ScheduleGenerator>();
+
+            var map_width = 50;
+            var map_height = 50;
+
+            world_generator.generate_world("red_overworld", map_width, map_height);
+            world_generator.generate_world("blue_overworld", map_width, map_height);
+            world_generator.generate_world("green_overworld", map_width, map_height);
+            world_generator.generate_world("purple_overworld", map_width, map_height);
+            world_generator.generate_world("yellow_overworld", map_width, map_height);
+
+            schedule_generator.generate_schedule();
+
+            Application.LoadLevel("StartingPortalRoom");
+        }
+        if (loadGame) {
             Application.LoadLevel("StartingPortalRoom");
         }
         if(addPlayer) {
@@ -51,4 +70,7 @@ public class MainMenu : MonoBehaviour {
 			Application.Quit();
 		}
 	}
+
+    private WorldGenerator world_generator;
+    private ScheduleGenerator schedule_generator;
 }
