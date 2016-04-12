@@ -8,7 +8,7 @@ public class WorldGenerator : MonoBehaviour {
     private int map_height = 50;
 
     void Start() {
-        /*generate_world("red_overworld", map_width, map_height);
+       /* generate_world("red_overworld", map_width, map_height);
         generate_world("blue_overworld", map_width, map_height);
         generate_world("green_overworld", map_width, map_height);
         generate_world("purple_overworld", map_width, map_height);
@@ -55,12 +55,19 @@ public class WorldGenerator : MonoBehaviour {
         // place towns
 
         // town 1
-        var town_1 = new Town(15,15);
-        town_1.pos = new int[] { Random.Range(0, height - town_1.height), Random.Range(0, width - town_1.width) };
-        place_town_in_map(town_1, ref map_data);
+        var town_1_size = 15;
+        var town_1 = new Town(town_1_size,town_1_size);
+        {
+            bool town_1_placed = false;
+            while (!town_1_placed) {
+                town_1.pos = new int[] { Random.Range(0, height - town_1.height), Random.Range(0, width - town_1.width) };
+                town_1_placed = place_town_in_map(town_1, ref map_data);
+            }
+        }
 
         // town 2
-        var town_2 = new Town(7, 7);
+        var town_2_size = 7;
+        var town_2 = new Town(town_2_size, town_2_size);
         {
             bool town_2_placed = false;
             while (!town_2_placed) {
@@ -70,7 +77,8 @@ public class WorldGenerator : MonoBehaviour {
         }
 
         // town 3
-        var town_3 = new Town(4, 4);
+        var town_3_size = 4;
+        var town_3 = new Town(town_3_size, town_3_size);
         {
             bool town_3_placed = false;
             while (!town_3_placed) {
@@ -98,16 +106,18 @@ public class WorldGenerator : MonoBehaviour {
                 tilemap_data.setTile(i, j, tile);
             }
         }
-        tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
-        tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
+       // tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
+       // tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
+        tilemap_data.portal_entrance = new int[] { portal_entrance[0], portal_entrance[1] };
+        tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0], dungeon_entrance[1] };
         tilemap_data.town_1 = new int[] { town_1.pos[0], town_1.pos[1] };
         tilemap_data.town_2 = new int[] { town_2.pos[0], town_2.pos[1] };
         tilemap_data.town_3 = new int[] { town_3.pos[0], town_3.pos[1] };
         tilemap_data.saveToDisk(world_id + "_map_data.bin");
 
         // print the map and other info (changing as more of the 'generate_world' function is completed)
-        Debug.Log(string.Format("Time to generate world: {0} ms", timer.ElapsedMilliseconds));
-        /*string map_output = "";
+        Debug.Log(string.Format("Time to generate {1}: {0} ms", timer.ElapsedMilliseconds, world_id));
+        string map_output = "";
         for (int i = 0; i < height; ++i) {
             map_output += "\n";
             for (int j = 0; j < width; ++j) {
@@ -138,7 +148,7 @@ public class WorldGenerator : MonoBehaviour {
                 map_output += string.Format("{0} ", value_to_char);
             }
         }
-        Debug.Log(map_output); */
+        Debug.Log(map_output);
     }
 
     private bool place_portal_in_map(int[] portal_pos, float portal_value, ref float[,] map_data) {
@@ -191,8 +201,8 @@ public class WorldGenerator : MonoBehaviour {
         var from = new Point(from_p[0], from_p[1]);
         var to = new Point(to_p[0], to_p[1]);
 
-        var visited = new HashSet<Point>(); // already visited
-        var to_visit = new HashSet<Point>(); // to visit
+        var visited = new List<Point>(); // already visited
+        var to_visit = new List<Point>(); // to visit
         var came_from = new Dictionary<Point, Point>(); // maps node to best node to it
         var g_score = new Dictionary<Point, int>(); // maps node to cost of getting to it from start
         var f_score = new Dictionary<Point, int>(); // maps node to total cost of getting from the start to goal through it
@@ -226,7 +236,8 @@ public class WorldGenerator : MonoBehaviour {
             to_visit.Remove(current);
             visited.Add(current);
 
-            foreach (var neighbour in get_neighbours(current, to, map_data, paving)) {
+            var neighbours = get_neighbours(current, to, map_data, paving);
+            foreach (var neighbour in neighbours) {
 
                 if (visited.Contains(neighbour)) {
                     continue;
@@ -256,6 +267,11 @@ public class WorldGenerator : MonoBehaviour {
             if (map_data[point.x, point.y] == 0.0f) {
                 map_data[point.x, point.y] = 1.0f;
             }
+        }
+
+        var test_path = get_path(from, to, map_data, false);
+        if (test_path.Count == 0) {
+            Debug.Log(string.Format("Build path weirdness from ({0}, {1}) to ({2}, {3})", from[0], from[1], to[0], to[1]));
         }
     }
 
@@ -297,7 +313,7 @@ public class WorldGenerator : MonoBehaviour {
         }
         if (node.x != map_height - 1) { // get bottom neighbour
             var n_point = new Point(node.x + 1, node.y);
-            var neighbour_value = map_data[node.x + 1, node.x];
+            var neighbour_value = map_data[node.x + 1, node.y];
             if ( (is_walkable(neighbour_value) || n_point.Equals(destination) || (paving && neighbour_value == 0.0f)) ) {
                 neighbours.Add(n_point);
             }
@@ -324,7 +340,7 @@ public class WorldGenerator : MonoBehaviour {
         path.Add(current);
         while (came_from.Keys.Contains(current)) {
             current = came_from[current];
-            path.Add(current);
+            path.Insert(0, current);
         }
         return path;
     }
@@ -332,7 +348,7 @@ public class WorldGenerator : MonoBehaviour {
     private int heuristic_estimate(Point from, Point to) {
         int x_diff = from.x - to.x;
         int y_diff = from.y - to.y;
-        int sqr_dist = x_diff * x_diff + y_diff * y_diff;
+        int sqr_dist = (x_diff * x_diff) + (y_diff * y_diff);
         return sqr_dist;
     }
 
@@ -349,9 +365,6 @@ public class WorldGenerator : MonoBehaviour {
 
     private bool is_walkable(float tile_value) {
         var w = tile_value == 1.0f || tile_value == 2.0f || tile_value == 3.1f || tile_value == 4.1f;
-        if (!w && tile_value != 0.0f) {
-            Debug.Log(tile_value);
-        }
         return w;
     }
 }
