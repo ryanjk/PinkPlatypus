@@ -11,26 +11,14 @@ public class MerchantPlacer : MonoBehaviour {
         tile_map = FindObjectOfType<TileMapScript>();
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
-<<<<<<< HEAD
-		GameObject g = GameObject.FindGameObjectWithTag("Merchant");
-		merchant = (Merchant) g.GetComponent("Merchant");
-        //schedule.loadSchedule("schedule_data.bin");
-		merchant.setDestination(new Vector3(0, 0, 0));
-		Debug.Log(merchant.getPathLength(0));
-		//merchant.setDestination(new Vector3(-6, 0, -6));
-		//Debug.Log(merchant.getPathLength(1));
-		//merchant.finishedSettingDestinationsAndMap = true;
-    }
-    
-    // Update is called once per frame
-=======
+
 
         is_moving = false;
         schedule.loadSchedule("schedule_data.bin");
 	}
 	
 	// Update is called once per frame
->>>>>>> origin/master
+
 	void Update () {
         var merchant = GameObject.FindGameObjectWithTag("Merchant");
         bool just_added_merchant = false;
