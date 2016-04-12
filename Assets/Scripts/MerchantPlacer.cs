@@ -11,6 +11,7 @@ public class MerchantPlacer : MonoBehaviour {
         tile_map = FindObjectOfType<TileMapScript>();
         schedule = FindObjectOfType<ScheduleScript>();
         path_finder = gameObject.AddComponent<WorldGenerator>();
+<<<<<<< HEAD
 		GameObject g = GameObject.FindGameObjectWithTag("Merchant");
 		merchant = (Merchant) g.GetComponent("Merchant");
         //schedule.loadSchedule("schedule_data.bin");
@@ -22,8 +23,17 @@ public class MerchantPlacer : MonoBehaviour {
     }
     
     // Update is called once per frame
+=======
+
+        is_moving = false;
+        schedule.loadSchedule("schedule_data.bin");
+	}
+	
+	// Update is called once per frame
+>>>>>>> origin/master
 	void Update () {
-       /* var merchant = GameObject.FindGameObjectWithTag("Merchant");
+        var merchant = GameObject.FindGameObjectWithTag("Merchant");
+        bool just_added_merchant = false;
         if (merchant == null) {
             var currently_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
             if (currently_in.world_id == tile_map.get_map_id()) {
@@ -38,48 +48,57 @@ public class MerchantPlacer : MonoBehaviour {
                 var path_pos = (int)(percent_along_path * path.Count);
                 path_pos = path_pos >= path.Count ? path.Count - 1 : path_pos;
                 var spawn_point_2d = path[path_pos];
-                var spawn_point = new Vector3(spawn_point_2d.y, 1.0f, spawn_point_2d.x);
-                merchant = Instantiate(merchant_prefab, spawn_point, Quaternion.identity) as GameObject;
+                var spawn_point = new Vector3(spawn_point_2d.x, 1.0f, spawn_point_2d.y);
+                merchant = Instantiate(merchant_prefab, spawn_point, Quaternion.Euler(0.0f, 270.0f, 0.0f)) as GameObject;
                 Debug.Log("no merchant, adding him in");
+                just_added_merchant = true;
             }
         }
         else if (!is_moving) {
-            Debug.Log("should merchant still be here?");
             // merchant is here, should he still be?
             var should_be_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
             if (should_be_in.world_id != tile_map.get_map_id()) {
                 Destroy(merchant);
-                Debug.Log("no");
+                Debug.Log("removing merchant from scene");
             }
         }
 
-        // see if merchant is still here
-        merchant = GameObject.FindGameObjectWithTag("Merchant");
-        if (merchant != null && !is_moving) {
-            // move it towards its path
+        if (just_added_merchant || merchant == null) {
+            return;
+        }
+
+        // if merchant is still here and we didn't just place him in
+        if (!is_moving) {
             var coming_from = schedule.getLowerEntry(time.getHour(), time.getMinute());
             var destination = schedule.getUpperEntry(time.getHour(), time.getMinute());
 
-            if (coming_from.world_id == destination.world_id && 
-                coming_from.x_pos == destination.x_pos && 
-                coming_from.y_pos == destination.y_pos) {
+            var same_entries = coming_from.world_id == destination.world_id &&
+                coming_from.x_pos == destination.x_pos &&
+                coming_from.y_pos == destination.y_pos;
+            var different_worlds = coming_from.world_id != destination.world_id;
+            if (same_entries || different_worlds) {
                 // don't move, in waiting position
-                Debug.Log("merchant is waiting");
+                Debug.Log(string.Format("merchant is waiting until {0}:{1}", destination.hour, destination.minute));
                 return;
             }
 
             var merchant_grid_pos = new int[] { (int) merchant.transform.position.x, (int) merchant.transform.position.z };
             var next_move = path_finder.get_path(merchant_grid_pos, new int[] { destination.x_pos, destination.y_pos }, tile_map.get_raw_data(), false)[1];
             iTween.MoveTo(merchant, iTween.Hash(
-                "position", new Vector3( (float) next_move.y, 1.0f, (float) next_move.x),
-                "name", "merchant_move_tween",
-                "time", 0.1f,
+                "position", new Vector3( next_move.x, 1.0f, next_move.y),
+                //"name", "merchant_move_tween",
+                "time", 2.0f,
                 "oncomplete", "on_tween_complete",
+                "oncompletetarget", gameObject,
                 "easetype", iTween.EaseType.linear
             ));
             is_moving = true;
-            Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.y, next_move.x));
-        } */
+            merchant.GetComponent<Merchant>().set_sprite_from_movement(merchant_grid_pos, new int[] { next_move.x, next_move.y });
+            Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
+        }
+        else {
+            Debug.Log("still moving");
+        }
     }
 
     public void on_tween_complete() {
@@ -90,7 +109,7 @@ public class MerchantPlacer : MonoBehaviour {
         return hour * 60 + min;
     }
 
-    private bool is_moving = false;
+    private bool is_moving;
     private ScheduleScript schedule;
     private TileMapScript tile_map;
     private GameTimeScript time;

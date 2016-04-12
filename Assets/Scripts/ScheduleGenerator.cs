@@ -8,7 +8,7 @@ public class ScheduleGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         world_generator = FindObjectOfType<WorldGenerator>();
-        //generate_schedule();
+        generate_schedule();
 	}
 	
 	// Update is called once per frame
@@ -67,6 +67,7 @@ public class ScheduleGenerator : MonoBehaviour {
         schedule_data.saveToDisk("schedule_data.bin");
 
         Debug.Log(string.Format("Time to generate schedule: {0} ms", timer.ElapsedMilliseconds));
+        Debug.Log(schedule_data.ToString());
     }
 
     private int build_schedule_part(int start_min, KeyPoint from, KeyPoint to, ref ScheduleData schedule_data, string map_id, TileMapScript map_data) {
@@ -76,8 +77,8 @@ public class ScheduleGenerator : MonoBehaviour {
         var path = world_generator.get_path(from_point, to_point, map_data.get_raw_data(), false);
 
         if (path.Count == 0) {
-            Debug.Log("can't make schedule, NO PATH");
-            Debug.Log(string.Format("From ({0}, {1}) to ({2},{3})", from_point[0], from_point[1], to_point[0], to_point[1]));
+            Debug.Log(string.Format("Can't make entry in {4} from ({0}, {1}) to ({2},{3})", 
+                from_point[0], from_point[1], to_point[0], to_point[1], map_id));
             map_data.print_map();
             return -1;
         }

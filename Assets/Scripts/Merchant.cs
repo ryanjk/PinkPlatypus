@@ -77,7 +77,7 @@ public class Merchant : MonoBehaviour
         return new Vector3(direction[0], 0, direction[1]);
     }
     private void setSprite(Direction newDirection) {
-        if (newDirection == Direction.DOWN || newDirection == Direction.DOWN) {
+        if (newDirection == Direction.DOWN || newDirection == Direction.NONE) {
             U.enabled = false;
             L.enabled = false;
             R.enabled = false;
@@ -109,6 +109,7 @@ public class Merchant : MonoBehaviour
         else if (currentMovementVector.z > 0) return Direction.UP;
         else return Direction.DOWN;
     }
+
     private enum Direction {
         UP,
         DOWN,
@@ -116,6 +117,24 @@ public class Merchant : MonoBehaviour
         RIGHT,
         NONE
     }
+
+    public void set_sprite_from_movement(int[] from, int[] to) {
+        var direction = Direction.NONE;
+        if (from[0] < to[0]) {
+            direction = Direction.DOWN;
+        }
+        else if (from[0] > to[0]) {
+            direction = Direction.UP;
+        }
+        else if (from[1] < to[1]) {
+            direction = Direction.RIGHT;
+        }
+        else if (from[1] > to[1]) {
+            direction = Direction.LEFT;
+        }
+        setSprite(direction);
+    }
+
     void Awake()
     {
         paths = new List<OriginDestination>();
