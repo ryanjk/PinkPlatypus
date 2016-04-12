@@ -129,6 +129,10 @@ public class Merchant : MonoBehaviour
 
     public void set_sprite_from_movement(int[] from, int[] to) {
         var direction = Direction.NONE;
+        if (from == null && to == null) {
+            setSprite(direction);
+            return;
+        }
         if (from[0] < to[0]) {
             direction = Direction.DOWN;
         }
