@@ -22,26 +22,22 @@ public class DungeonSceneManager : SceneManager {
         _player.gameObject.transform.Find("spriteR").gameObject.SetActive(false);
         _player.gameObject.transform.Find("spriteL").gameObject.SetActive(false);
 
+        dungeon_color = destination.Substring(0, destination.IndexOf('_'));
+        
         // figure out what rupees to place
-        try {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(".\\Assets\\Resources\\" + destination + "_rupee_data.dat", FileMode.Open);
-            RupeeSaveData[] rupees = formatter.Deserialize(stream) as RupeeSaveData[];
-            var rupee_game_objects = FindObjectsOfType(typeof(CurrencyMain)) as CurrencyMain[];
-            foreach (var rupee in rupees) {
-                foreach (var game_object in rupee_game_objects) {
-                    if (rupee.id == game_object.id) {
-                        if (rupee.picked_up) {
-                            game_object.GetComponent<MeshRenderer>().enabled = false;
-                            game_object.picked_up = true;
-                        }
+
+        var save_index = SaveDataScript.map_to_slot(dungeon_color);
+        var rupees = SaveDataScript.save_data.dungeon_data[save_index];
+        var rupee_game_objects = FindObjectsOfType(typeof(CurrencyMain)) as CurrencyMain[];
+        foreach (var rupee in rupees) {
+            foreach (var game_object in rupee_game_objects) {
+                if (rupee.id == game_object.id) {
+                    if (rupee.picked_up) {
+                        game_object.GetComponent<MeshRenderer>().enabled = false;
+                        game_object.picked_up = true;
                     }
                 }
             }
-            stream.Close();
-        }
-        catch (FileNotFoundException e) {
-            Debug.Log("No dungeon save data to load yet");
         }
         
         foreach (PortalScript p in (FindObjectsOfType(typeof(PortalScript))) as PortalScript[]) {
@@ -91,18 +87,16 @@ public class DungeonSceneManager : SceneManager {
     */
     protected override void prepare_to_leave_scene(string destination, string source) {
         // save rupees
+        var save_index = SaveDataScript.map_to_slot(dungeon_color);
+        var rupees = SaveDataScript.save_data.dungeon_data[save_index];
         CurrencyMain[] rupee_game_objects = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
-        RupeeSaveData[] rupees = new RupeeSaveData[rupee_game_objects.Length];
         for (int i = 0; i < rupee_game_objects.Length; ++i) {
             RupeeSaveData save_data;
             save_data.id = rupee_game_objects[i].id;
             save_data.picked_up = rupee_game_objects[i].picked_up;
             rupees[i] = save_data;
         }
-        IFormatter formatter = new BinaryFormatter();
-        Stream stream = new FileStream(".\\Assets\\Resources\\" + source + "_rupee_data.dat", FileMode.Create, FileAccess.Write, FileShare.None);
-        formatter.Serialize(stream, rupees);
-        stream.Close();
+        SaveDataScript.save();
 
         // prepare player to leave
         _player.GetComponent<PlayerController>().enabled = true;
@@ -118,7 +112,7 @@ public class DungeonSceneManager : SceneManager {
     }
 
     [Serializable]
-    private struct RupeeSaveData {
+    public struct RupeeSaveData {
         public int id;
         public bool picked_up;
     }
@@ -128,5 +122,7 @@ public class DungeonSceneManager : SceneManager {
     public Material blue;
     public Material yellow;
     public Material purple;
+
+    private string dungeon_color;
 
 }

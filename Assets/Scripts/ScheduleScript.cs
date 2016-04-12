@@ -20,10 +20,13 @@ public class ScheduleScript : MonoBehaviour {
     * @param filename - filename of schedule data to load
     */
     public void loadSchedule(string filename) {
-        IFormatter formatter = new BinaryFormatter();
+
+        _scheduleData = SaveDataScript.save_data.schedule;
+
+        /*IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Open);
         _scheduleData = (ScheduleData)formatter.Deserialize(stream);
-        stream.Close();
+        stream.Close(); */
     }
 
     /**

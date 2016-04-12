@@ -35,6 +35,14 @@ public class ShopMain : MonoBehaviour {
         // set item prices
         _prices.Add(101, 5);
         _prices.Add(102, 15);
+        _prices.Add(201, 5);
+        _prices.Add(202, 15);
+        _prices.Add(301, 5);
+        _prices.Add(302, 15);
+        _prices.Add(401, 5);
+        _prices.Add(402, 15);
+        _prices.Add(501, 5);
+        _prices.Add(502, 15);
 
         // load or create inventory
         var try_loading = _inventory.loadFromDisk("merchant");
@@ -43,11 +51,19 @@ public class ShopMain : MonoBehaviour {
             //_inventory.addItem(1,10);
             _inventory.addItem(101);
             _inventory.addItem(102);
+            _inventory.addItem(201);
+            _inventory.addItem(202);
+            _inventory.addItem(301);
+            _inventory.addItem(302);
+            _inventory.addItem(401);
+            _inventory.addItem(402);
+            _inventory.addItem(501);
+            _inventory.addItem(502);
             //_player.addItem(0,100);
 
             //foreach (int i in _inventory.getItemList().Keys){
-		    //	_prices.Add(i, 1);
-		    //}
+            //	_prices.Add(i, 1);
+            //}
         }
 	}
 

@@ -81,16 +81,20 @@ public class ScheduleData {
     * @param filename - name of file on disk
     */
     public void saveToDisk(string filename) {
-        IFormatter formatter = new BinaryFormatter();
+
+        SaveDataScript.save_data.schedule = this;
+        SaveDataScript.save();
+
+        /*IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, this);
-        stream.Close();
+        stream.Close(); */
     }
 
     public override string ToString() {
         var s = "";
         foreach (var entry in _scheduleData) {
-            s += string.Format("{0,2}:{1,2}: World {2,-2} at {3,-3},{4,-3}\n", entry.hour, entry.minute, entry.world_id, entry.x_pos, entry.y_pos);
+            s += string.Format("{0,2}:{1,2}: World {2,-2} at {3,-3},{4,-3}{5}", entry.hour, entry.minute, entry.world_id, entry.x_pos, entry.y_pos, Environment.NewLine);
         }
         return s;
     }

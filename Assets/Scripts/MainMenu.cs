@@ -31,6 +31,9 @@ public class MainMenu : MonoBehaviour {
             // clear the old save data
             File.Delete(".\\Assets\\Resources\\player_inventory.bin");
             File.Delete(".\\Assets\\Resources\\merchant_inventory.bin");
+            File.Delete(".\\Assets\\Resources\\save_data.bin");
+
+            SaveDataScript.save_data = new SaveDataScript.SaveData();
 
             world_generator = gameObject.AddComponent<WorldGenerator>();
             schedule_generator = gameObject.AddComponent<ScheduleGenerator>();
@@ -49,7 +52,10 @@ public class MainMenu : MonoBehaviour {
             Application.LoadLevel("StartingPortalRoom");
         }
         if (loadGame) {
-            Application.LoadLevel("StartingPortalRoom");
+            var loaded = SaveDataScript.load();
+            if (loaded) {
+                Application.LoadLevel("StartingPortalRoom");
+            }
         }
         if(addPlayer) {
             GameObject.FindGameObjectWithTag("Player").GetComponent<PauseMenuScript>().hostNetwork();

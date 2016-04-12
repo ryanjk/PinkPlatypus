@@ -26,16 +26,26 @@ using System.IO;
 * if Assert.raiseExceptions is set to true, the execution will stop. Otherwise it will print a message and continue.
 */
 
+[Serializable]
 public class ItemInventory : MonoBehaviour {
 
     public void saveToDisk(string owner) {
-        Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+
+        var slot = SaveDataScript.inventory_owner_to_slot(owner);
+        SaveDataScript.save_data.item_inventory[slot] = _items;
+        SaveDataScript.save();
+        
+        /*Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
         Serialize(_items, stream);
-        stream.Close();
+        stream.Close(); */
     }
 
     public bool loadFromDisk(string owner) {
-        try {
+        var slot = SaveDataScript.inventory_owner_to_slot(owner);
+        _items = SaveDataScript.save_data.item_inventory[slot];
+        return true;
+        
+        /*try {
             Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Open, FileAccess.Read, FileShare.None);
             _items = Deserialize(stream);
             stream.Close();
@@ -46,7 +56,7 @@ public class ItemInventory : MonoBehaviour {
                 _items = new Dictionary<int, int>();
             }
             return false;
-        }
+        } */
     }
 
     /**

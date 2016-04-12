@@ -20,9 +20,10 @@ public class TileMapData {
     * @param width the width of the map to create
     * @param height the height of the map to create
     */
-    public TileMapData(int width, int height) {
+    public TileMapData(int width, int height, string id) {
         _width = width;
         _height = height;
+        _id = id;
         _tiles = new Tile[height, width];
     }
 
@@ -129,10 +130,16 @@ public class TileMapData {
     * @param filename name of the file relative to the "Assets/Resources" folder 
     */
     public void saveToDisk(string filename) {
-        IFormatter formatter = new BinaryFormatter();
+
+        var map_color = filename.Substring(0, filename.IndexOf('_'));
+        var map_index = SaveDataScript.map_to_slot(map_color);
+        SaveDataScript.save_data.map_data[map_index] = this;
+        SaveDataScript.save();
+        
+        /*IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, this);
-        stream.Close();
+        stream.Close(); */
     }
 
     public override string ToString() {
@@ -169,6 +176,11 @@ public class TileMapData {
 
     private int _width;
     private int _height;
+    private string _id;
+
+    public string getID() {
+        return _id;
+    }
 
     public float[,] getTiles() {
         float[,] tiles = new float[_height, _width];

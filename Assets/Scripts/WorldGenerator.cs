@@ -87,7 +87,8 @@ public class WorldGenerator : MonoBehaviour {
         build_path_between(town_2.pos, town_1.pos, map_data);
 
         // save map to disk
-        var tilemap_data = new TileMapData(map_width, map_height);
+        var map_color = world_id.Substring(0, world_id.IndexOf('_'));
+        var tilemap_data = new TileMapData(map_width, map_height, map_color);
         for (int i = 0; i < map_height; ++i) {
             for (int j = 0; j < map_width; ++j) {
                 var tile = new TileMapData.Tile();

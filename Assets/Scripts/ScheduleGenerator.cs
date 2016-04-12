@@ -2,6 +2,7 @@
 using System.Collections;
 
 using KeyPoint = TileMapData.KeyPoint;
+using System.IO;
 
 public class ScheduleGenerator : MonoBehaviour {
 
@@ -64,6 +65,8 @@ public class ScheduleGenerator : MonoBehaviour {
         schedule_data.insertEntry(create_schedule_entry(next_time, "yellow", end_point[0], end_point[1]));
 
         schedule_data.saveToDisk("schedule_data.bin");
+
+        File.WriteAllText(".\\Assets\\Resources\\schedule_data.txt", schedule_data.ToString());
 
         Debug.Log(string.Format("Time to generate schedule: {0} ms", timer.ElapsedMilliseconds));
         Debug.Log(schedule_data.ToString());
