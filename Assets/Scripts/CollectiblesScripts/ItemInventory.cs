@@ -28,20 +28,24 @@ using System.IO;
 
 public class ItemInventory : MonoBehaviour {
 
-    public void saveToDisk() {
-        Stream stream = new FileStream(".\\Assets\\Resources\\player_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+    public void saveToDisk(string owner) {
+        Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
         Serialize(_items, stream);
         stream.Close();
     }
 
-    public void loadFromDisk() {
+    public bool loadFromDisk(string owner) {
         try {
-            Stream stream = new FileStream(".\\Assets\\Resources\\player_inventory.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Open, FileAccess.Read, FileShare.None);
             _items = Deserialize(stream);
             stream.Close();
+            return true;
         }
         catch (Exception e) {
-            _items = new Dictionary<int, int>();
+            if (owner == "player") {
+                _items = new Dictionary<int, int>();
+            }
+            return false;
         }
     }
 

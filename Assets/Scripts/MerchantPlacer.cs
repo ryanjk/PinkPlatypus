@@ -54,6 +54,7 @@ public class MerchantPlacer : MonoBehaviour {
             var should_be_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
             if (should_be_in.world_id != tile_map.get_map_id()) {
                 Destroy(merchant);
+                close_merchant_shop();
                 Debug.Log("removing merchant from scene");
             }
         }
@@ -92,6 +93,7 @@ public class MerchantPlacer : MonoBehaviour {
             is_moving = true;
             merchant.GetComponent<Merchant>().set_sprite_from_movement(merchant_grid_pos, new int[] { next_move.x, next_move.y });
             set_merchant_collider(merchant, false);
+            close_merchant_shop();
             Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
         }
         else {
@@ -118,6 +120,12 @@ public class MerchantPlacer : MonoBehaviour {
         if (shop != null) {
             shop.GetComponent<BoxCollider>().enabled = on;
         }
+    }
+
+    private void close_merchant_shop() {
+        var shop = GameObject.Find("ShopCollider");
+        var shop_script = shop.GetComponent<ShopMain>();
+        shop_script.closeShopWindow();
     }
 
     private bool is_moving;

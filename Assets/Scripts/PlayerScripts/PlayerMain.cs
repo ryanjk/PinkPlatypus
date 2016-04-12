@@ -25,11 +25,11 @@ public class PlayerMain : MonoBehaviour {
 
     void OnApplicationQuit() {
         Debug.Log("saving player inventory");
-        _inventory.saveToDisk();
+        _inventory.saveToDisk("player");
     }
 
     public void load_inventory() {
-        _inventory.loadFromDisk();
+        _inventory.loadFromDisk("player");
     }
 
 	/**

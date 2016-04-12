@@ -28,19 +28,27 @@ public class ShopMain : MonoBehaviour {
 
     // Called by the engine when all objects are created 
 	void Start () {
-        
-		_inventory = this.GetComponent<ItemInventory>();
+
 		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMain>();
-        //This was stuff put in for testing
-        //_inventory.addItem(1,10);
-        _inventory.addItem(101);
-        _inventory.addItem(102);
-        //_player.addItem(0,100);
+		_inventory = GetComponent<ItemInventory>();
+
+        // set item prices
         _prices.Add(101, 5);
         _prices.Add(102, 15);
-        //foreach (int i in _inventory.getItemList().Keys){
-		//	_prices.Add(i, 1);
-		//}
+
+        // load or create inventory
+        var try_loading = _inventory.loadFromDisk("merchant");
+        if (!try_loading) { // no data on disk, create it
+            //This was stuff put in for testing
+            //_inventory.addItem(1,10);
+            _inventory.addItem(101);
+            _inventory.addItem(102);
+            //_player.addItem(0,100);
+
+            //foreach (int i in _inventory.getItemList().Keys){
+		    //	_prices.Add(i, 1);
+		    //}
+        }
 	}
 
 	/*
@@ -139,6 +147,7 @@ public class ShopMain : MonoBehaviour {
 				_slider.gameObject.SetActive(false);
 				updateDropdownList();
 				updateCurrentItemInfo();
+                _inventory.saveToDisk("merchant");
 			}
 			else{
 				Debug.Log("Not enough money to buy this!");
