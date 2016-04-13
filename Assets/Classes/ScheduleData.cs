@@ -167,6 +167,7 @@ public class ScheduleData {
             if ( sum >= 60 ) {
                 minute += minutes;
                 minute = minute % 60;                
+                hour = (hour + 1);
             }
             else {
                 minute = sum;
