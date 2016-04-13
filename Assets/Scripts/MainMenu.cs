@@ -29,8 +29,6 @@ public class MainMenu : MonoBehaviour {
 		if (newGame) {
 
             // clear the old save data
-            File.Delete(".\\Assets\\Resources\\player_inventory.bin");
-            File.Delete(".\\Assets\\Resources\\merchant_inventory.bin");
             File.Delete(".\\Assets\\Resources\\save_data.bin");
 
             SaveDataScript.save_data = new SaveDataScript.SaveData();

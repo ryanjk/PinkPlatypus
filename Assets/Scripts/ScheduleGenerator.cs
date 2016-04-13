@@ -86,7 +86,7 @@ public class ScheduleGenerator : MonoBehaviour {
         }
 
         var path_length = path.Count - 1; // num of tiles to walk
-        var MERCHANT_MIN_PER_TILE = 2.0f;
+        var MERCHANT_MIN_PER_TILE = 1.0f;
 
         int finish_time = start_min + (int) (MERCHANT_MIN_PER_TILE * path_length);
 

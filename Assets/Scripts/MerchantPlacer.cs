@@ -15,6 +15,8 @@ public class MerchantPlacer : MonoBehaviour {
 
         is_moving = false;
         schedule.loadSchedule("schedule_data.bin");
+
+        Application.runInBackground = true;
 	}
 	
 	// Update is called once per frame
@@ -72,7 +74,7 @@ public class MerchantPlacer : MonoBehaviour {
                 coming_from.x_pos == destination.x_pos &&
                 coming_from.y_pos == destination.y_pos;
             var different_worlds = coming_from.world_id != destination.world_id;
-            if (same_entries || different_worlds) {
+            if (at_point(merchant, coming_from) && (same_entries || different_worlds)) {
                 // don't move, in waiting position
                 Debug.Log(string.Format("merchant is waiting until {0}:{1}", destination.hour, destination.minute));
                 merchant.GetComponent<Merchant>().set_sprite_from_movement(null, null);
@@ -81,11 +83,15 @@ public class MerchantPlacer : MonoBehaviour {
             }
 
             var merchant_grid_pos = new int[] { (int) merchant.transform.position.x, (int) merchant.transform.position.z };
-            var next_move = path_finder.get_path(merchant_grid_pos, new int[] { destination.x_pos, destination.y_pos }, tile_map.get_raw_data(), false)[1];
+            // var new_dest = at_point(merchant, coming_from) ? destination : coming_from;
+            var new_dest = destination;
+            var next_path = path_finder.get_path(merchant_grid_pos, new int[] { new_dest.x_pos, new_dest.y_pos }, tile_map.get_raw_data(), false);
+            var path_index = next_path.Count == 1 ? 0 : 1;
+            var next_move = next_path[path_index];
             iTween.MoveTo(merchant, iTween.Hash(
                 "position", new Vector3( next_move.x, 1.0f, next_move.y),
                 "name", "merchant_move_tween",
-                "time", 2.0f,
+                "time", 1.0f,
                 "oncomplete", "on_tween_complete",
                 "oncompletetarget", gameObject,
                 "easetype", iTween.EaseType.linear
@@ -94,10 +100,10 @@ public class MerchantPlacer : MonoBehaviour {
             merchant.GetComponent<Merchant>().set_sprite_from_movement(merchant_grid_pos, new int[] { next_move.x, next_move.y });
             set_merchant_collider(merchant, false);
             close_merchant_shop();
-            Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
+            //Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
         }
         else {
-            Debug.Log("still moving");
+            //Debug.Log("still moving");
         }
     }
 
@@ -109,6 +115,7 @@ public class MerchantPlacer : MonoBehaviour {
         if (is_moving) {
             iTween.StopByName("merchant_move_tween");
         }
+        Application.runInBackground = false;
     }
 
     private int time_to_min(int hour, int min) {
@@ -120,6 +127,15 @@ public class MerchantPlacer : MonoBehaviour {
         if (shop != null) {
             shop.GetComponent<BoxCollider>().enabled = on;
         }
+    }
+
+    private bool at_point(GameObject merchant, ScheduleData.ScheduleEntry entry_point) {
+        var current_pos = merchant.transform.position;
+
+        var same_world = tile_map.get_map_id() == entry_point.world_id;
+        var same_position = current_pos.x == entry_point.x_pos && current_pos.z == entry_point.y_pos;
+
+        return same_position && same_world;
     }
 
     private void close_merchant_shop() {
