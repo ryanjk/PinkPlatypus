@@ -87,6 +87,22 @@ public class ScheduleData {
         return entries_from_world[UnityEngine.Random.Range(0, entries_from_world.Count)];
     }
 
+    public void addPadding(int minutes) {
+        for (int i = 1; i < _scheduleData.Count; ++i) {
+            var cur_entry = _scheduleData[i];
+            var prev_entry = _scheduleData[i - 1];
+            if (cur_entry.PositionEquals(prev_entry) || cur_entry.world_id != prev_entry.world_id) {
+                push_entries_back(minutes, i);
+            }
+        }
+    }
+
+    private void push_entries_back(int num_minutes, int starting_entry_index) {
+        for (int i = starting_entry_index; i < _scheduleData.Count; ++i) {
+            _scheduleData[i].add_minutes(num_minutes); 
+        }
+    }
+
     /**
     * Save the database to disk
     * @param filename - name of file on disk
@@ -131,6 +147,30 @@ public class ScheduleData {
             c.x_pos = x_pos;
             c.y_pos = y_pos;
             return c;
+        }
+
+        public bool PositionEquals(object entry) {
+            if (entry == null || !(entry is ScheduleEntry)) {
+                return false;
+            }
+
+            var other = entry as ScheduleEntry;
+            if ((world_id == other.world_id) && (x_pos == other.x_pos) && (y_pos == other.y_pos)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void add_minutes(int minutes) {
+            var sum = minute + minutes;
+            if ( sum >= 60 ) {
+                minute += minutes;
+                minute = minute % 60;                
+            }
+            else {
+                minute = sum;
+            }
         }
 
         public int CompareTo(ScheduleEntry other) {

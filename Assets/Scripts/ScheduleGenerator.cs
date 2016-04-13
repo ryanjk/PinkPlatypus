@@ -64,6 +64,11 @@ public class ScheduleGenerator : MonoBehaviour {
         var end_point = yellow_map.get_key_point(KeyPoint.TOWN_3);
         schedule_data.insertEntry(create_schedule_entry(next_time, "yellow", end_point[0], end_point[1]));
 
+        // add padding to make it get to 24 hours
+
+        var padding_amount = ((24 * 60) - (next_time)) / 15;
+        schedule_data.addPadding(padding_amount);
+
         schedule_data.saveToDisk("schedule_data.bin");
 
         File.WriteAllText(".\\Assets\\Resources\\schedule_data.txt", schedule_data.ToString());

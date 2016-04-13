@@ -91,7 +91,7 @@ public class MerchantPlacer : MonoBehaviour {
             iTween.MoveTo(merchant, iTween.Hash(
                 "position", new Vector3( next_move.x, 1.0f, next_move.y),
                 "name", "merchant_move_tween",
-                "time", 1.0f,
+                "time", 0.9f,
                 "oncomplete", "on_tween_complete",
                 "oncompletetarget", gameObject,
                 "easetype", iTween.EaseType.linear
