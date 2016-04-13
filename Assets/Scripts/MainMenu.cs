@@ -63,11 +63,11 @@ public class MainMenu : MonoBehaviour {
         }
         if(connect) {
             man.networkAddress = GameObject.FindGameObjectWithTag("Text").GetComponent<Text>().text;
-            Application.LoadLevel("SceneGenTest");
-            man.StartClient();
+            Application.LoadLevel("NSceneGenTest");
 
         }
         if (back) {
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
             Application.LoadLevel("MainMenu");
         }
         if (exit) {

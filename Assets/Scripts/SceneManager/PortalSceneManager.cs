@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PortalSceneManager : SceneManager {
 
@@ -26,6 +27,10 @@ public class PortalSceneManager : SceneManager {
     protected override void prepare_to_leave_scene(string destination, string source) {
 
     }
+
+    protected override void alt_prepare_scene() {
+    }
+
     public GameObject defaultPortal;
 
 }

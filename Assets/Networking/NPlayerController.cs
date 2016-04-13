@@ -8,7 +8,7 @@ using System.Collections;
 public class NPlayerController : NetworkBehaviour {
 
     // time takes to move distance
-    private float _speed = 0.3f;
+    private float _speed = 0.22f;
 
     // distance per step
     private float _distance = 1f;
@@ -20,10 +20,12 @@ public class NPlayerController : NetworkBehaviour {
     public bool ignoreInput;
     private bool host;
     private bool firstUpdate;
+    public bool closeOnUpdate;
 
     void Start() {
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
+        closeOnUpdate = false;
         ignoreInput = false;
         U2.enabled = false;
         R2.enabled = false;
@@ -36,18 +38,40 @@ public class NPlayerController : NetworkBehaviour {
     void Update() {
         if (!firstUpdate && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length < 2) {
             firstUpdate = true;
-            gameObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position + new Vector3(0f, 0.3f, 0f) ;
+            gameObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+            gameObject.transform.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+            gameObject.transform.eulerAngles = new Vector3(0f, -90f, 0f);
         }
         else if (!firstUpdate && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length == 2) {
             firstUpdate = true;
-            foreach(GameObject g in GameObject.FindGameObjectsWithTag("NetworkPlayer")) {
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("NetworkPlayer")) {
                 if (g != this) {
-                    gameObject.transform.position = GameObject.FindGameObjectWithTag("NetworkPlayer").transform.position + new Vector3(0f, 0.3f, 0f) ;
+                    gameObject.transform.position = GameObject.FindGameObjectWithTag("NetworkPlayer").transform.position;
+                    gameObject.transform.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+                    gameObject.transform.eulerAngles = new Vector3(0f, -90f, 0f);
                     break;
                 }
 
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Return) && !isHost()) {
+            closeClient();
+        }
+        if(closeOnUpdate) {
+            if(!isHost() && !isServer) {
+                closeClient();
+            }
+            if(isHost() && isServer && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length < 2)
+                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopHost();
+        }
+
+    }
+    public void closeClient() {
+        Destroy(GameObject.FindGameObjectWithTag("Player"));
+        GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopClient();
+        Application.LoadLevel("ServerConnect");
+
     }
 
     public void switchToPlayer2() {
@@ -60,6 +84,7 @@ public class NPlayerController : NetworkBehaviour {
         L = L2;
         D = D2;
         D.enabled = true;
+        host = false;
     }
     public bool isHost() {
         return host;
@@ -68,9 +93,7 @@ public class NPlayerController : NetworkBehaviour {
     public void otherPlayer() {
         cam.enabled = false;
         ignoreInput = true;
-        host = false;
     }
-
     void FixedUpdate() {
     
         
@@ -175,7 +198,7 @@ public class NPlayerController : NetworkBehaviour {
             return Direction.NONE;
         }
     }
-
+    
     private Vector3 direction_to_velocity(Direction dir) {
         switch (dir) {
             case Direction.UP:

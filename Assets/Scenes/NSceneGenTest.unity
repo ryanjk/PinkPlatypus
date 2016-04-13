@@ -85,6 +85,87 @@ NavMeshSettings:
     cellSize: .166666672
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &30879040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 30879043}
+  - 114: {fileID: 30879042}
+  - 114: {fileID: 30879041}
+  m_Layer: 0
+  m_Name: NetworkAdaptor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &30879041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 30879040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc762688a7e7ba94bb6b6d85a111d9a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkable_tile_prefab: {fileID: 134838, guid: 8b7dd88e5098e0f418b2eb587408a6f1, type: 2}
+  nonwalkable_tile_prefab: {fileID: 192168, guid: f6508a1bcbf579346adab535773df095,
+    type: 2}
+  town_tile_prefab: {fileID: 169654, guid: 4fdda1fb8e092b246bbde1b7389c0d7d, type: 2}
+  npc_prefab: {fileID: 142980, guid: e64170a7b47f32f459f9aa296fb9b5cb, type: 2}
+  portal_prefab: {fileID: 112132, guid: f9c4f2f2a37765d40b89fab28056c720, type: 2}
+  dungeon_portal_prefab: {fileID: 198634, guid: 069b3a762e71e054eadb0313c6ca3d7b,
+    type: 2}
+  map: {fileID: 0}
+--- !u!114 &30879042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 30879040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!4 &30879043
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 30879040}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.00000048, y: 1.30000055, z: 37}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
 --- !u!1 &229665477
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +225,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1 &636748626
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,25 +311,29 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
---- !u!1001 &1333005045
+  m_RootOrder: 1
+--- !u!1001 &1322512537
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_LocalRotation.x
@@ -268,16 +353,40 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 410520, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 156000, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
       propertyPath: m_CustomConfig
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
-      propertyPath: m_DontDestroyOnLoad
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_SpawnPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 198634, guid: 069b3a762e71e054eadb0313c6ca3d7b, type: 2}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 112132, guid: f9c4f2f2a37765d40b89fab28056c720, type: 2}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 134838, guid: 8b7dd88e5098e0f418b2eb587408a6f1, type: 2}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 142980, guid: e64170a7b47f32f459f9aa296fb9b5cb, type: 2}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 192168, guid: f6508a1bcbf579346adab535773df095, type: 2}
+    - target: {fileID: 11413528, guid: 994dd499e94b466469a45db367b235a2, type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 169654, guid: 4fdda1fb8e092b246bbde1b7389c0d7d, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 994dd499e94b466469a45db367b235a2, type: 2}
   m_IsPrefabParent: 0
@@ -312,9 +421,13 @@ MonoBehaviour:
   walkable_tile_prefab: {fileID: 135828, guid: 8dfd3925f0f67574ea153cd71498323d, type: 2}
   nonwalkable_tile_prefab: {fileID: 115590, guid: f5c697f1ff985a3459a456fdcbaf864d,
     type: 2}
-  portal_prefab: {fileID: 179150, guid: 24f847fb0ec60a64f9844e5be7eaea0b, type: 2}
+  town_tile_prefab: {fileID: 135828, guid: c14392d645b412047bf9432c09ec97c2, type: 2}
+  npc_prefab: {fileID: 179220, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
+  portal_prefab: {fileID: 112132, guid: f9c4f2f2a37765d40b89fab28056c720, type: 2}
   dungeon_portal_prefab: {fileID: 198634, guid: 069b3a762e71e054eadb0313c6ca3d7b,
     type: 2}
+  map: {fileID: 0}
+  na: {fileID: 30879041}
 --- !u!114 &1714377761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,4 +450,4 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4

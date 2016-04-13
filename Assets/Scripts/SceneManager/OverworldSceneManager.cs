@@ -80,4 +80,6 @@ public class OverworldSceneManager : SceneManager {
 
     }
 
+    protected override void alt_prepare_scene() {
+    }
 }

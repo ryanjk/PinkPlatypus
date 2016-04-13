@@ -111,6 +111,9 @@ public class DungeonSceneManager : SceneManager {
         _player.gameObject.transform.position += new Vector3(1f, 0f, 0f);
     }
 
+    protected override void alt_prepare_scene() {
+    }
+
     [Serializable]
     public struct RupeeSaveData {
         public int id;

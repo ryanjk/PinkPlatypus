@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
+  _inventory: {fileID: 0}
 --- !u!124 &12446652
 Behaviour:
   m_ObjectHideFlags: 1

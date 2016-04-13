@@ -17,7 +17,7 @@ public class PlayerMain : MonoBehaviour {
         //TODO: fix this, can't create a script with new. should be AddComponent.
 		//_inventory = new ItemInventory ();
        // _sceneLoadData = new SceneLoadData();
-       if (_times_ran == 0) {
+       if (_times_ran == 0 && Application.loadedLevelName != "ServerConnect") {
             load_inventory();
             _times_ran++;
         }
