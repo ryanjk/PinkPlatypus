@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using Type = TileMapData.Tile.Type;
+using UnityEngine.UI;
 
 public class OverworldSceneManager : SceneManager {
 
@@ -74,10 +75,30 @@ public class OverworldSceneManager : SceneManager {
                 }
             }
         }
+        Color c = new Color();
+        switch (destination.Substring(0,destination.IndexOf('_'))) {
+            case "red":
+                c = Color.red;
+                break;
+            case "blue":
+                c = Color.blue;
+                break;
+            case "green":
+                c = Color.green;
+                break;
+            case "yellow":
+                c = Color.yellow;
+                break;
+            case "purple":
+                c = new Color(165f/255f, 40f/255f, 176f/255f); ;
+                break;
+            default:
+                break;
+        }
+        GameObject.FindGameObjectWithTag("WorldMarker").GetComponent<Image>().color = c;
     }
 
     protected override void prepare_to_leave_scene(string destination, string source) {
-
     }
 
     protected override void alt_prepare_scene() {

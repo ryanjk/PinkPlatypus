@@ -25,7 +25,6 @@ public class NPlayerController : NetworkBehaviour {
     void Start() {
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
-        closeOnUpdate = false;
         ignoreInput = false;
         U2.enabled = false;
         R2.enabled = false;
@@ -54,23 +53,17 @@ public class NPlayerController : NetworkBehaviour {
 
             }
         }
-
         if (Input.GetKeyDown(KeyCode.Return) && !isHost()) {
             closeClient();
-        }
-        if(closeOnUpdate) {
-            if(!isHost() && !isServer) {
-                closeClient();
-            }
-            if(isHost() && isServer && GameObject.FindGameObjectsWithTag("NetworkPlayer").Length < 2)
-                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopHost();
         }
 
     }
     public void closeClient() {
-        Destroy(GameObject.FindGameObjectWithTag("Player"));
-        GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopClient();
-        Application.LoadLevel("ServerConnect");
+        if (isLocalPlayer) {
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
+            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopClient();
+            Application.LoadLevel("ServerConnect");
+        }
 
     }
 

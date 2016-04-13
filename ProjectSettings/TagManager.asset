@@ -14,6 +14,8 @@ TagManager:
   - Messages
   - MessageBox
   - Text
+  - WorldMarker
+  - Rupee
   layers:
   - Default
   - TransparentFX

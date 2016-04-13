@@ -72,25 +72,25 @@ public class PauseMenuScript : NetworkBehaviour {
                 }
             }
             else {
-                foreach (GameObject g in GameObject.FindGameObjectsWithTag("NetworkPlayer")) {
-                    g.GetComponent<NPlayerController>().closeOnUpdate = true;
+                Debug.Log(GameObject.FindGameObjectsWithTag("NetworkPlayer").Length);
+                if (GameObject.FindGameObjectsWithTag("NetworkPlayer").Length == 1) {
+                    GameObject g = GameObject.FindGameObjectWithTag("NetworkPlayer");
+                    gameObject.transform.position = g.transform.position;
+                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManagerHUD>().enabled = false;
+                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().enabled = false;
+
+                    foreach (Transform child in this.transform) {
+                        child.gameObject.SetActive(true);
                     }
-                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManagerHUD>().enabled = false;
-                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().enabled = false;
+                    gameObject.GetComponent<PlayerController>().enabled = true;
+                    gameObject.GetComponent<Collider>().enabled = true;
+                    SceneLoadData newSceneLoadData = gameObject.GetComponent<PlayerMain>().getSceneLoadData();
+                    newSceneLoadData.destination = newSceneLoadData.destination.Substring(2);
+                    gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
+                    _networking = false;
 
-                foreach (Transform child in this.transform) {
-                    child.gameObject.SetActive(true);
+                    Application.LoadLevel("SceneGenTest");
                 }
-                gameObject.GetComponent<PlayerController>().enabled = true;
-                gameObject.GetComponent<Collider>().enabled = true;
-                SceneLoadData newSceneLoadData = gameObject.GetComponent<PlayerMain>().getSceneLoadData();
-                newSceneLoadData.destination = newSceneLoadData.destination.Substring(2);
-                gameObject.GetComponent<PlayerMain>().setSceneLoadData(newSceneLoadData);
-                _networking = false;
-
-                Application.LoadLevel("SceneGenTest");
-
-
             }
         }
     }
