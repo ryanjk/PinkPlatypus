@@ -8,6 +8,7 @@ public class OverworldSceneManager : SceneManager {
     public GameObject walkable_tile_prefab;
     public GameObject nonwalkable_tile_prefab;
     public GameObject town_tile_prefab;
+    public GameObject npc_prefab;
 
     public GameObject portal_prefab;
     public GameObject dungeon_portal_prefab;
@@ -40,6 +41,13 @@ public class OverworldSceneManager : SceneManager {
                     } break;
                     case Type.TOWN: {
                         new_game_object = Instantiate(town_tile_prefab, world_pos, Quaternion.identity) as GameObject;
+                    } break;
+                    case Type.TOWN_NPC: {
+                        var new_tile = Instantiate(town_tile_prefab, world_pos, Quaternion.identity) as GameObject;
+                        new_tile.transform.SetParent(map_container.transform);
+                        
+                        new_game_object = Instantiate(npc_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
+                        new_game_object.GetComponentInChildren<Talk>().set_overworld_npc(true);
                     } break;
                     case Type.ENTRY_PORTAL: {
                         new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;

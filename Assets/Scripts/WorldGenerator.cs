@@ -44,7 +44,7 @@ public class WorldGenerator : MonoBehaviour {
         // place towns
 
         // town 1
-        var town_1_size = 15;
+        var town_1_size = 16;
         var town_1 = new Town(town_1_size,town_1_size);
         {
             bool town_1_placed = false;
@@ -55,7 +55,7 @@ public class WorldGenerator : MonoBehaviour {
         }
 
         // town 2
-        var town_2_size = 7;
+        var town_2_size = 8;
         var town_2 = new Town(town_2_size, town_2_size);
         {
             bool town_2_placed = false;
@@ -77,7 +77,6 @@ public class WorldGenerator : MonoBehaviour {
         }
 
         // make sure key points are reachable
-
         build_path_between(portal_entrance, dungeon_entrance, map_data);
         build_path_between(town_1.pos, portal_entrance, map_data);
         build_path_between(town_2.pos, portal_entrance, map_data);
@@ -98,45 +97,13 @@ public class WorldGenerator : MonoBehaviour {
         }
         tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
         tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
-        tilemap_data.town_1 = new int[] { town_1.pos[0], town_1.pos[1] };
-        tilemap_data.town_2 = new int[] { town_2.pos[0], town_2.pos[1] };
-        tilemap_data.town_3 = new int[] { town_3.pos[0], town_3.pos[1] };
+        tilemap_data.town_1 = new int[] { town_1.pos[0] + town_1.height / 2, town_1.pos[1] + town_1.width / 2 };
+        tilemap_data.town_2 = new int[] { town_2.pos[0] + town_2.height / 2, town_2.pos[1] + town_2.width / 2 };
+        tilemap_data.town_3 = new int[] { town_3.pos[0] + town_3.height / 2, town_3.pos[1] + town_3.width / 2 };
         tilemap_data.saveToDisk(world_id + "_map_data.bin");
 
         // print the map and other info (changing as more of the 'generate_world' function is completed)
         Debug.Log(string.Format("Time to generate {1}: {0} ms", timer.ElapsedMilliseconds, world_id));
-        string map_output = "";
-        for (int i = 0; i < height; ++i) {
-            map_output += "\n";
-            for (int j = 0; j < width; ++j) {
-                var value = tilemap_data.getTile(i, j).value;
-                var value_to_char = "";
-
-                if (value == 0.0f) {
-                    value_to_char = "X"; // non-walkable
-                }
-                else if (value == 1.0f) {
-                    value_to_char = "."; // walkable
-                }
-                else if (value == 2.0f) {
-                    value_to_char = "T"; // town
-                }
-                else if (value == 3.0f) {
-                    value_to_char = "P"; // portal entrance
-                }
-                else if (value == 3.1f) {
-                    value_to_char = "p";
-                }
-                else if (value == 4.0f) {
-                    value_to_char = "D"; // portal entrance
-                }
-                else if (value == 4.1f) {
-                    value_to_char = "d";
-                }
-                map_output += string.Format("{0} ", value_to_char);
-            }
-        }
-        Debug.Log(map_output);
     }
 
     private bool place_portal_in_map(int[] portal_pos, float portal_value, ref float[,] map_data) {
@@ -173,9 +140,57 @@ public class WorldGenerator : MonoBehaviour {
             }
         }
 
-        // sure that it's not overwriting another town, so write to map data
+        var center_x = town.pos[0] + town.height / 2;
+        var center_y = town.pos[1] + town.width / 2;
+        
+        // place npcs
+        var num_npcs_to_place = town.height / 4;
+        var npc_points = new List<Point>();
+        var loops = 0;
+        while (npc_points.Count < num_npcs_to_place) {
+
+            if (loops++ > 10) {
+                return false;
+            }
+
+            var x_pos = Random.Range(town.pos[0], town.pos[0] + town.height);
+            var y_pos = Random.Range(town.pos[1], town.pos[1] + town.width);
+
+            // if can't access npcs dialogue trigger, try again
+            if (x_pos == map_height - 1) {
+                continue;
+            }
+            if (map_data[x_pos + 1, y_pos] == 0.0f) {
+                continue;
+            }
+
+            // try to place NPC, but not where merchant will eventually stop
+            var is_center = (x_pos == center_x && y_pos == center_y) || (x_pos == center_x + 1 && y_pos == center_y + 1);
+            if (is_center) {
+                continue;
+            }
+
+            var neighbour_is_npc = false;
+            foreach (var neighbour in get_all_neighbours(new Point(x_pos, y_pos), map_data)) {
+                if (npc_points.Contains(neighbour)) {
+                    neighbour_is_npc = true;
+                }
+            }
+            if (neighbour_is_npc) {
+                continue;
+            }
+
+            npc_points.Add(new Point(x_pos, y_pos));
+        }
+
+        foreach (var point in npc_points) {
+            map_data[point.x, point.y] = 2.2f;
+        }
+        
         for (int i = town.pos[0]; i < town.pos[0] + town.height; ++i) {
             for (int j = town.pos[1]; j < town.pos[1] + town.width; ++j) {
+                if (map_data[i, j] == 2.2f) continue;
+
                 map_data[i, j] = 2.0f;
             }
         }
@@ -256,11 +271,6 @@ public class WorldGenerator : MonoBehaviour {
                 map_data[point.x, point.y] = 1.0f;
             }
         }
-
-        var test_path = get_path(from, to, map_data, false);
-        if (test_path.Count == 0) {
-            Debug.Log(string.Format("Build path weirdness from ({0}, {1}) to ({2}, {3})", from[0], from[1], to[0], to[1]));
-        }
     }
 
     public struct Point {
@@ -319,6 +329,27 @@ public class WorldGenerator : MonoBehaviour {
             if ((is_walkable(neighbour_value) || n_point.Equals(destination) || (paving && neighbour_value == 0.0f))) {
                 neighbours.Add(n_point);
             }
+        }
+        return neighbours;
+    }
+
+    private List<Point> get_all_neighbours(Point node, float[,] map_data) {
+        var neighbours = new List<Point>();
+        if (node.x != 0) { // get upper neighbour
+            var n_point = new Point(node.x - 1, node.y);
+            neighbours.Add(n_point);
+        }
+        if (node.x != map_height - 1) { // get bottom neighbour
+            var n_point = new Point(node.x + 1, node.y);
+            neighbours.Add(n_point);
+        }
+        if (node.y != 0) { // get left neighbour
+            var n_point = new Point(node.x, node.y - 1);
+            neighbours.Add(n_point);
+        }
+        if (node.y != map_width - 1) { // get right neighbour
+            var n_point = new Point(node.x, node.y + 1);
+            neighbours.Add(n_point);
         }
         return neighbours;
     }

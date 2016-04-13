@@ -68,7 +68,7 @@ public class TileMapData {
             copy.value = value;
             return copy;
         }
-		public Boolean isWalkable(){
+		public bool isWalkable(){
 			if(get_type()==Type.OVERWORLD_NONWALKABLE)
 				return false;
 			return true;
@@ -83,6 +83,9 @@ public class TileMapData {
             }
             else if (value == 2.0f) {
                 value_to_char = Type.TOWN; // town
+            }
+            else if (value == 2.2f) {
+                value_to_char = Type.TOWN_NPC; // town npc
             }
             else if (value == 3.0f) {
                 value_to_char = Type.ENTRY_PORTAL; // portal entrance
@@ -107,6 +110,7 @@ public class TileMapData {
             DUNGEON_PORTAL_BORDER,
             DUNGEON_PORTAL,
             TOWN,
+            TOWN_NPC,
 
             NONE
         }

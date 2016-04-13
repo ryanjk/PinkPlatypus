@@ -57,6 +57,10 @@ public class ScheduleScript : MonoBehaviour {
         return _scheduleData.getUpperEntry(hour, minute).clone();
     }
 
+    public ScheduleEntry getRandomEntry(string world) {
+        return _scheduleData.getRandomEntry(world);
+    }
+
     void Start() {
         /*
         //This block demonstrates how to create, save to disk and then load schedule data 

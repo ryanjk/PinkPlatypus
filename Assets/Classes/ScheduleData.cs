@@ -76,6 +76,17 @@ public class ScheduleData {
         return current_max;
     }
 
+    public ScheduleEntry getRandomEntry(string from_world) {
+        var entries_from_world = new List<ScheduleEntry>();
+        foreach (var entry in _scheduleData) {
+            if (entry.world_id == from_world) {
+                entries_from_world.Add(entry);
+            }
+        }
+
+        return entries_from_world[UnityEngine.Random.Range(0, entries_from_world.Count)];
+    }
+
     /**
     * Save the database to disk
     * @param filename - name of file on disk
