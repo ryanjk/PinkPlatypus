@@ -31,7 +31,6 @@ public class SaveDataScript : MonoBehaviour {
             _inventory.Add(402, 1);
             _inventory.Add(501, 1);
             _inventory.Add(502, 1);
-            _inventory.Add(1, 4);
 
             for (int i = 0; i < 5; ++i) {
                 dungeon_data[i] = new RupeeSaveData[3];
@@ -46,6 +45,11 @@ public class SaveDataScript : MonoBehaviour {
     }
 
     public static void save() {
+
+        if (!Directory.Exists(".\\Assets\\Resources")) {
+            Directory.CreateDirectory(".\\Assets\\Resources\\");
+        }
+
         IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream(".\\Assets\\Resources\\save_data.bin", FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, save_data);

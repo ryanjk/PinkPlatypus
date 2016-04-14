@@ -351,7 +351,7 @@ Transform:
   - {fileID: 10560457}
   - {fileID: 1362431858}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
 --- !u!1 &249469328
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,7 +646,7 @@ GameObject:
   - 4: {fileID: 490257249}
   - 212: {fileID: 490257248}
   m_Layer: 0
-  m_Name: Arrow (1)
+  m_Name: Bill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1576,15 +1576,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 21205574, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
       propertyPath: m_Color.r
-      value: .903651118
+      value: .57175827
       objectReference: {fileID: 0}
     - target: {fileID: 21205574, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
       propertyPath: m_Color.g
-      value: 1
+      value: .0794225559
       objectReference: {fileID: 0}
     - target: {fileID: 21205574, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
       propertyPath: m_Color.b
-      value: .301470578
+      value: .83088237
       objectReference: {fileID: 0}
     - target: {fileID: 21205574, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
       propertyPath: m_Sprite
@@ -1603,12 +1603,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 199632, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
+      propertyPath: m_Name
+      value: Platypus
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1166701289 stripped
 Transform:
   m_PrefabParentObject: {fileID: 437670, guid: 34329896e4a928842ad030b3a0dc71f6, type: 2}
+  m_PrefabInternal: {fileID: 1166701288}
+--- !u!212 &1166701290 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 21205574, guid: 34329896e4a928842ad030b3a0dc71f6,
+    type: 2}
   m_PrefabInternal: {fileID: 1166701288}
 --- !u!1 &1192602054
 GameObject:
@@ -1972,6 +1981,7 @@ MonoBehaviour:
   blue: {fileID: 2100000, guid: c1ff04220116fad44ae70a24090f4e2d, type: 2}
   yellow: {fileID: 2100000, guid: b598bbb35570fa742ba7759ec438a1a3, type: 2}
   purple: {fileID: 2100000, guid: 5d00d8c6b6af51749a961bdbf07b468f, type: 2}
+  Platypus: {fileID: 1166701290}
 --- !u!4 &1362431858
 Transform:
   m_ObjectHideFlags: 0

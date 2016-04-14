@@ -29,7 +29,9 @@ public class MainMenu : MonoBehaviour {
 		if (newGame) {
 
             // clear the old save data
-            File.Delete(".\\Assets\\Resources\\save_data.bin");
+            if (!Directory.Exists(".\\Assets\\Resources") && File.Exists(".\\Assets\\Resources\\save_data.bin")) {
+                File.Delete(".\\Assets\\Resources\\save_data.bin");
+            }
 
             SaveDataScript.save_data = new SaveDataScript.SaveData();
 
