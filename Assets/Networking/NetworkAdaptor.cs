@@ -7,6 +7,7 @@ public class NetworkAdaptor : NetworkBehaviour {
 
     public GameObject walkable_tile_prefab;
     public GameObject nonwalkable_tile_prefab;
+    public GameObject nonwalkable_tile_two_prefab;
     public GameObject town_tile_prefab;
     public GameObject npc_prefab;
 
@@ -22,6 +23,7 @@ public class NetworkAdaptor : NetworkBehaviour {
     public void registerPrefabs() {
         ClientScene.RegisterPrefab(walkable_tile_prefab);
         ClientScene.RegisterPrefab(nonwalkable_tile_prefab);
+        ClientScene.RegisterPrefab(nonwalkable_tile_two_prefab);
         ClientScene.RegisterPrefab(town_tile_prefab);
         ClientScene.RegisterPrefab(npc_prefab);
         ClientScene.RegisterPrefab(portal_prefab);
@@ -41,15 +43,20 @@ public class NetworkAdaptor : NetworkBehaviour {
                 var world_pos = new Vector3(i, 0, j);
                 //GameObject new_game_object = null;
                 switch (tile.get_type()) {
-                    case Type.OVERWORLD_WALKABLE:
-                    case Type.DUNGEON_PORTAL_BORDER:
-                    case Type.ENTRY_PORTAL_BORDER: {
+                    case Type.OVERWORLD_WALKABLE:{
                             GameObject new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
                             NetworkServer.Spawn(new_game_object);
                         }
                         break;
                     case Type.OVERWORLD_NONWALKABLE: {
                             GameObject new_game_object = Instantiate(nonwalkable_tile_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
+                            NetworkServer.Spawn(new_game_object);
+                        }
+                        break;
+                    case Type.ALT_OVERWORLD_WALKABLE:
+                    case Type.DUNGEON_PORTAL_BORDER:
+                    case Type.ENTRY_PORTAL_BORDER: {
+                            GameObject new_game_object = Instantiate(nonwalkable_tile_two_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
                             NetworkServer.Spawn(new_game_object);
                         }
                         break;

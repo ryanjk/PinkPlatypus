@@ -113,8 +113,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc762688a7e7ba94bb6b6d85a111d9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkable_tile_prefab: {fileID: 134838, guid: 8b7dd88e5098e0f418b2eb587408a6f1, type: 2}
+  walkable_tile_prefab: {fileID: 168326, guid: ff41edc69059a5342ae1fc105f77a8a5, type: 2}
   nonwalkable_tile_prefab: {fileID: 192168, guid: f6508a1bcbf579346adab535773df095,
+    type: 2}
+  nonwalkable_tile_two_prefab: {fileID: 134838, guid: 8b7dd88e5098e0f418b2eb587408a6f1,
     type: 2}
   town_tile_prefab: {fileID: 169654, guid: 4fdda1fb8e092b246bbde1b7389c0d7d, type: 2}
   npc_prefab: {fileID: 142980, guid: e64170a7b47f32f459f9aa296fb9b5cb, type: 2}

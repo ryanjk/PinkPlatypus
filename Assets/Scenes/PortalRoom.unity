@@ -637,7 +637,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.25000024
+  m_Radius: .899999976
   m_Center: {x: 0, y: 0, z: -2.38418579e-07}
 --- !u!114 &491175103
 MonoBehaviour:
@@ -2043,7 +2043,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.25000024
+  m_Radius: .899999976
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1135626103
 MonoBehaviour:
@@ -3345,7 +3345,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 13537526, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
       propertyPath: m_Radius
-      value: 1.20000005
+      value: .899999976
       objectReference: {fileID: 0}
     - target: {fileID: 402204, guid: f9beaebfb65fcc847b7f5c97f94c7504, type: 2}
       propertyPath: m_LocalScale.x
@@ -3562,7 +3562,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.25000024
+  m_Radius: .899999976
   m_Center: {x: 0, y: 0, z: -5.96046448e-08}
 --- !u!114 &1476917694
 MonoBehaviour:
@@ -5077,7 +5077,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.25000024
+  m_Radius: .899999976
   m_Center: {x: 0, y: 0, z: 2.38418579e-07}
 --- !u!114 &1768369374
 MonoBehaviour:
@@ -6228,7 +6228,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.20000005
+  m_Radius: .899999976
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!199 &2028769939
 ParticleSystemRenderer:
