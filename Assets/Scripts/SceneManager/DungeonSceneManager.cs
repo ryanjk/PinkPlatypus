@@ -94,14 +94,12 @@ public class DungeonSceneManager : SceneManager {
         // save rupees
         var save_index = SaveDataScript.map_to_slot(dungeon_color);
         var rupees = SaveDataScript.save_data.dungeon_data[save_index];
-        CurrencyMain[] rupee_game_objects = (FindObjectsOfType(typeof(CurrencyMain))) as CurrencyMain[];
-        for (int i = 0; i < rupee_game_objects.Length; ++i) {
-            if (rupee_game_objects[i].gameObject.tag == "Rupee") {
-                RupeeSaveData save_data;
-                save_data.id = rupee_game_objects[i].id;
-                save_data.picked_up = rupee_game_objects[i].picked_up;
-                rupees[i] = save_data;
-            }
+        GameObject[] g = GameObject.FindGameObjectsWithTag("Rupee");
+        for (int i = 0; i < g.Length; i++) {
+            RupeeSaveData save_data;
+            save_data.id = g[i].GetComponent<CurrencyMain>().id;
+            save_data.picked_up = g[i].GetComponent<CurrencyMain>().picked_up;
+            rupees[i] = save_data;
         }
         SaveDataScript.save();
 
