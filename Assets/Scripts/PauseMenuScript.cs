@@ -104,6 +104,7 @@ public class PauseMenuScript : NetworkBehaviour {
             Debug.Log("Loading: " + newSceneLoadData.destination);
 
             _paused = false;
+            Debug.Log("Spawning Host Player");
             Application.LoadLevel("NSceneGenTest");
 
             }

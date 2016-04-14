@@ -18,6 +18,7 @@ public class CurrencyMain : MonoBehaviour {
 	public int value;
 
     public int id;
+    public int item_id;
     public bool picked_up;
 
 	/**
@@ -28,8 +29,8 @@ public class CurrencyMain : MonoBehaviour {
 		GameObject player = GameObject.FindWithTag("Player");
 		if(player != null) {
 			PlayerMain playerScript = player.GetComponent<PlayerMain>();
-			playerScript.addItem(0,value);
-			Debug.Log ("Giving " + value + " currency to Player.");
+			playerScript.addItem(item_id,value);
+			Debug.Log ("Giving " + value + " item of id " + item_id + " to Player.");
 		}
 		else {
 			Debug.Log ("Player Object not found");

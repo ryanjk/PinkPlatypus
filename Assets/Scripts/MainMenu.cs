@@ -63,6 +63,7 @@ public class MainMenu : MonoBehaviour {
         }
         if(connect) {
             man.networkAddress = GameObject.FindGameObjectWithTag("Text").GetComponent<Text>().text;
+            Debug.Log("Adding player 2");
             Application.LoadLevel("NSceneGenTest");
 
         }

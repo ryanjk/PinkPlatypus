@@ -1,31 +1,31 @@
- 0: 0: World red at 33 ,28 
- 0:15: World red at 24 ,22 
- 0:40: World red at 24 ,22 
- 1: 6: World red at 16 ,4  
- 1:31: World red at 16 ,4  
- 1:41: World red at 25 ,5  
- 2: 6: World blue at 22 ,26 
- 2:30: World blue at 11 ,13 
- 2:55: World blue at 11 ,13 
- 3:33: World blue at 31 ,31 
- 3:58: World blue at 31 ,31 
- 4:16: World blue at 19 ,37 
- 4:41: World green at 29 ,7  
- 5:36: World green at 22 ,41 
- 6: 1: World green at 22 ,41 
- 6:52: World green at 4  ,18 
- 7:17: World green at 4  ,18 
- 7:33: World green at 7  ,31 
- 7:58: World purple at 19 ,2  
- 8:22: World purple at 35 ,10 
- 8:47: World purple at 35 ,10 
- 9:29: World purple at 44 ,43 
- 9:54: World purple at 44 ,43 
-10:25: World purple at 16 ,46 
-10:50: World yellow at 42 ,40 
-11:27: World yellow at 14 ,31 
-11:52: World yellow at 14 ,31 
-12: 6: World yellow at 26 ,33 
-12:31: World yellow at 26 ,33 
-13: 0: World yellow at 3  ,39 
-13:25: World yellow at 3  ,39 
+ 0: 0: World red at 6  ,3  
+ 0:49: World red at 23 ,35 
+ 1:47: World red at 23 ,35 
+ 2:27: World red at 39 ,11 
+ 3:25: World red at 39 ,11 
+ 3:55: World red at 10 ,10 
+ 4:53: World blue at 16 ,13 
+ 5:17: World blue at 24 ,29 
+ 6:15: World blue at 24 ,29 
+ 6:34: World blue at 8  ,32 
+ 7:32: World blue at 8  ,32 
+ 8: 4: World blue at 40 ,32 
+ 9: 2: World green at 46 ,47 
+ 9:31: World green at 39 ,25 
+10:29: World green at 39 ,25 
+10:56: World green at 15 ,28 
+11:54: World green at 15 ,28 
+12:30: World green at 28 ,13 
+13:28: World purple at 32 ,9  
+14:32: World purple at 20 ,37 
+15:30: World purple at 20 ,37 
+16:18: World purple at 25 ,6  
+17:16: World purple at 25 ,6  
+18:16: World purple at 46 ,43 
+19:14: World yellow at 27 ,3  
+20: 6: World yellow at 9  ,37 
+21: 4: World yellow at 9  ,37 
+21:34: World yellow at 23 ,21 
+22:32: World yellow at 23 ,21 
+22:54: World yellow at 18 ,4  
+23:52: World yellow at 18 ,4  

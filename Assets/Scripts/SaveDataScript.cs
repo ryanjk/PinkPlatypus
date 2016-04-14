@@ -31,6 +31,7 @@ public class SaveDataScript : MonoBehaviour {
             _inventory.Add(402, 1);
             _inventory.Add(501, 1);
             _inventory.Add(502, 1);
+            _inventory.Add(1, 4);
 
             for (int i = 0; i < 5; ++i) {
                 dungeon_data[i] = new RupeeSaveData[3];

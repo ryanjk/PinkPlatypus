@@ -119,7 +119,7 @@ MonoBehaviour:
   town_tile_prefab: {fileID: 169654, guid: 4fdda1fb8e092b246bbde1b7389c0d7d, type: 2}
   npc_prefab: {fileID: 142980, guid: e64170a7b47f32f459f9aa296fb9b5cb, type: 2}
   portal_prefab: {fileID: 112132, guid: f9c4f2f2a37765d40b89fab28056c720, type: 2}
-  dungeon_portal_prefab: {fileID: 198634, guid: 069b3a762e71e054eadb0313c6ca3d7b,
+  dungeon_portal_prefab: {fileID: 138848, guid: 069b3a762e71e054eadb0313c6ca3d7b,
     type: 2}
   map: {fileID: 0}
 --- !u!114 &30879042
@@ -780,6 +780,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1733625879}
+  - 114: {fileID: 1733625880}
   m_Layer: 0
   m_Name: God
   m_TagString: God
@@ -801,3 +802,15 @@ Transform:
   - {fileID: 757496984}
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!114 &1733625880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1733625878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a45855684abfa4897f7bd5ece23919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warningText: {fileID: 0}
