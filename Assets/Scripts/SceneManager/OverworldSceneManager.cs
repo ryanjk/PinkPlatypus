@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class OverworldSceneManager : SceneManager {
 
     public GameObject walkable_tile_prefab;
+    public GameObject alt_walkable_tile_prefab;
+
     public GameObject nonwalkable_tile_prefab;
     public GameObject town_tile_prefab;
     public GameObject npc_prefab;
@@ -36,6 +38,9 @@ public class OverworldSceneManager : SceneManager {
                     case Type.DUNGEON_PORTAL_BORDER:
                     case Type.ENTRY_PORTAL_BORDER: {
                         new_game_object = Instantiate(walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
+                    } break;
+                    case Type.ALT_OVERWORLD_WALKABLE: {
+                        new_game_object = Instantiate(alt_walkable_tile_prefab, world_pos, Quaternion.identity) as GameObject;
                     } break;
                     case Type.OVERWORLD_NONWALKABLE: {
                         new_game_object = Instantiate(nonwalkable_tile_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;

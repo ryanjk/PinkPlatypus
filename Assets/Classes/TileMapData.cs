@@ -81,6 +81,9 @@ public class TileMapData {
             else if (value == 1.0f) {
                 value_to_char = Type.OVERWORLD_WALKABLE; // walkable
             }
+            else if (value == 1.1f) {
+                value_to_char = Type.ALT_OVERWORLD_WALKABLE; // walkable
+            }
             else if (value == 2.0f) {
                 value_to_char = Type.TOWN; // town
             }
@@ -104,6 +107,7 @@ public class TileMapData {
 
         public enum Type {
             OVERWORLD_WALKABLE,
+            ALT_OVERWORLD_WALKABLE,
             OVERWORLD_NONWALKABLE,
             ENTRY_PORTAL_BORDER,
             ENTRY_PORTAL,
@@ -119,6 +123,7 @@ public class TileMapData {
             switch(get_type()) {
                 case Type.OVERWORLD_NONWALKABLE: return "X";
                 case Type.OVERWORLD_WALKABLE: return ".";
+                case Type.ALT_OVERWORLD_WALKABLE: return ".";
                 case Type.TOWN: return "T";
                 case Type.ENTRY_PORTAL: return "P";
                 case Type.ENTRY_PORTAL_BORDER: return "p";

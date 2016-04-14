@@ -20,10 +20,11 @@ public class WorldGenerator : MonoBehaviour {
 
         // flatten noise to 0 or 1
         var threshold = 0.5f; // walkable iff value <= threshold
+        var alt_threshold = 0.47f;
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
                 var value = map_data[i, j];
-                map_data[i, j] = value <= threshold ? 1.0f : 0.0f;
+                map_data[i, j] = value <= alt_threshold ? 1.1f : value <= threshold ? 1.0f : 0.0f;
             }
         }
 
@@ -109,7 +110,7 @@ public class WorldGenerator : MonoBehaviour {
         for (int i = portal_pos[0]; i < portal_pos[0] + 3; ++i) {
             for (int j = portal_pos[1]; j < portal_pos[1] + 3; ++j) {
                 var tile_value = map_data[i, j];
-                if (tile_value != 0.0f && tile_value != 1.0f) {
+                if (tile_value != 0.0f && tile_value != 1.0f && tile_value != 1.1f) {
                     return false;
                 }
             }
@@ -133,7 +134,7 @@ public class WorldGenerator : MonoBehaviour {
         for (int i = town.pos[0]; i < town.pos[0] + town.height; ++i) {
             for (int j = town.pos[1]; j < town.pos[1] + town.width; ++j) {
                 var tile_value = map_data[i, j];
-                if (tile_value != 0.0f && tile_value != 1.0f) { // a town can only overwrite a walkable or non-walkable tile
+                if (tile_value != 0.0f && tile_value != 1.0f && tile_value != 1.1f) { // a town can only overwrite a walkable or non-walkable tile
                     return false;
                 }
             }
@@ -382,7 +383,7 @@ public class WorldGenerator : MonoBehaviour {
     }
 
     private bool is_walkable(float tile_value) {
-        var w = tile_value == 1.0f || tile_value == 2.0f || tile_value == 3.1f || tile_value == 4.1f;
+        var w = tile_value == 1.0f || tile_value == 1.1f || tile_value == 2.0f || tile_value == 3.1f || tile_value == 4.1f;
         return w;
     }
 }
