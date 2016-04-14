@@ -83,7 +83,7 @@ public class Talk : MonoBehaviour
             case 4:
                 return "Thanks for saving me! There are " + (5 - GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerMain>().countItem(1)) + " other platypi left to save!";
             case 3:
-                return "Thank the heavans you're here! My 3 other friends are out there. I hope they're alright...";
+                return "Thank the heavens you're here! My 3 other friends are out there. I hope they're alright...";
             case 2:
                 return "Wow. I thought I was a goner. You're my hero. Only two to go!";
             case 1:
