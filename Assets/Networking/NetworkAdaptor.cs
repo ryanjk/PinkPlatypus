@@ -56,7 +56,7 @@ public class NetworkAdaptor : NetworkBehaviour {
                     case Type.ALT_OVERWORLD_WALKABLE:
                     case Type.DUNGEON_PORTAL_BORDER:
                     case Type.ENTRY_PORTAL_BORDER: {
-                            GameObject new_game_object = Instantiate(nonwalkable_tile_two_prefab, world_pos + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
+                            GameObject new_game_object = Instantiate(nonwalkable_tile_two_prefab, world_pos, Quaternion.identity) as GameObject;
                             NetworkServer.Spawn(new_game_object);
                         }
                         break;
