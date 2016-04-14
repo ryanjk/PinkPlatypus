@@ -87,6 +87,32 @@ public class ScheduleData {
         return entries_from_world[UnityEngine.Random.Range(0, entries_from_world.Count)];
     }
 
+    public ScheduleEntry getClosestEntry(string in_world, int[] point) {
+        var x = point[0];
+        var y = point[1];
+
+        var min_dist = int.MaxValue;
+        var min_entry = new ScheduleEntry();
+        for (int i = 1; i < _scheduleData.Count; i += 2) {
+
+            var entry = _scheduleData[i];
+            if (in_world != entry.world_id) {
+                continue;
+            }
+
+            var x_diff = x - entry.x_pos;
+            var y_diff = y - entry.y_pos;
+
+            var dist = x_diff * x_diff + y_diff * y_diff;
+            if (dist < min_dist) {
+                min_dist = dist;
+                min_entry = entry;
+            }
+        }
+
+        return min_entry;
+    }
+
     public void addPadding(int minutes) {
         for (int i = 1; i < _scheduleData.Count; ++i) {
             var cur_entry = _scheduleData[i];
@@ -111,11 +137,6 @@ public class ScheduleData {
 
         SaveDataScript.save_data.schedule = this;
         SaveDataScript.save();
-
-        /*IFormatter formatter = new BinaryFormatter();
-        Stream stream = new FileStream(".\\Assets\\Resources\\" + filename, FileMode.Create, FileAccess.Write, FileShare.None);
-        formatter.Serialize(stream, this);
-        stream.Close(); */
     }
 
     public override string ToString() {

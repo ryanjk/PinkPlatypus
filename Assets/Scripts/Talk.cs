@@ -34,10 +34,12 @@ public class Talk : MonoBehaviour
                 var schedule_data = FindObjectOfType<ScheduleScript>();
                 var world_info = FindObjectOfType<TileMapScript>();
 
-                var random_time_in_this_world = schedule_data.getRandomEntry(world_info.get_map_id());
-                var minute = random_time_in_this_world.minute;
+                var npc_object = gameObject.transform.parent.gameObject;
+                var npc_position = new int[] { (int) npc_object.transform.position.x, (int) npc_object.transform.position.z };
+                var nearest_entry = schedule_data.getClosestEntry(world_info.get_map_id(), npc_position);
+                var minute = nearest_entry.minute;
                 var minute_string = minute <= 9 ? string.Format("0{0}", minute) : string.Format("{0}", minute);
-                var time_string = string.Format("{0,2}:{1,2}", random_time_in_this_world.hour, minute_string);
+                var time_string = string.Format("{0,2}:{1,2}", nearest_entry.hour, minute_string);
                 _text.text = merchantSchedule(time_string);
             }
 

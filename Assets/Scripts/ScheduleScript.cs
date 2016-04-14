@@ -61,6 +61,10 @@ public class ScheduleScript : MonoBehaviour {
         return _scheduleData.getRandomEntry(world);
     }
 
+    public ScheduleEntry getClosestEntry(string in_world, int[] point) {
+        return _scheduleData.getClosestEntry(in_world, point);
+    }
+
     void Start() {
         /*
         //This block demonstrates how to create, save to disk and then load schedule data 
