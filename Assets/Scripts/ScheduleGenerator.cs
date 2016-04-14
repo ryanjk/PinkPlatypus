@@ -71,7 +71,9 @@ public class ScheduleGenerator : MonoBehaviour {
 
         schedule_data.saveToDisk("schedule_data.bin");
 
+#if UNITY_EDITOR
         File.WriteAllText(".\\Assets\\Resources\\schedule_data.txt", schedule_data.ToString());
+#endif
 
         Debug.Log(string.Format("Time to generate schedule: {0} ms", timer.ElapsedMilliseconds));
         Debug.Log(schedule_data.ToString());

@@ -102,7 +102,6 @@ public class WorldGenerator : MonoBehaviour {
         tilemap_data.town_3 = new int[] { town_3.pos[0] + town_3.height / 2, town_3.pos[1] + town_3.width / 2 };
         tilemap_data.saveToDisk(world_id + "_map_data.bin");
 
-        // print the map and other info (changing as more of the 'generate_world' function is completed)
         Debug.Log(string.Format("Time to generate {1}: {0} ms", timer.ElapsedMilliseconds, world_id));
     }
 

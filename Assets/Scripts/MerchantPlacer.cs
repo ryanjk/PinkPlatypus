@@ -41,7 +41,7 @@ public class MerchantPlacer : MonoBehaviour {
                     var path = path_finder.get_path(new int[] { currently_in.x_pos, currently_in.y_pos }, new int[] { going_to.x_pos, going_to.y_pos }, tile_map.get_raw_data(), false);
                     var percent_along_path = ((float)(cur_min - currently_in_min)) / (going_to_min - currently_in_min);
                     var path_pos = (int)(percent_along_path * path.Count);
-                    path_pos = path_pos >= path.Count ? path.Count - 1 : path_pos;
+                    path_pos = path_pos < 0 ? 0 : path_pos >= path.Count ? path.Count - 1 : path_pos;
                     var spawn_point_2d = path[path_pos];
                     spawn_point = new Vector3(spawn_point_2d.x, 1.0f, spawn_point_2d.y);
                 }
@@ -86,6 +86,9 @@ public class MerchantPlacer : MonoBehaviour {
             // var new_dest = at_point(merchant, coming_from) ? destination : coming_from;
             var new_dest = destination;
             var next_path = path_finder.get_path(merchant_grid_pos, new int[] { new_dest.x_pos, new_dest.y_pos }, tile_map.get_raw_data(), false);
+            if (next_path.Count == 0) {
+                return;
+            }
             var path_index = next_path.Count == 1 ? 0 : 1;
             var next_move = next_path[path_index];
             iTween.MoveTo(merchant, iTween.Hash(
