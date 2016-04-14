@@ -76,6 +76,7 @@ public class PauseMenuScript : NetworkBehaviour {
                 if (GameObject.FindGameObjectsWithTag("NetworkPlayer").Length == 1) {
                     GameObject g = GameObject.FindGameObjectWithTag("NetworkPlayer");
                     gameObject.transform.position = g.transform.position;
+                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopHost();
                     GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManagerHUD>().enabled = false;
                     GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().enabled = false;
 

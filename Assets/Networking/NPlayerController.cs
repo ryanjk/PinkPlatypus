@@ -96,7 +96,7 @@ public class NPlayerController : NetworkBehaviour {
         }
         float vert = 0f;
         float hori = 0f;
-        if (!ignoreInput) {
+        if (!ignoreInput && isLocalPlayer) {
             vert = Input.GetAxis("Vertical");
             hori = Input.GetAxis("Horizontal");
         }

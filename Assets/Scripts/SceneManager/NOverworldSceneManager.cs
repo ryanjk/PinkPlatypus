@@ -38,7 +38,8 @@ public class NOverworldSceneManager : SceneManager {
 
 
     protected override void prepare_to_leave_scene(string destination, string source) {
-        
+        GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().StopHost();
+
     }
 
     protected override void alt_prepare_scene() {
