@@ -1,152 +1,140 @@
 ﻿using UnityEngine;
-using System.Collections;
-
+using System.Collections.Generic;
 public class MerchantPlacer : MonoBehaviour {
-
     public GameObject merchant_prefab;
-	private Merchant merchant;
-	// Use this for initialization
 	void Start () {
         time = FindObjectOfType<GameTimeScript>();
-        tile_map = FindObjectOfType<TileMapScript>();
+        tileMap = FindObjectOfType<TileMapScript>();
         schedule = FindObjectOfType<ScheduleScript>();
-        path_finder = gameObject.AddComponent<WorldGenerator>();
-
-
-        is_moving = false;
+        pathFinder = gameObject.AddComponent<WorldGenerator>();
+        isMoving = false;
         schedule.loadSchedule("schedule_data.bin");
-
         Application.runInBackground = true;
 	}
 	
 	// Update is called once per frame
-
 	void Update () {
-        var merchant = GameObject.FindGameObjectWithTag("Merchant");
-        bool just_added_merchant = false;
+        GameObject merchant = GameObject.FindGameObjectWithTag("Merchant");
+        bool justAddedMerchant = false;
         if (merchant == null) {
-            var currently_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
-            if (currently_in.world_id == tile_map.get_map_id()) {
+            ScheduleData.ScheduleEntry currentlyIn = schedule.getLowerEntry(time.getHour(), time.getMinute());
+            if (currentlyIn.world_id == tileMap.get_map_id()) {
                 // spawn merchant, he should be here
-                var going_to = schedule.getUpperEntry(time.getHour(), time.getMinute());
-                var cur_min = time_to_min(time.getHour(), time.getMinute());
-                var currently_in_min = time_to_min(currently_in.hour, currently_in.minute);
-                var going_to_min = time_to_min(going_to.hour, going_to.minute);
+                ScheduleData.ScheduleEntry goingTo = schedule.getUpperEntry(time.getHour(), time.getMinute());
+                int currentMin = timeToMin(time.getHour(), time.getMinute());
+                int currentlyInMin = timeToMin(currentlyIn.hour, currentlyIn.minute);
+                int goingToMin = timeToMin(goingTo.hour, goingTo.minute);
 
-                var spawn_point = new Vector3();
-                if (going_to.world_id != currently_in.world_id) { // not on a path, no need to calculate percent along path
-                    spawn_point = new Vector3(currently_in.x_pos, 1.0f, currently_in.y_pos);
+                Vector3 spawnPoint = new Vector3();
+                if (goingTo.world_id != currentlyIn.world_id) { // not on a path, no need to calculate percent along path
+                    spawnPoint = new Vector3(currentlyIn.x_pos, 1.0f, currentlyIn.y_pos);
                 }
                 else {
-                    var path = path_finder.get_path(new int[] { currently_in.x_pos, currently_in.y_pos }, new int[] { going_to.x_pos, going_to.y_pos }, tile_map.get_raw_data(), false);
-                    var percent_along_path = ((float)(cur_min - currently_in_min)) / (going_to_min - currently_in_min);
-                    var path_pos = (int)(percent_along_path * path.Count);
-                    path_pos = path_pos >= path.Count ? path.Count - 1 : path_pos;
-                    var spawn_point_2d = path[path_pos];
-                    spawn_point = new Vector3(spawn_point_2d.x, 1.0f, spawn_point_2d.y);
+                    List<WorldGenerator.Point> path = pathFinder.get_path(new int[] { currentlyIn.x_pos, currentlyIn.y_pos }, new int[] { goingTo.x_pos, goingTo.y_pos }, tileMap.get_raw_data(), false);
+                    float percentAlongPath = ((float)(currentMin - currentlyInMin)) / (goingToMin - currentlyInMin);
+                    var pathPosition = (int)(percentAlongPath * path.Count);
+                    pathPosition = pathPosition >= path.Count ? path.Count - 1 : pathPosition;
+                    var spawn_point_2d = path[pathPosition];
+                    spawnPoint = new Vector3(spawn_point_2d.x, 1.0f, spawn_point_2d.y);
                 }
-                merchant = Instantiate(merchant_prefab, spawn_point, Quaternion.Euler(0.0f, 270.0f, 0.0f)) as GameObject;
+                merchant = Instantiate(merchant_prefab, spawnPoint, Quaternion.Euler(0.0f, 270.0f, 0.0f)) as GameObject;
                 Debug.Log("no merchant, adding him in");
-                just_added_merchant = true;
-                set_merchant_collider(merchant, false);
+                justAddedMerchant = true;
+                setMerchantCollider(merchant, false);
             }
         }
-        else if (!is_moving) {
+        else if (!isMoving) {
             // merchant is here, should he still be?
-            var should_be_in = schedule.getLowerEntry(time.getHour(), time.getMinute());
-            if (should_be_in.world_id != tile_map.get_map_id()) {
+            var shouldBeIn = schedule.getLowerEntry(time.getHour(), time.getMinute());
+            if (shouldBeIn.world_id != tileMap.get_map_id()) {
                 Destroy(merchant);
-                close_merchant_shop();
+                closeMerchantShop();
                 Debug.Log("removing merchant from scene");
             }
         }
 
-        if (just_added_merchant || merchant == null) {
+        if (justAddedMerchant || merchant == null) {
             return;
         }
 
         // if merchant is still here and we didn't just place him in
-        if (!is_moving) {
-            var coming_from = schedule.getLowerEntry(time.getHour(), time.getMinute());
+        if (!isMoving) {
+            var comingFrom = schedule.getLowerEntry(time.getHour(), time.getMinute());
             var destination = schedule.getUpperEntry(time.getHour(), time.getMinute());
 
-            var same_entries = coming_from.world_id == destination.world_id &&
-                coming_from.x_pos == destination.x_pos &&
-                coming_from.y_pos == destination.y_pos;
-            var different_worlds = coming_from.world_id != destination.world_id;
-            if (at_point(merchant, coming_from) && (same_entries || different_worlds)) {
+            var sameEntries = comingFrom.world_id == destination.world_id &&
+                comingFrom.x_pos == destination.x_pos &&
+                comingFrom.y_pos == destination.y_pos;
+            var differentWorlds = comingFrom.world_id != destination.world_id;
+            if (atPoint(merchant, comingFrom) && (sameEntries || differentWorlds)) {
                 // don't move, in waiting position
                 Debug.Log(string.Format("merchant is waiting until {0}:{1}", destination.hour, destination.minute));
                 merchant.GetComponent<Merchant>().set_sprite_from_movement(null, null);
-                set_merchant_collider(merchant, true);
+                setMerchantCollider(merchant, true);
                 return;
             }
 
-            var merchant_grid_pos = new int[] { (int) merchant.transform.position.x, (int) merchant.transform.position.z };
-            // var new_dest = at_point(merchant, coming_from) ? destination : coming_from;
-            var new_dest = destination;
-            var next_path = path_finder.get_path(merchant_grid_pos, new int[] { new_dest.x_pos, new_dest.y_pos }, tile_map.get_raw_data(), false);
-            var path_index = next_path.Count == 1 ? 0 : 1;
-            var next_move = next_path[path_index];
+            var merchantPosition = new int[] { (int) merchant.transform.position.x, (int) merchant.transform.position.z };
+            var newDestination = destination;
+            var nextPath = pathFinder.get_path(merchantPosition, new int[] { newDestination.x_pos, newDestination.y_pos }, tileMap.get_raw_data(), false);
+            var pathIndex = nextPath.Count == 1 ? 0 : 1;
+            var nextMove = nextPath[pathIndex];
             iTween.MoveTo(merchant, iTween.Hash(
-                "position", new Vector3( next_move.x, 1.0f, next_move.y),
+                "position", new Vector3( nextMove.x, 1.0f, nextMove.y),
                 "name", "merchant_move_tween",
                 "time", 1.0f,
                 "oncomplete", "on_tween_complete",
                 "oncompletetarget", gameObject,
                 "easetype", iTween.EaseType.linear
             ));
-            is_moving = true;
-            merchant.GetComponent<Merchant>().set_sprite_from_movement(merchant_grid_pos, new int[] { next_move.x, next_move.y });
-            set_merchant_collider(merchant, false);
-            close_merchant_shop();
-            //Debug.Log(string.Format("Moving from ({0}, {1}) to ({2}, {3})", merchant_grid_pos[0], merchant_grid_pos[1], next_move.x, next_move.y));
-        }
-        else {
-            //Debug.Log("still moving");
+            isMoving = true;
+            merchant.GetComponent<Merchant>().set_sprite_from_movement(merchantPosition, new int[] { nextMove.x, nextMove.y });
+            setMerchantCollider(merchant, false);
+            closeMerchantShop();
         }
     }
 
-    public void on_tween_complete() {
-        is_moving = false;
+    public void onTweenComplete() {
+        isMoving = false;
     }
 
     void OnDestroy() {
-        if (is_moving) {
+        if (isMoving) {
             iTween.StopByName("merchant_move_tween");
         }
         Application.runInBackground = false;
     }
 
-    private int time_to_min(int hour, int min) {
+    private int timeToMin(int hour, int min) {
         return hour * 60 + min;
     }
 
-    private void set_merchant_collider(GameObject merchant, bool on) {
+    private void setMerchantCollider(GameObject merchant, bool on) {
         var shop = GameObject.Find("ShopCollider");
         if (shop != null) {
             shop.GetComponent<BoxCollider>().enabled = on;
         }
     }
 
-    private bool at_point(GameObject merchant, ScheduleData.ScheduleEntry entry_point) {
+    private bool atPoint(GameObject merchant, ScheduleData.ScheduleEntry entry_point) {
         var current_pos = merchant.transform.position;
 
-        var same_world = tile_map.get_map_id() == entry_point.world_id;
-        var same_position = current_pos.x == entry_point.x_pos && current_pos.z == entry_point.y_pos;
+        var sameWorld = tileMap.get_map_id() == entry_point.world_id;
+        var samePosition = current_pos.x == entry_point.x_pos && current_pos.z == entry_point.y_pos;
 
-        return same_position && same_world;
+        return samePosition && sameWorld;
     }
 
-    private void close_merchant_shop() {
+    private void closeMerchantShop() {
         var shop = GameObject.Find("ShopCollider");
-        var shop_script = shop.GetComponent<ShopMain>();
-        shop_script.closeShopWindow();
+        var shopScript = shop.GetComponent<ShopMain>();
+        shopScript.closeShopWindow();
     }
 
-    private bool is_moving;
+    private bool isMoving;
+    private Merchant merchant;
     private ScheduleScript schedule;
-    private TileMapScript tile_map;
+    private TileMapScript tileMap;
     private GameTimeScript time;
-    private WorldGenerator path_finder;
+    private WorldGenerator pathFinder;
 }
