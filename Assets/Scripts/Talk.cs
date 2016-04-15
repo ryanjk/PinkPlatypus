@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 /*
- * PlayerMain
- @author Taha Ghassemi
+ * Talk
+ @author Taha Ghassemi & Thomas Fix
  * 
- *
+ * Class handling dialogue with the player for NPCs
  *
  */
 public class Talk : MonoBehaviour
@@ -65,7 +65,16 @@ public class Talk : MonoBehaviour
         is_overworld_npc = value;
     }
 
-	private string merchantSchedule(string time){
+    /**
+    * This method provides a way to give NPCs random, helpful dialogue about the merchant's schedule
+    * given a string representation of the time he's supposed to arrive
+    *
+    * @param time the time to insert into the string
+    * @return a random string from the hard-coded list, which includes time data
+    */
+	private string merchantSchedule(string time) {
+        // didn't need to be super robust, so it's just a local, hard-coded array
+        // of strings - TIME is to be replaced by the argument string (see below)
         string[] _messages = {"Who? The mysterious creep? I think he will be here around TIME",
                               "Stick around until about TIME, that's when the caravan rolls in",
                               "I hear the merchant stops here at TIME",
@@ -73,10 +82,13 @@ public class Talk : MonoBehaviour
                               "Need some keys? Wait until TIME",
                               "I can't wait until TIME",
                               "TIME. Remember it"};
+        // pick a random string
         string returnString = _messages[Random.Range(0, _messages.Length)];
+        // insert the time
         returnString = returnString.Replace("TIME", time);
 		return returnString;
 	}
+
     private string gameProgress() {
         switch ((5 - GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerMain>().countItem(1))) {
             case 5:
@@ -95,5 +107,6 @@ public class Talk : MonoBehaviour
         }
 
     }
+
     private Dictionary<string, string> _conversations;
 }
