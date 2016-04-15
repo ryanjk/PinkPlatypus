@@ -3,7 +3,15 @@ using UnityEngine.Networking;
 using System.Collections;
 
 /**
+* Player Controller
 * @author Thomas, Ryan and Harry
+*
+* Class converting player input into character movement
+*
+* This class takes the default Unity input, and translates it into movement
+* for the player character, including tweening provided by an external library.
+* The class also handles switching between sprites to match the direction
+* the player character is facing.
 */
 public class PlayerController : MonoBehaviour {
 
@@ -19,6 +27,7 @@ public class PlayerController : MonoBehaviour {
     public bool ignoreInput;
 
     void Start() {
+        // initialize some fields
         _rbody = GetComponent<Rigidbody>();
         _direction = Direction.NONE;
         ignoreInput = false;
@@ -83,14 +92,23 @@ public class PlayerController : MonoBehaviour {
         FixedUpdate();
     }
 
+    /**
+    * Simple method to switch the active sprite
+    * 
+    * @param direction takes in a direction enum and switches the sprite to the appropriate direction
+    */
     private void set_sprite(Direction direction) {
+        // most of the details of sprites are handled in Unity
+        // down-facing/default case
         if (direction == Direction.NONE || direction == Direction.DOWN) {
+            // disable every sprite except down sprite
             R.enabled = false;
             L.enabled = false;
             U.enabled = false;
             D.enabled = true;
             return;
         }
+        // up-facing case
         if (direction == Direction.UP) {
             R.enabled = false;
             L.enabled = false;
@@ -98,6 +116,7 @@ public class PlayerController : MonoBehaviour {
             D.enabled = false;
             return;
         }
+        // right-facing case
         if (direction == Direction.RIGHT) {
             R.enabled = true;
             L.enabled = false;
@@ -105,6 +124,7 @@ public class PlayerController : MonoBehaviour {
             D.enabled = false;
             return;
         }
+        // left-facing case
         if (direction == Direction.LEFT) {
             R.enabled = false;
             L.enabled = true;
@@ -115,27 +135,43 @@ public class PlayerController : MonoBehaviour {
 
         //transform.GetChild(0).transform.localEulerAngles = new Vector3(90f, 0f, (int) direction * 90f);
     }
+
+    /**
+    * converting the input into a direction enum
+    *
+    * @param vertical the value of the vertical input
+    * @param horizontal the value of the horizontal input
+    * @return the corresponding Direction enum
+    */
     private Direction input_to_direction(float vertical, float horizontal) {
+        // negative vertical? -> facing down
         if (vertical < 0.0f) {
             return Direction.DOWN;
         }
-
+        // positive vertical? -> facing up
         else if (vertical > 0.0f) {
             return Direction.UP;
         }
-
+        // negative horizontal? -> facing left
         else if (horizontal < 0.0f) {
             return Direction.LEFT;
         }
-
+        // positive horizontal? -> facing right
         else if (horizontal > 0.0f) {
             return Direction.RIGHT;
         }
+        // zero input? -> default direction
         else {
             return Direction.NONE;
         }
     }
 
+    /**
+    * simple switch block mapping a direction enum to a direction vector
+    *
+    * @param dir the direction to convert
+    * @return a unit vector in the correct direction (or the 0-vector)
+    */
     private Vector3 direction_to_velocity(Direction dir) {
         switch (dir) {
             case Direction.UP:
