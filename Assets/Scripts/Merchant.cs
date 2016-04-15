@@ -3,14 +3,13 @@ using UnityEngine;
 using System;
 
 //The merchant has a number of places to go. It finds a path to each of its required places and then goes there.
+//@author Taha Ghassemi
 public class Merchant : MonoBehaviour
 {
     public SpriteRenderer U, D, L, R; // assigned in Unity editor
     private Direction _direction;
     private Transform _transform; //an object keeping track of the Merchant's position
-    /*Where the merchant is heading. Because he only moves horizontally and vertically, it must differ from the merchant's position by only one
-     coordinate.*/
-    private Vector3 currentGoal;
+    private Vector3 currentGoal; //Where the merchant is heading, next to merchant's position
     private Vector3 currentMovementVector; //the vector he translates by in every frame. It is one of the following four vectors:
 
     private OriginDestination currentOriginDestination;
@@ -146,11 +145,9 @@ public class Merchant : MonoBehaviour
     }
     void Start()
     {
-
 		currentOriginDestination= new OriginDestination();
         speed = 0.08f;
 		currentOriginDestination.currentDestinationIndex = 0;
-
         _transform = gameObject.transform;
 		currentOriginDestination.currentDestinationIndex = 0;
         currentGoalIndex = 1;
@@ -178,10 +175,6 @@ public class Merchant : MonoBehaviour
                         currentGoalIndex = 1;
                     }
 					currentGoal = setVector(paths[currentOriginDestination.currentDestinationIndex].getPoint(currentGoalIndex));
-                    /*Debug.Log("currentDestinationIndex = "+currentDestinationIndex);
-                    Debug.Log("currentDestination=" + paths[currentDestinationIndex].getDestination()[0] + "," + paths[currentDestinationIndex].getDestination()[1]);
-                    Debug.Log("currentGoalIndex - "+currentGoalIndex);
-                    Debug.Log("currentGoal=" + paths[currentDestinationIndex].getDirection(currentGoalIndex)[0] + "," + paths[currentDestinationIndex].getDirection(currentGoalIndex)[1]);*/
 					currentMovementVector = speed * directionToVector(paths[currentOriginDestination.currentDestinationIndex].getDirection(currentGoalIndex)); //In either case, set the movement vector accordingly
                 }
                 //else, he has reached his final destination, so he should not move.
