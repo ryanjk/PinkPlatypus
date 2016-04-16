@@ -76,6 +76,9 @@ public class ScheduleData {
         return current_max;
     }
 
+    /**
+    Get a random entry that's in the given world
+    */
     public ScheduleEntry getRandomEntry(string from_world) {
         var entries_from_world = new List<ScheduleEntry>();
         foreach (var entry in _scheduleData) {
@@ -87,6 +90,9 @@ public class ScheduleData {
         return entries_from_world[UnityEngine.Random.Range(0, entries_from_world.Count)];
     }
 
+    /**
+    Get an entry that is closest to the given point in the world
+    */
     public ScheduleEntry getClosestEntry(string in_world, int[] point) {
         var x = point[0];
         var y = point[1];
@@ -113,6 +119,7 @@ public class ScheduleData {
         return min_entry;
     }
 
+    // add an amount of padding to all waiting points
     public void addPadding(int minutes) {
         for (int i = 1; i < _scheduleData.Count; ++i) {
             var cur_entry = _scheduleData[i];
@@ -123,6 +130,7 @@ public class ScheduleData {
         }
     }
 
+    // add a constant amount of time to all entries including and after a given starting one
     private void push_entries_back(int num_minutes, int starting_entry_index) {
         for (int i = starting_entry_index; i < _scheduleData.Count; ++i) {
             _scheduleData[i].add_minutes(num_minutes); 
@@ -146,8 +154,6 @@ public class ScheduleData {
         }
         return s;
     }
-
-    private List<ScheduleEntry> _scheduleData;
 
     /**
     * ScheduleEntry used to represent an entry in the database
@@ -233,5 +239,5 @@ public class ScheduleData {
         }
     }
 
-
+    private List<ScheduleEntry> _scheduleData;
 }
