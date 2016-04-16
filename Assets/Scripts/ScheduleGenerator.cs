@@ -1,45 +1,44 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 using KeyPoint = TileMapData.KeyPoint;
 using System.IO;
 
+/**
+Class used to create a schedule and store it on disk
+    @author Ryan Kitner
+*/
 public class ScheduleGenerator : MonoBehaviour {
 
-	// Use this for initialization
 	void Awake () {
         world_generator = FindObjectOfType<WorldGenerator>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
+    /**
+    Method creates the schedule and stores it on disk
+    */
     public void generate_schedule() {
         var timer = System.Diagnostics.Stopwatch.StartNew();
 
+        // get the map data to use to build the schedule
+
         var red_map = gameObject.AddComponent<TileMapScript>();
         red_map.loadMap("red_overworld_map_data.bin");
-        //var red_map_data = red_map.get_raw_data();
 
         var blue_map = gameObject.AddComponent<TileMapScript>();
         blue_map.loadMap("blue_overworld_map_data.bin");
-       // var blue_map_data = blue_map.get_raw_data();
 
         var green_map = gameObject.AddComponent<TileMapScript>();
         green_map.loadMap("green_overworld_map_data.bin");
-       // var green_map_data = green_map.get_raw_data();
 
         var purple_map = gameObject.AddComponent<TileMapScript>();
         purple_map.loadMap("purple_overworld_map_data.bin");
-        //var purple_map_data = purple_map.get_raw_data();
 
         var yellow_map = gameObject.AddComponent<TileMapScript>();
         yellow_map.loadMap("yellow_overworld_map_data.bin");
-      //  var yellow_map_data = yellow_map.get_raw_data();
 
         var schedule_data = new ScheduleData();
+
+        // build the schedule by creating its parts. the variable next_time stores the time for the next part to begin at.
 
         var next_time = build_schedule_part(0, KeyPoint.PORTAL_ENTRANCE, KeyPoint.TOWN_1, ref schedule_data, "red", red_map);
         next_time = build_schedule_part(next_time, KeyPoint.TOWN_1, KeyPoint.TOWN_2, ref schedule_data, "red", red_map);
@@ -79,12 +78,16 @@ public class ScheduleGenerator : MonoBehaviour {
         Debug.Log(schedule_data.ToString());
     }
 
+    // create an entry that begins at the given time between two key points. return the time the next entry should begin at.
     private int build_schedule_part(int start_min, KeyPoint from, KeyPoint to, ref ScheduleData schedule_data, string map_id, TileMapScript map_data) {
 
         var from_point = map_data.get_key_point(from);
         var to_point = map_data.get_key_point(to);
-        var path = world_generator.get_path(from_point, to_point, map_data.get_raw_data(), false);
 
+        // get the path between the two points
+        var path = world_generator.get_path(from_point, to_point, map_data.get_raw_data(), false); 
+
+        // make sure that a path exists first (if not there's a bug somewhere. this shouldn't happen because world gen ensures a path exists.)
         if (path.Count == 0) {
             Debug.Log(string.Format("Can't make entry in {4} from ({0}, {1}) to ({2},{3})", 
                 from_point[0], from_point[1], to_point[0], to_point[1], map_id));
@@ -92,19 +95,23 @@ public class ScheduleGenerator : MonoBehaviour {
             return -1;
         }
 
-        var path_length = path.Count - 1; // num of tiles to walk
+        var path_length = path.Count - 1;
         var MERCHANT_MIN_PER_TILE = 1.0f;
 
+        // the time to be at the destination is proportional to the length of the path times the merchant's speed
+        // it's set so that it gives the perfect amount of time for the merchant to get there on time
         int finish_time = start_min + (int) (MERCHANT_MIN_PER_TILE * path_length);
 
         schedule_data.insertEntry(create_schedule_entry(start_min, map_id, from_point[0], from_point[1]));
         schedule_data.insertEntry(create_schedule_entry(finish_time, map_id, to_point[0], to_point[1]));
 
+        // return the next time to create an entry at, which is WAITING_TIME more than the finish time, because the merchant waits at the spot for WAITING_TIME
         var WAITING_TIME_IN_MIN = 25;
         finish_time += WAITING_TIME_IN_MIN;
         return finish_time;
     }
 
+    // Private method that assists filling a schedule entry
     private ScheduleData.ScheduleEntry create_schedule_entry(int total_min, string map_id, int x_pos, int y_pos) {
         var schedule_entry = new ScheduleData.ScheduleEntry();
         schedule_entry.hour = total_min / 60;

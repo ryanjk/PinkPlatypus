@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 
 using RupeeSaveData = DungeonSceneManager.RupeeSaveData;
@@ -8,17 +7,26 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 
+/**
+Class that stores the data that is kept track of for serialization purposes and is responsible for saving and loading it
+    @author Ryan Kitner
+*/
 public class SaveDataScript : MonoBehaviour {
 
+    // struct that stores the save data
     [Serializable]
     public class SaveData {
-        public TileMapData[] map_data = new TileMapData[5];
-        public ScheduleData schedule = new ScheduleData();
-        public Dictionary<int, int>[] item_inventory = new Dictionary<int, int>[2];
-        public RupeeSaveData[][] dungeon_data = new RupeeSaveData[5][];
+        public TileMapData[] map_data = new TileMapData[5]; // the five maps
+        public ScheduleData schedule = new ScheduleData(); // the schedule
+        public Dictionary<int, int>[] item_inventory = new Dictionary<int, int>[2]; // the player and merchant inventory
+        public RupeeSaveData[][] dungeon_data = new RupeeSaveData[5][]; // the dungeon states
 
+        // default constructor that initializes the save data
         public SaveData() {
+            // player starts with an empty inventory
             item_inventory[0] = new Dictionary<int, int>();
+
+            // stock the merchant's inventory
             item_inventory[1] = new Dictionary<int, int>();
             var _inventory = item_inventory[1];
             _inventory.Add(101, 1);
@@ -32,6 +40,7 @@ public class SaveDataScript : MonoBehaviour {
             _inventory.Add(501, 1);
             _inventory.Add(502, 1);
 
+            // initialize the dungeon state
             for (int i = 0; i < 5; ++i) {
                 dungeon_data[i] = new RupeeSaveData[3];
                 for (int j = 0; j < 3; ++j) {
@@ -44,6 +53,9 @@ public class SaveDataScript : MonoBehaviour {
         }
     }
 
+    /**
+    Static method that serializes the data currently in the save data to disk 
+    */
     public static void save() {
 
         if (!Directory.Exists(".\\Assets\\Resources")) {
@@ -56,6 +68,9 @@ public class SaveDataScript : MonoBehaviour {
         stream.Close();
     }
 
+    /** 
+    Static method that loads the data on disk to the save data
+    */
     public static bool load() {
         try {
             IFormatter formatter = new BinaryFormatter();
@@ -69,6 +84,9 @@ public class SaveDataScript : MonoBehaviour {
         }
     }
 
+    /** 
+    Used to assist access to the data of a specific map. Returns the index of the map color in the save data array of maps.
+    */
     public static int map_to_slot(string color) {
         int map_save_slot = -1;
         if (color == "red") {
@@ -96,6 +114,9 @@ public class SaveDataScript : MonoBehaviour {
         }
     }
 
+    /**
+    Used to assist access to the inventory data. Returns the index of the inventory corresponsing to the player or merchant in the array of inventories.
+    */
     public static int inventory_owner_to_slot(string owner) {
         var slot_number = -1;
         if (owner == "player") {
@@ -113,5 +134,6 @@ public class SaveDataScript : MonoBehaviour {
         return slot_number;
     }
 
+    // Publicly accessable save data
     public static SaveData save_data;
 }

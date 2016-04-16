@@ -29,34 +29,18 @@ using System.IO;
 [Serializable]
 public class ItemInventory : MonoBehaviour {
 
+    // Save the inventory to disk
     public void saveToDisk(string owner) {
-
         var slot = SaveDataScript.inventory_owner_to_slot(owner);
         SaveDataScript.save_data.item_inventory[slot] = _items;
         SaveDataScript.save();
-        
-        /*Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-        Serialize(_items, stream);
-        stream.Close(); */
     }
 
+    // Load the inventory from the global save data struct to this instance
     public bool loadFromDisk(string owner) {
         var slot = SaveDataScript.inventory_owner_to_slot(owner);
         _items = SaveDataScript.save_data.item_inventory[slot];
         return true;
-        
-        /*try {
-            Stream stream = new FileStream(".\\Assets\\Resources\\" + owner + "_inventory.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            _items = Deserialize(stream);
-            stream.Close();
-            return true;
-        }
-        catch (Exception e) {
-            if (owner == "player") {
-                _items = new Dictionary<int, int>();
-            }
-            return false;
-        } */
     }
 
     /**
@@ -157,31 +141,5 @@ public class ItemInventory : MonoBehaviour {
         return s;
     }
 
-    void Awake() {
-        //_items = new Dictionary<int, int>();
-    }
-
     private Dictionary<int, int> _items = new Dictionary<int, int>();
-
-    public void Serialize(Dictionary<int, int> dictionary, Stream stream) {
-        BinaryWriter writer = new BinaryWriter(stream);
-        writer.Write(dictionary.Count);
-        foreach (var kvp in dictionary) {
-            writer.Write(kvp.Key);
-            writer.Write(kvp.Value);
-        }
-        writer.Flush();
-    }
-
-    public Dictionary<int, int> Deserialize(Stream stream) {
-        BinaryReader reader = new BinaryReader(stream);
-        int count = reader.ReadInt32();
-        var dictionary = new Dictionary<int, int>(count);
-        for (int n = 0; n < count; n++) {
-            var key = reader.ReadInt32();
-            var value = reader.ReadInt32();
-            dictionary.Add(key, value);
-        }
-        return dictionary;
-    }
 }

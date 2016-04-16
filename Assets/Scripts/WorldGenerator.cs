@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
+/** 
+World generator
+    @author Ryan Kitner
+    Class is used to generate a map's data, including the NPCs and towns and store it on disk
+*/
 public class WorldGenerator : MonoBehaviour {
 
-    private int map_width = 50;
-    private int map_height = 50;
-
-    void Start() {
-
-    }
-
+    /**
+    Generate a world and store it on disk
+    @param world_id - name of the world
+    @param width - width of the world
+    @param height - height of the world
+    */
     public void generate_world(string world_id, int width, int height) {
         var timer = System.Diagnostics.Stopwatch.StartNew();
 
@@ -96,17 +100,23 @@ public class WorldGenerator : MonoBehaviour {
                 tilemap_data.setTile(i, j, tile);
             }
         }
+
+        // store the key points in the tile map data for future reference for the merchant pathfinding
         tilemap_data.portal_entrance = new int[] { portal_entrance[0] + 1, portal_entrance[1] + 1 };
         tilemap_data.dungeon_entrance = new int[] { dungeon_entrance[0] + 1, dungeon_entrance[1] + 1 };
         tilemap_data.town_1 = new int[] { town_1.pos[0] + town_1.height / 2, town_1.pos[1] + town_1.width / 2 };
         tilemap_data.town_2 = new int[] { town_2.pos[0] + town_2.height / 2, town_2.pos[1] + town_2.width / 2 };
         tilemap_data.town_3 = new int[] { town_3.pos[0] + town_3.height / 2, town_3.pos[1] + town_3.width / 2 };
+
+        // save to disk
         tilemap_data.saveToDisk(world_id + "_map_data.bin");
 
         Debug.Log(string.Format("Time to generate {1}: {0} ms", timer.ElapsedMilliseconds, world_id));
     }
 
+    // Private method used to place the portal in the map
     private bool place_portal_in_map(int[] portal_pos, float portal_value, ref float[,] map_data) {
+        // first make sure the attempted position is legal (i.e. that it wouldn't overwrite any occupied tiles)
         for (int i = portal_pos[0]; i < portal_pos[0] + 3; ++i) {
             for (int j = portal_pos[1]; j < portal_pos[1] + 3; ++j) {
                 var tile_value = map_data[i, j];
@@ -116,6 +126,7 @@ public class WorldGenerator : MonoBehaviour {
             }
         }
 
+        // if it's here then it's good to place, set the tiles now
         for (int i = portal_pos[0]; i < portal_pos[0] + 3; ++i) {
             for (int j = portal_pos[1]; j < portal_pos[1] + 3; ++j) {
                 if (i == portal_pos[0] + 1 && j == portal_pos[1] + 1) { // if center of lot, designate portal space
@@ -129,6 +140,7 @@ public class WorldGenerator : MonoBehaviour {
         return true;
     }
 
+    // Private method used to place a town and its NPCs in the map
     private bool place_town_in_map(Town town, ref float[,] map_data) {
         // check to make sure not overwriting another town or portal entrance
         for (int i = town.pos[0]; i < town.pos[0] + town.height; ++i) {
@@ -149,6 +161,7 @@ public class WorldGenerator : MonoBehaviour {
         var loops = 0;
         while (npc_points.Count < num_npcs_to_place) {
 
+            // if looped for too long, cancel all town placement, not going to work. try again.
             if (loops++ > 10) {
                 return false;
             }
@@ -164,12 +177,13 @@ public class WorldGenerator : MonoBehaviour {
                 continue;
             }
 
-            // try to place NPC, but not where merchant will eventually stop
+            // try to place NPC, but not where merchant will eventually stop (or in front of it)
             var is_center = (x_pos == center_x && y_pos == center_y) || (x_pos == center_x + 1 && y_pos == center_y + 1);
             if (is_center) {
                 continue;
             }
 
+            // ensure that none of its neighbours are NPCs
             var neighbour_is_npc = false;
             foreach (var neighbour in get_all_neighbours(new Point(x_pos, y_pos), map_data)) {
                 if (npc_points.Contains(neighbour)) {
@@ -180,13 +194,16 @@ public class WorldGenerator : MonoBehaviour {
                 continue;
             }
 
+            // if here then it passed all checks, add the position to the list of points to place NPCs
             npc_points.Add(new Point(x_pos, y_pos));
         }
 
+        // place the NPCs
         foreach (var point in npc_points) {
             map_data[point.x, point.y] = 2.2f;
         }
         
+        // place the town tiles
         for (int i = town.pos[0]; i < town.pos[0] + town.height; ++i) {
             for (int j = town.pos[1]; j < town.pos[1] + town.width; ++j) {
                 if (map_data[i, j] == 2.2f) continue;
@@ -199,6 +216,14 @@ public class WorldGenerator : MonoBehaviour {
         return true;
     }
 
+    /**
+    Get a path from one point to another in a map. Uses A* pathfinding.
+        @param from_p - From this point
+        @param to_p - to this point
+        @param map_data - the map data to reference
+        @param paving - whether or not to include blocks as something that can be walked over for the path
+        @return the path of points from start to finish. If path length is 0 there is no path.
+    */
     public List<Point> get_path(int[] from_p, int[] to_p, float[,] map_data, bool paving) {
 
         var from = new Point(from_p[0], from_p[1]);
@@ -264,7 +289,9 @@ public class WorldGenerator : MonoBehaviour {
 
     }
 
+    // Private method for ensuring a path exists between two points.
     private void build_path_between(int[] from, int[] to, float[,] map_data) {
+        // get a path that includes blocks and pave over them if necessary
         var path = get_path(from, to, map_data, true);
         foreach (var point in path) {
             if (map_data[point.x, point.y] == 0.0f) {
@@ -273,6 +300,7 @@ public class WorldGenerator : MonoBehaviour {
         }
     }
 
+    // Simple struct that holds two points. Used for easy access and data passing.
     public struct Point {
         public int x;
         public int y;
@@ -300,6 +328,7 @@ public class WorldGenerator : MonoBehaviour {
         }
     }
 
+    // Get the neighbours of a given node. Paving decides whether or not to include non-walkable tiles as neighbours.
     private List<Point> get_neighbours(Point node, Point destination, float[,] map_data, bool paving) {
         var neighbours = new List<Point>();
         if (node.x != 0) { // get upper neighbour
@@ -333,6 +362,7 @@ public class WorldGenerator : MonoBehaviour {
         return neighbours;
     }
 
+    // Get all neighbours regardless of their type
     private List<Point> get_all_neighbours(Point node, float[,] map_data) {
         var neighbours = new List<Point>();
         if (node.x != 0) { // get upper neighbour
@@ -354,6 +384,7 @@ public class WorldGenerator : MonoBehaviour {
         return neighbours;
     }
 
+    // Used in pathfinding to trace a path back to the beginning from a given point
     private List<Point> reconstruct_path(Dictionary<Point, Point> came_from, Point current) {
         var path = new List<Point>();
         path.Add(current);
@@ -364,6 +395,7 @@ public class WorldGenerator : MonoBehaviour {
         return path;
     }
 
+    // Used in pathfinding to return an estimate of the remaining distance between two points
     private int heuristic_estimate(Point from, Point to) {
         int x_diff = from.x - to.x;
         int y_diff = from.y - to.y;
@@ -371,6 +403,7 @@ public class WorldGenerator : MonoBehaviour {
         return sqr_dist;
     }
 
+    // Struct created to assist data transfer in world gen
     private class Town {
         public int[] pos;
         public int width;
@@ -382,8 +415,12 @@ public class WorldGenerator : MonoBehaviour {
         }
     }
 
+    // Check if a given tile value represents a walkable tile
     private bool is_walkable(float tile_value) {
         var w = tile_value == 1.0f || tile_value == 1.1f || tile_value == 2.0f || tile_value == 3.1f || tile_value == 4.1f;
         return w;
     }
+
+    private int map_width = 50;
+    private int map_height = 50;
 }

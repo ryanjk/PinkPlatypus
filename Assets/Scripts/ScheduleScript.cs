@@ -57,33 +57,18 @@ public class ScheduleScript : MonoBehaviour {
         return _scheduleData.getUpperEntry(hour, minute).clone();
     }
 
+    /**
+    Get a random entry that's in the given world
+    */
     public ScheduleEntry getRandomEntry(string world) {
         return _scheduleData.getRandomEntry(world);
     }
 
+    /**
+    Get an entry that is closest to the given point in the world
+    */
     public ScheduleEntry getClosestEntry(string in_world, int[] point) {
         return _scheduleData.getClosestEntry(in_world, point);
-    }
-
-    void Start() {
-        /*
-        //This block demonstrates how to create, save to disk and then load schedule data 
-        ScheduleData data = new ScheduleData();
-        for (int i = 23; i >= 0; --i) {
-            for (int j = 1; j >= 0; --j) {
-                var entry = new ScheduleEntry();
-                entry.hour = i;
-                entry.minute = j * 30;
-                entry.world_id = (i % 5) + 1;
-                entry.x_pos = 100;
-                entry.y_pos = 300;
-                data.insertEntry(entry);
-            }
-        }
-        data.saveToDisk("sched");
-        _scheduleData = null;
-        loadSchedule("sched");
-        */
     }
 
     private ScheduleData _scheduleData;

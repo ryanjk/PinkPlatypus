@@ -57,7 +57,8 @@ public class TileMapData {
 
     /**
     * Tile class
-    * data structure that contains information every tile stores. For now, just store if the tile is walkable.
+    * Data structure that contains information every tile stores.
+    * It stores a value that corresponds to some map element
     */
     [Serializable]
     public class Tile {
@@ -73,6 +74,8 @@ public class TileMapData {
 				return false;
 			return true;
 		}
+
+        // get the type of map element the value corresponds to
         public Type get_type() {
             Type value_to_char = Type.NONE;
             if (value == 0.0f) {
@@ -166,6 +169,7 @@ public class TileMapData {
         PORTAL_ENTRANCE, DUNGEON_ENTRANCE, TOWN_1, TOWN_2, TOWN_3
     }
 
+    // get a key point's coordinates from the given enum
     public int[] get_key_point(KeyPoint key_point) {
         switch(key_point) {
             case KeyPoint.DUNGEON_ENTRANCE:
@@ -203,6 +207,7 @@ public class TileMapData {
 
     private Tile[,] _tiles;
 
+    // the key point corrdinates
     public int[] portal_entrance = new int[2];
     public int[] dungeon_entrance = new int[2];
     public int[] town_1 = new int[2];
